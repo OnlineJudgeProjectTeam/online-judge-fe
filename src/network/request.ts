@@ -1,4 +1,5 @@
-import { Token, getToken } from "@/utils/token";
+import { Token } from "@/type/user";
+import { getToken } from "@/utils/token";
 import axios, { AxiosRequestConfig } from "axios";
 import { Ref, ref } from "vue";
 

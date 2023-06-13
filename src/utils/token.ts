@@ -1,10 +1,6 @@
-const TOKEN_KEY = "__OJ__token";
+import { Token } from "@/type/user";
 
-export interface Token {
-  value: string;
-  expire: number;
-  _id?: string;
-}
+const TOKEN_KEY = "__OJ__token";
 
 export function setToken(token: Token) {
   window.localStorage.setItem(TOKEN_KEY, JSON.stringify(token));
