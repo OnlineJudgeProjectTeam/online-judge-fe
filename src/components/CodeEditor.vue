@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
-const code = ref<string[]>(["const a = 1"]);
+const code = ref<string[]>(["const a = 1", "const a = 2"]);
 </script>
 
 <template>
@@ -29,21 +29,25 @@ const code = ref<string[]>(["const a = 1"]);
   width: 28px;
   min-height: 100vh;
   left: 0;
-  border-right: 1px solid rgba($color: #000000, $alpha: 0.5);
+  border-right: 1px solid rgba($color: #000000, $alpha: 0.3);
   background-color: #e3e3e3;
 }
 
 .code-container {
   position: relative;
-  margin-left: 29px;
+  min-height: 100vh;
+  margin-left: 32px;
+  background-color: #f3f3f3;
 
   .line-number {
     position: absolute;
     left: -16px;
+    font-size: 14px;
   }
 
   .code {
     & > pre > code {
+      font-size: 16px;
       padding: 0;
     }
   }
