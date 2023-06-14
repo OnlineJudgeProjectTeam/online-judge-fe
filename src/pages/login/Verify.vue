@@ -1,42 +1,34 @@
 <script lang="ts" setup>
     import { ref,reactive } from 'vue'
     import request from '../../network/request'
-    import { useRouter } from 'vue-router';
-
     const userinfo = reactive({
-        username : "",
-        password : ""
+        email : "",
+        code : ""
     })
     let err = ref<string>("")
 
-    const rExp :RegExp = /[a-zA-Z0-9]{4,32}$/
+    const rExp :RegExp = /[0-9]+@[0-9a-z]+.com/
 
-    const router= useRouter()
+    async function send(){
+        request({url:'/user/send',method:'post'})
+    }
 
-    async function handleLogin() {
-        if(userinfo.username === ""){
-            err.value = "用户名不能为空"
+    async function handleVerify() {
+        if(!userinfo.email.match(rExp)){
+            err.value = "邮箱不存在"
         }
-        else if(!userinfo.password.match(rExp)){
-            err.value = "密码不符合规则"
-        }
+        // else if(){
+        //     err.value = "密码不符合规则"
+        // }
         else{
-            request({url:'/user/login',method:'post',data:userinfo})
+            request({url:'/login',method:'post',data:userinfo})
         }
-    }
-
-    async function verify() {
-        router.push('/verify') 
-    }
-
-    async function register() {
-        router.push('/registry') 
     }
 
 </script>
 
 <template>
-  <div class="login">
+  <div class="verify">
     <div class="container">
         <div class="left">
             <img src="" alt="">
@@ -45,22 +37,17 @@
         </div>
         <div class="right">
             <div class="text">
-                <input type = "text" v-model="userinfo.username" placeholder="请输入您的账号">
+                <input type = "text" v-model="userinfo.email" placeholder="请输入您的邮箱">
+                <span @click="send">发送验证码</span>
             </div>
             <div class="pwd">
-                <input type="password" v-model="userinfo.password" placeholder="请输入您的密码">
+                <input type="password" v-model="userinfo.code" placeholder="请输入验证码">
             </div>
             <div class="msg">
                 <span v-html="err"></span>
             </div>
             <div class="btn">
-                <button class="loginbtn" @click="handleLogin">登录</button>
-            </div>
-            <div class="verify" @click="verify">
-                验证码登录
-            </div>
-            <div class="register" @click="register">
-                注册账号
+                <button class="loginbtn" @click="handleVerify">登录</button>
             </div>
         </div>
     </div>
@@ -68,7 +55,7 @@
 </template>
 
 <style lang="scss" scoped>
-.login{
+.verify{
     position: relative;
     width: 100vw;
     height: 100vh;
@@ -161,24 +148,5 @@
         }  
     } 
      
-    .verify{
-        text-align: right;
-        margin-right: 20px;
-        margin-top: 25px;
-        &:hover{
-           color: blue;
-           cursor: pointer;
-        } 
-    }
-    .register{
-        text-align: right;
-        margin-right: 20px;
-        margin-top: 10px;
-        &:hover{
-           color: blue;
-           cursor: pointer;
-        } 
-    }
 }
-
 </style>
