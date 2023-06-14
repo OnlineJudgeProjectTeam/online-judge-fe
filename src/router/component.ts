@@ -5,5 +5,9 @@ export const asyncHome = defineAsyncComponent({
 });
 
 export const asyncLogin = defineAsyncComponent({
-  loader: () => import("@pages/login/Login.VUe"),
+  loader: () => import("@pages/login/Login.vue"),
+});
+
+export const asyncDetail = defineAsyncComponent({
+  loader: () => import("@pages/Detail.vue"),
 });

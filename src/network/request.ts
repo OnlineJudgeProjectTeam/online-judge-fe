@@ -2,12 +2,13 @@ import { Token } from "@/type/user";
 import { getToken } from "@/utils/token";
 import axios, { AxiosRequestConfig } from "axios";
 import { Ref, ref } from "vue";
+import { Res } from "@/type";
 
 const baseURL = "";
 
 const requestSet = new Set<string>();
 
-function request<T>(config: AxiosRequestConfig) {
+function request<T>(config: AxiosRequestConfig): Res<T> | undefined {
   const key =
     JSON.stringify(config.data) + config.url! + JSON.stringify(config.params);
 
