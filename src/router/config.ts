@@ -1,5 +1,11 @@
 import { RouteRecordRaw } from "vue-router";
-import { asyncDetail, asyncHome, asyncLogin } from "./component";
+import {
+  asyncHome,
+  asyncLogin,
+  asyncRegister,
+  asyncVerify,
+  asyncDetail,
+} from "./component";
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -11,6 +17,16 @@ export const routes: RouteRecordRaw[] = [
     path: "/login",
     name: "login",
     component: asyncLogin,
+  },
+  {
+    path: "/verify",
+    name: "verify",
+    component: asyncVerify,
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: asyncRegister,
   },
   {
     path: "/detail",

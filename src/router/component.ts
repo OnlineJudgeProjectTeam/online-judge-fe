@@ -8,6 +8,14 @@ export const asyncLogin = defineAsyncComponent({
   loader: () => import("@pages/login/Login.vue"),
 });
 
+export const asyncVerify = defineAsyncComponent({
+  loader: () => import("@pages/login/Verify.vue"),
+});
+
+export const asyncRegister = defineAsyncComponent({
+  loader: () => import("@pages/login/Register.vue"),
+});
+
 export const asyncDetail = defineAsyncComponent({
   loader: () => import("@pages/Detail.vue"),
 });

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
 import request from "../../network/request";
+import { useRouter } from "vue-router";
 
 const userinfo = reactive({
   username: "",
@@ -9,6 +10,8 @@ const userinfo = reactive({
 let err = ref<string>("");
 
 const rExp: RegExp = /[a-zA-Z0-9]{4,32}$/;
+
+const router = useRouter();
 
 async function handleLogin(userinfo) {
   if (userinfo.username === null) {
@@ -29,11 +32,11 @@ async function handleLogin(userinfo) {
 }
 
 async function verify() {
-  this.router.push("/verify");
+  router.push("/verify");
 }
 
 async function register() {
-  this.router.push("/registry");
+  router.push("/registry");
 }
 </script>
 
@@ -42,24 +45,22 @@ async function register() {
     <div class="container">
       <div class="left">
         <img src="" alt="" />
-        <h1>欢迎来到</h1>
-        <h3>Welcome to</h3>
+        <h1>欢迎来到online-judge</h1>
+        <h3>Welcome to online-judge</h3>
       </div>
       <div class="right">
-        <div class="submit">
-          用户名
+        <div class="text">
           <input
             type="text"
             v-model="userinfo.username"
             placeholder="请输入您的账号"
           />
         </div>
-        <div>
-          密码
+        <div class="pwd">
           <input
             type="password"
             v-model="userinfo.password"
-            placeholder="请输入您的账号"
+            placeholder="请输入您的密码"
           />
         </div>
         <div class="msg">
@@ -68,8 +69,8 @@ async function register() {
         <div class="btn">
           <button class="loginbtn" @click="handleLogin">登录</button>
         </div>
-        <div class="verify" @click="">验证码登录</div>
-        <div class="register" @click="">注册账号</div>
+        <div class="verify" @click="verify">验证码登录</div>
+        <div class="register" @click="register">注册账号</div>
       </div>
     </div>
   </div>
@@ -117,17 +118,14 @@ async function register() {
 }
 
 .right {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .submit {
+  .text {
     input {
-      width: 80%;
-      height: 45px;
-      margin-top: 10px;
-      border: 1px solid white;
+      width: 60%;
+      height: 40px;
+      margin-top: 80px;
+      margin-left: 20px;
+      border: 1px solid rgb(65, 63, 63);
       background-color: rgba(255, 255, 255, 0.5);
-      border-radius: 10px;
       font-size: inherit;
       padding-left: 20px;
       outline: none;
