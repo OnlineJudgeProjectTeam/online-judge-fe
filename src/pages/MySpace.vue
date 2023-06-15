@@ -16,7 +16,7 @@
                 </el-menu-item>
               </router-link>
 
-              <router-link class="alink" to="/infodditor">
+              <router-link class="alink" to="/infoeditor">
                 <el-menu-item index="1-2">
                   <el-icon><EditPen /></el-icon>信息修改
                 </el-menu-item>
@@ -25,6 +25,12 @@
               <router-link class="alink" to="/imageup">
                 <el-menu-item index="1-3">
                   <el-icon><Picture /></el-icon>头像修改
+                </el-menu-item>
+              </router-link>
+
+              <router-link class="alink" to="/accountctrl">
+                <el-menu-item index="1-4">
+                  <el-icon><Picture /></el-icon>账号管理
                 </el-menu-item>
               </router-link>
 

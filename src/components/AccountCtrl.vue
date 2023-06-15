@@ -19,11 +19,11 @@
     </div>
     </template>
     
-    <script lang="ts">
+    <script>
     export default {
-      name: "AccountCtrl",
+      name: "countcontrol",
       data() {
-        var checkAge = (rule:any, value:any, callback:any) => {
+        var checkAge = (rule, value, callback) => {
           if (!value) {
             return callback(new Error('校验码不能为空'));
           }
@@ -37,7 +37,7 @@
             }
           }, 1000);
         };
-        var validatePass = (rule:any, value:any, callback:any) => {
+        var validatePass = (rule, value, callback) => {
           if (value === '') {
             callback(new Error('请输入密码'));
           } else {
@@ -79,8 +79,8 @@
         };
       },
       methods: {
-        submitForm(forname:any) {
-          this.$refs[forname:].validate((valid) => {
+        submitForm(formName) {
+          this.$refs[formName].validate((valid) => {
             if (valid) {
               alert('submit!');
             } else {
@@ -89,8 +89,8 @@
             }
           });
         },
-        resetForm(forname:any) {
-          this.$refs[forname:].resetFields();
+        resetForm(formName) {
+          this.$refs[formName].resetFields();
         }
       }
     }
