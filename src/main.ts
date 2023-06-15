@@ -4,7 +4,11 @@ import App from "./App.vue";
 import router from "./router";
 
 import hljs from "highlight.js";
-import "highlight.js/styles/default.css";
+import "highlight.js/styles/github.css";
+
+hljs.configure({
+  ignoreUnescapedHTML: true,
+});
 
 createApp(App)
   .directive("highlight", function (el) {
