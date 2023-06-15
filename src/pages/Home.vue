@@ -1,7 +1,22 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import  Header  from "@/components/Header.vue";
+import HomeMain from "@/components/HomeMain.vue";
+
+</script>
+
 
 <template>
-  <div>home</div>
+  <div class="home">
+    <div class="header">
+      <Header/>
+    </div>
+    <div class="container">
+      <HomeMain/>
+    </div>
+  </div>
+  
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+</style>

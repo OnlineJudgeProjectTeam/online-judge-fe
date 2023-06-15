@@ -5,6 +5,10 @@ import router from "./router";
 
 import hljs from "highlight.js";
 import "highlight.js/styles/github.css";
+import { createPinia } from "pinia";
+
+import ElementPlus from "element-plus";
+import "element-plus/dist/index.css";
 
 hljs.configure({
   ignoreUnescapedHTML: true,
@@ -18,4 +22,6 @@ createApp(App)
     });
   })
   .use(router)
+  .use(ElementPlus)
+  .use(createPinia())
   .mount("#app");

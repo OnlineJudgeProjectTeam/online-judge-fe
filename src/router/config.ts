@@ -5,6 +5,14 @@ import {
   asyncRegister,
   asyncVerify,
   asyncDetail,
+  asyncShowInfo,
+  asyncInfoEditor,
+  asyncImageUp,
+  asyncAccountCtrl,
+  asyncMySpace,
+  asyncMyCollect,
+  asyncMyHistory,
+  asyncMyUpload,
 } from "./component";
 
 export const routes: RouteRecordRaw[] = [
@@ -33,4 +41,46 @@ export const routes: RouteRecordRaw[] = [
     name: "detail",
     component: asyncDetail,
   },
+  {
+    path: '/myspace',
+    name: 'myspace',
+    component: asyncMySpace,
+    children:[
+      {
+        path: '/showinfo',
+        name: 'showinfo',
+        component: asyncShowInfo,
+      },
+      {
+        path: '/infoeditor',
+        name: 'infoeditor',
+        component: asyncInfoEditor,
+      },
+      {
+        path: '/accountctrl',
+        name: 'accountctrl',
+        component: asyncAccountCtrl,
+      },
+      {
+        path: '/imageup',
+        name: 'imageup',
+        component: asyncImageUp,
+      },
+      {
+        path: '/mycollect',
+        name: 'mycollect',
+        component: asyncMyCollect,
+      },
+      {
+        path: '/myhistory',
+        name: 'myhistory',
+        component: asyncMyHistory,
+      },
+      {
+        path: '/myupload',
+        name: 'myupload',
+        component: asyncMyUpload
+      },
+    ],
+  }
 ];
