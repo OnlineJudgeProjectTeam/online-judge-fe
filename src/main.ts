@@ -5,6 +5,7 @@ import router from "./router";
 
 import hljs from "highlight.js";
 import "highlight.js/styles/default.css";
+import { createPinia } from "pinia";
 
 createApp(App)
   .directive("highlight", function (el) {
@@ -14,4 +15,5 @@ createApp(App)
     });
   })
   .use(router)
+  .use(createPinia())
   .mount("#app");

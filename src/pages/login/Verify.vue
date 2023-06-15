@@ -1,27 +1,71 @@
 <script lang="ts" setup>
-    import { ref,reactive } from 'vue'
-    import request from '../../network/request'
+  import { ref,reactive } from "vue"
+  import request from "../../network/request"
+ import { useRouter } from "vue-router";
+
+
+    interface Data{
+        code:string
+        success:boolean
+    }
+
+
     const userinfo = reactive({
         email : "",
         code : ""
     })
     let err = ref<string>("")
+    let s = ref<string>("发送验证码")
+    let code = ref<string>("")
+    let isDisabled = ref<boolean>(true)
+    let count = ref<number>(60)
 
     const rExp :RegExp = /[0-9]+@[0-9a-z]+.com/
+    const router = useRouter()
 
     async function send(){
-        request({url:'/user/send',method:'post'})
+        const { data, whenFinish } = request<Data>({
+            url: "/user/Loginsend",
+            method: "post",
+            data: userinfo,
+            });
+            whenFinish.then(() => {
+            if (data.value?.code) {
+                code.value = data.value.code
+                isDisabled.value = false;
+                s.value = count.value + "s后重发"
+                let id = setInterval(() => {
+                    count.value--;
+                    s.value = count.value + "s后重发"
+                },1000)
+                if (count.value === 0) {
+                    clearInterval(id)
+                    s.value = "发送验证码"
+                    isDisabled.value = true
+                    count.value = 60
+                }
+            }
+            });
     }
 
     async function handleVerify() {
         if(!userinfo.email.match(rExp)){
             err.value = "邮箱不存在"
         }
-        // else if(){
-        //     err.value = "密码不符合规则"
-        // }
+        else if(!code.value.match(rExp)){
+            err.value = "密码不符合规则"
+        }
         else{
-            request({url:'/login',method:'post',data:userinfo})
+            const { data, whenFinish } = request<Data>({
+            url: "/user/LoginByCode",
+            method: "post",
+            data: userinfo,
+            });
+            whenFinish.then(() => {
+            if (data.value?.success) {
+                router.push("/")
+            }
+            });
         }
     }
 
@@ -38,16 +82,16 @@
         <div class="right">
             <div class="text">
                 <input type = "text" v-model="userinfo.email" placeholder="请输入您的邮箱">
-                <span @click="send">发送验证码</span>
             </div>
-            <div class="pwd">
-                <input type="password" v-model="userinfo.code" placeholder="请输入验证码">
+            <div class="code">
+                <input type="password" v-model="userinfo.code" placeholder="验证码">
+                <p  @click="send" :disabled = isDisabled>{{ s }}</p>
             </div>
             <div class="msg">
-                <span v-html="err"></span>
+                <span >{{ err }}</span>
             </div>
-            <div class="btn">
-                <button class="loginbtn" @click="handleVerify">登录</button>
+            <div class="btn" @click="handleVerify">
+                <p class="loginbtn">登录</p>
             </div>
         </div>
     </div>
@@ -69,9 +113,6 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%,-50%);
-        // border-radius: 25px;
-        // border: 1px solid black;
-        // background-color: #fff;
     }
 }
 .container{
@@ -104,7 +145,7 @@
 }
 
 .right{
-    
+    position: relative;
     .text{
         input{
             width: 60%;
@@ -119,9 +160,8 @@
         }
     }
 
-    .pwd{
+    .code{
         input{
-            width: 60%;
             height: 40px;
             margin-top: 40px;
             margin-left: 20px;
@@ -130,23 +170,45 @@
             font-size: inherit;
             padding-left: 20px;
             outline: none;
+            width: 33%;
+        }
+        p{
+            border: 1px solid black;
+            border-radius: 2px;
+            cursor: pointer;
+            margin-left: 2%;
+            display: inline-block;
+            width: 25%;
         }
     }
     .msg{
-        margin-top: 26px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 10px;
         font-size: 0.9rem;
         color: red;
     }
-    .loginbtn{
+    .btn{
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
         width: 80%;
         height: 40px;
-        margin-top: 25px;
         background-color: skyblue; 
+        margin-top: 50px;
+        .loginbtn{
+        text-align:center;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
         &:hover{
            color: red;
            cursor: pointer;
         }  
     } 
+    }
      
 }
 </style>
