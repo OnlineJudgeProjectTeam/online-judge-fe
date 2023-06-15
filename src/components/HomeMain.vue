@@ -1,16 +1,27 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
 
-  const isShowc = ref<boolean>()
+  
+  const isShowc = ref<boolean>(false)
   async function displayc() {
     isShowc.value = !isShowc.value
   }
-  const isShowd = ref<boolean>()
+  const isShowd = ref<boolean>(false)
   async function displayd() {
     isShowd.value = !isShowd.value
   }
-  
 
+  const url = ref<string>()
+  const isCollected = ref<boolean>()
+  async function collect() {
+    isCollected.value = !isCollected.value
+    if(isCollected.value === true){
+      url.value = "/src/assets/images/star-yellow.png"
+    }
+    else{
+      url.value = "/src/assets/images/star.png"
+    }
+  }
 </script>
 
 <template>
@@ -25,10 +36,10 @@
         </div>
           <div class="classify" @click="displayc">
             <div class="text">
-              分类
-              <a class="choice" :class="{hide: isShowc === false}">123</a>
-              <a class="choice" :class="{hide: isShowc === false}">234</a>
-              <a class="choice" :class="{hide: isShowc === false}">345</a>
+              <a>分类</a>
+              <a :class="isShowc === true ? 'choice' : 'hide'" >123</a>
+              <a :class="isShowc === true ? 'choice' : 'hide'" >234</a>
+              <a :class="isShowc === true ? 'choice' : 'hide'" >345</a>
             </div>
             <div class="btn" >
               <img src="../assets/images/down.png" alt="">
@@ -36,10 +47,10 @@
           </div>
           <div class="degree" @click="displayd">
             <div class="text">
-              难度
-              <a class="choice" :class="{hide: isShowd === false}">1</a>
-              <a class="choice" :class="{hide: isShowd === false}">2</a>
-              <a class="choice" :class="{hide: isShowd === false}">3</a>
+              <a>难度</a>
+              <a :class="isShowd === true ? 'choice' : 'hide'" >1</a>
+              <a :class="isShowd === true ? 'choice' : 'hide'" >2</a>
+              <a :class="isShowd === true ? 'choice' : 'hide'" >3</a>
             </div>
             <div class="btn" >
               <img src="../assets/images/down.png" alt="">
@@ -50,8 +61,85 @@
       随机一题
       </div>
     </div>
-    <div class="title">
-      
+    <div class="questions">
+      <div class="title">
+        <div class="status">状态</div>
+        <div class="question">题目</div>
+        <div class="answer">题解</div>
+        <div class="assort">分类</div>
+        <div class="difficulty">难度</div>
+        <div class="collected">收藏</div>
+      </div>
+      <div class="contents">
+        <div class="content">
+            <div class="status">状态</div>
+            <div class="question">题目</div>
+            <div class="answer">题解</div>
+            <div class="assort">分类</div>
+            <div class="difficulty">难度</div>
+            <div class="collected" @click="collect">
+              <img :src="url" alt="">
+              <a>123</a>
+            </div>
+        </div>
+        <div class="content">
+          <div class="status">状态</div>
+          <div class="question">题目</div>
+          <div class="answer">题解</div>
+          <div class="assort">分类</div>
+          <div class="difficulty">难度</div>
+          <div class="collected">收藏</div>
+        </div>
+        <div class="content">
+          <div class="status">状态</div>
+          <div class="question">题目</div>
+          <div class="answer">题解</div>
+          <div class="assort">分类</div>
+          <div class="difficulty">难度</div>
+          <div class="collected">收藏</div>
+        </div>
+        <div class="content">
+          <div class="status">状态</div>
+          <div class="question">题目</div>
+          <div class="answer">题解</div>
+          <div class="assort">分类</div>
+          <div class="difficulty">难度</div>
+          <div class="collected">收藏</div>
+        </div>
+        <div class="content">
+          <div class="status">状态</div>
+          <div class="question">题目</div>
+          <div class="answer">题解</div>
+          <div class="assort">分类</div>
+          <div class="difficulty">难度</div>
+          <div class="collected">收藏</div>
+        </div>
+        <div class="content">
+          <div class="status">状态</div>
+          <div class="question">题目</div>
+          <div class="answer">题解</div>
+          <div class="assort">分类</div>
+          <div class="difficulty">难度</div>
+          <div class="collected">收藏</div>
+        </div>
+      </div>
+    </div>
+    <div class="record">
+      <div class="description">
+        <div class="easy">简单</div>
+        <div class="mid">中等</div>
+        <div class="difficult">困难</div>
+      </div>
+      <div class="count">
+        <div class="easy">111</div>
+        <div class="mid">2</div>
+        <div class="difficult">3</div>
+      </div>
+      <div class="rate">
+        <div class="easy">1</div>
+        <div class="mid">2</div>
+        <div class="difficult">3</div>
+      </div>
     </div>
   </div>
 </template>
@@ -65,29 +153,38 @@
 .choose{
   display: flex;
   height: 5vh;
-  margin-top: 10px;
+  margin-top: 20px;
   margin-bottom: 10px;
-  border-bottom:1px solid black;
 }
 .submit{
   display: flex;
-}
-input{
-  outline: none;
-  border: none;
 }
 .search{
   display: flex;
   margin-bottom: 10px;
   margin-left: 10px;
-  border:1px solid black;
+  border-radius: 5px;
+  background-color: rgb(242,243,244);
+  height: 4vh;
 }
+input{
+  outline: none;
+  border: none;
+  background-color: rgb(242,243,244);
+  padding-left: 5px;
+  height: 4vh;
+  border-radius: 5px;
+}
+
 .classify{
   display: flex;
   margin-left: 60px;
   margin-right: 30px;
-  margin-bottom: 10px;
-  border:1px solid black;
+  border-radius: 5px;
+  width: 12vh;
+  height: 3vh;
+  padding: 3px 0;
+  background-color: rgb(242,243,244);
   &:hover{
     background-color: rgb(247, 247,247);
   }
@@ -98,8 +195,11 @@ input{
 .degree{
   display: flex;
   margin-left: 30px;
-  margin-bottom: 10px;
-  border:1px solid black;
+  border-radius: 5px;
+  height: 3vh;
+  width: 12vh;
+  padding: 3px 0;
+  background-color: rgb(242,243,244);
   &:hover{
     background-color: rgb(247, 247,247);
   }
@@ -108,14 +208,24 @@ input{
   }
 }
 .text{
-  margin-left: 10px;
+  padding-left: 10px;
   display: flex;
   flex-direction: column;
   text-align: center;
 }
 .choice{
-    margin-top: 10px;
-    text-align: center;
+    z-index: 999;
+    display: inline-block;
+    width: 5vh;
+    padding-left: 0;
+    padding-top: 10px;
+    background-color: white;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04), 
+    0px 4px 8px rgba(0, 0, 0, 0.02), 
+    0px 6px 12px rgba(0, 0, 0, 0.02);
+    &:last-child{
+      border-radius: 0 0 5px 5px;
+    }
 }
 .hide{
   display: none;
@@ -130,9 +240,105 @@ input{
 .btn{
   margin-top: 3px;
   margin-right: 3px;
-}
-img{
+  img{
   height: 18px;
   width: 18px;
+}
+}
+
+.questions{
+  width: 80%;
+  
+}
+.title{
+  display: flex;
+  padding-bottom: 8px;
+  height: 3vh;
+  border-bottom: 1px solid rgb(240,240,240);
+}
+.status{
+  margin-left: 15px;
+  width: 10%;
+}
+.question{
+  width: 30%;
+  cursor: pointer;
+  &:hover{
+    color: blue;
+  }
+}
+.answer{
+  width: 10%;
+  cursor: pointer;
+  &:hover{
+    color: blue;
+  }
+}
+.assort{
+  width: 30%;
+}
+.difficulty{
+  width: 10%;
+}
+.collected{
+  width: 10%;
+  img{
+    height: 18px;
+    width: 18px;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+  a{
+    padding-left: 2px;
+    vertical-align: middle;
+  }
+}
+.content:nth-child(odd){
+    background-color: #fff;
+}
+.content:nth-child(even){
+    background-color: rgb(247, 247,247);
+}
+.content{
+  display: flex;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  height: 4vh;
+}
+.record{
+  width: 13%;
+  position: fixed;
+  top: 110px;
+  right: 180px;
+  margin-top: 7px;
+  border-radius: 3px;
+  background-color: white;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04), 
+  0px 4px 8px rgba(0, 0, 0, 0.02), 
+  0px 6px 12px rgba(0, 0, 0, 0.02);
+
+}
+.description{
+  display: flex;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}
+.count{
+  display: flex;
+  padding-bottom: 1vh;
+}
+.rate{
+  display: flex;
+  padding-bottom: 1vh;
+}
+.easy{
+  width: 30%;
+  padding-left: 10%;
+}
+.mid{
+  width: 30%;
+}
+.difficult{
+  width: 30%;
 }
 </style>
