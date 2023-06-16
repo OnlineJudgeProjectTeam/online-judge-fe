@@ -52,8 +52,8 @@
         if(!userinfo.email.match(rExp)){
             err.value = "邮箱不存在"
         }
-        else if(!code.value.match(rExp)){
-            err.value = "密码不符合规则"
+        else if(!code.value){
+            err.value = "验证码错误"
         }
         else{
             const { data, whenFinish } = request<Data>({
@@ -75,7 +75,7 @@
   <div class="verify">
     <div class="container">
         <div class="left">
-            <img src="" alt="">
+            <img src="../../assets/images/logo.svg" alt="">
             <h1>欢迎来到online-judge</h1>
             <h3>Welcome to online-judge</h3>
         </div>

@@ -1,13 +1,10 @@
 <script lang="ts" setup>
-import { ref, reactive } from "vue";
-import request from "../../network/request";
-import { useRouter } from "vue-router";
-import { Person } from "@/type/user/index";
+import useLogin from "@/hooks/login/useLogin";
 import { userStore } from "@/stores/login";
-interface LoginRes {
-    success:boolean
-    user: Person
-}
+import { ref, reactive } from "vue";
+import { useRouter } from "vue-router";
+
+
 
 const userinfo = reactive({
   username: "",
@@ -19,7 +16,7 @@ const rExp: RegExp = /[a-zA-Z0-9]{4,32}$/;
 
 const router = useRouter();
 
-const store = userStore()
+const store = userStore();
 
 async function handleLogin() {
   if (userinfo.username === "") {
@@ -27,20 +24,13 @@ async function handleLogin() {
   } else if (!userinfo.password.match(rExp)) {
     err.value = "密码不符合规则";
   } else {
-    const { data, whenFinish } = request<LoginRes>({
-      url: "/user/Login",
-      method: "post",
-      data: userinfo,
-    });
-    whenFinish.then(() => {
-      if (data.value?.success) {
-        store.$state = data.value?.user
-        router.push("/")
-      }
-      else{
-        
-      }
-    });
+    err.value = "";
+    const res = useLogin(userinfo);
+    if(!res.error){
+      err.value = res.error      
+      store.$state = res.data.value;
+      router.push("/")
+    }
   }
 }
 
@@ -49,7 +39,7 @@ async function verify() {
 }
 
 async function register() {
-  router.push("/registry");
+  router.push("/register");
 }
 </script>
 
@@ -57,16 +47,16 @@ async function register() {
   <div class="login">
     <div class="container">
       <div class="left">
-        <img src="" alt="" />
+        <img src="../../assets/images/logo.svg" alt="" />
         <h1>欢迎来到online-judge</h1>
         <h3>Welcome to online-judge</h3>
       </div>
       <div class="right">
         <div class="text">
-                <input type = "text" v-model="userinfo.username" placeholder="请输入您的邮箱">
+                <input type = "text" v-model="userinfo.username" placeholder="请输入您的用户名">
             </div>
             <div class="pwd">
-                <input type="password" v-model="userinfo.password" placeholder="验证码">
+                <input type="password" v-model="userinfo.password" placeholder="请输入密码">
             </div>
             <div class="msg">
                 <span >{{ err }}</span>
@@ -173,6 +163,7 @@ async function register() {
         height: 40px;
         background-color: skyblue; 
         margin-top: 50px;
+        cursor: pointer;
         .loginbtn{
         text-align:center;
         position: absolute;
@@ -181,7 +172,6 @@ async function register() {
         transform: translateX(-50%) translateY(-50%);
         &:hover{
            color: red;
-           cursor: pointer;
         }  
         } 
   }

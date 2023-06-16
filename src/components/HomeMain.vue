@@ -35,8 +35,8 @@
           </div>
         </div>
           <div class="classify" @click="displayc">
+            <div class="label">分类</div>
             <div class="text">
-              <a>分类</a>
               <a :class="isShowc === true ? 'choice' : 'hide'" >123</a>
               <a :class="isShowc === true ? 'choice' : 'hide'" >234</a>
               <a :class="isShowc === true ? 'choice' : 'hide'" >345</a>
@@ -46,8 +46,8 @@
             </div>
           </div>
           <div class="degree" @click="displayd">
+            <div class="label">难度</div>
             <div class="text">
-              <a>难度</a>
               <a :class="isShowd === true ? 'choice' : 'hide'" >1</a>
               <a :class="isShowd === true ? 'choice' : 'hide'" >2</a>
               <a :class="isShowd === true ? 'choice' : 'hide'" >3</a>
@@ -130,6 +130,11 @@
         <div class="mid">中等</div>
         <div class="difficult">困难</div>
       </div>
+      <div class="countAll">
+        <div class="easy">111</div>
+        <div class="mid">2</div>
+        <div class="difficult">3</div>
+      </div>
       <div class="count">
         <div class="easy">111</div>
         <div class="mid">2</div>
@@ -140,6 +145,7 @@
         <div class="mid">2</div>
         <div class="difficult">3</div>
       </div>
+      <div class="statistics"></div>
     </div>
   </div>
 </template>
@@ -177,6 +183,7 @@ input{
 }
 
 .classify{
+  position: relative;
   display: flex;
   margin-left: 60px;
   margin-right: 30px;
@@ -191,8 +198,12 @@ input{
   .btn{
     margin-left: 10px;
   }
+  .label{
+    padding-left: 10px;
+  }
 }
 .degree{
+  position: relative;
   display: flex;
   margin-left: 30px;
   border-radius: 5px;
@@ -206,26 +217,25 @@ input{
   .btn{
     margin-left: 10px;
   }
+  .label{
+    padding-left: 10px;
+  }
 }
 .text{
-  padding-left: 10px;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-}
-.choice{
-    z-index: 999;
-    display: inline-block;
-    width: 5vh;
-    padding-left: 0;
-    padding-top: 10px;
-    background-color: white;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04), 
+  position: absolute;
+  top:100%;
+  background-color: white;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04), 
     0px 4px 8px rgba(0, 0, 0, 0.02), 
     0px 6px 12px rgba(0, 0, 0, 0.02);
-    &:last-child{
-      border-radius: 0 0 5px 5px;
-    }
+  border-radius: 5px;
+  z-index: 999;
+}
+.choice{
+    display: block;
+    width: 15vh;
+    padding-top: 10px;
+    padding-left: 10px;
 }
 .hide{
   display: none;
@@ -323,6 +333,10 @@ input{
   padding-top: 1vh;
   padding-bottom: 1vh;
 }
+.countAll{
+  display: flex;
+  padding-bottom: 1vh;
+}
 .count{
   display: flex;
   padding-bottom: 1vh;
@@ -334,11 +348,21 @@ input{
 .easy{
   width: 30%;
   padding-left: 10%;
+  color: rgb(0,175,155);
 }
 .mid{
   width: 30%;
+  color: rgb(255,184,0);
 }
 .difficult{
   width: 30%;
+  color: rgb(255,45,85);
+}
+.statistics{
+  width: 15vh;
+  height: 15vh;
+  border: 1px solid black;
+  border-radius: 999px;
+  margin: 15px auto;
 }
 </style>

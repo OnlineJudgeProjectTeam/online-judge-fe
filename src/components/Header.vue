@@ -31,7 +31,7 @@ async function displayr() {
 <template>
   <div class=" header">
     <div class="logo">
-      <img src="" alt="">
+      <img src="../assets/images/logo.svg" alt="">
       <a>OnlineJudge</a>
     </div>
     <div class="choice">
@@ -47,7 +47,7 @@ async function displayr() {
     </div>
     <div class="user">
       <a>{{ greet }}</a>
-      <img src="" alt="">
+      <img src="../assets/images/logo.svg" alt="">
     </div>
   </div>
 </template>
@@ -62,13 +62,23 @@ async function displayr() {
 }
 .logo{
   margin: auto 0;
-  margin-left: 250px;
+  margin-left: 175px;
+  width: 15%;
+  img{
+    width: 5vh;
+    height: 5vh;
+    vertical-align: middle;
+  }
+  a{
+    padding-left: 10px;
+    vertical-align: middle;
+  }
 }
 .choice{
   display: flex;
   justify-self: start;
   margin: auto;
-  margin-left: 100px; 
+  margin-left: 50px; 
 }
 .bank{
     width: 5vh;
@@ -107,13 +117,22 @@ async function displayr() {
       cursor: pointer;
     }
     .hr{
-      margin-torp: 13px;
+      margin-top: 13px;
       border-color: black;
     }
 }
 .user{
   margin: auto 0;
-  margin-right: 100px;
+  margin-right: 175px;
+  a{
+    vertical-align: middle;
+  }
+  img{
+    width: 5vh;
+    height: 5vh;
+    vertical-align: middle;
+    padding-left: 10px;
+  }
 }
 .hide{
   display: none;
