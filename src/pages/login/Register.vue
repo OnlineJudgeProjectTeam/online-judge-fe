@@ -164,7 +164,7 @@
         width: 400px;
         height: 400px;
         border-radius: 25px;
-        border: 1px solid black;
+        border: 1px solid rgb(227, 229, 235);
         background-color: white;
       }
 }
@@ -177,7 +177,7 @@
         height: 35px;
         margin-top: 30px;
         margin-left: 20px;
-        border: 1px solid rgb(65, 63, 63);
+        border: 1px solid rgb(227, 229, 235);
         background-color: rgba(255, 255, 255, 0.5);
         font-size: inherit;
         padding-left: 20px;
@@ -189,7 +189,7 @@
         height: 35px;
         margin-top: 20px;
         margin-left: 20px;
-        border: 1px solid rgb(65, 63, 63);
+        border: 1px solid rgb(227, 229, 235);
         background-color: rgba(255, 255, 255, 0.5);
         font-size: inherit;
         padding-left: 20px;
@@ -201,7 +201,7 @@
             height: 35px;
             margin-top: 20px;
             margin-left: 20px;
-            border: 1px solid black;
+            border: 1px solid rgb(227, 229, 235);
             background-color: rgba(255, 255, 255, 0.5);
             font-size: inherit;
             padding-left: 20px;
@@ -231,6 +231,7 @@
         height: 35px;
         background-color: skyblue; 
         margin-top: 40px;
+        border-radius: 5px;
         cursor: pointer;
         .registerbtn{
             text-align:center;

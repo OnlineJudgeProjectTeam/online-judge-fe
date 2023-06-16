@@ -136,7 +136,7 @@ import { userStore } from "@/stores/login";
         width: 400px;
         height: 400px;
         border-radius: 25px;
-        border: 1px solid black;
+        border: 1px solid rgb(227, 229, 235);
         background-color: white;
       }
 }
@@ -149,7 +149,7 @@ import { userStore } from "@/stores/login";
             height: 40px;
             margin-top: 80px;
             margin-left: 20px;
-            border: 1px solid rgb(65, 63, 63);
+            border: 1px solid rgb(227, 229, 235);
             background-color: rgba(255, 255, 255, 0.5);
             font-size: inherit;
             padding-left: 20px;
@@ -162,7 +162,7 @@ import { userStore } from "@/stores/login";
             height: 40px;
             margin-top: 40px;
             margin-left: 20px;
-            border: 1px solid black;
+            border: 1px solid rgb(227, 229, 235);
             background-color: rgba(255, 255, 255, 0.5);
             font-size: inherit;
             padding-left: 20px;
@@ -191,6 +191,7 @@ import { userStore } from "@/stores/login";
         height: 40px;
         background-color: skyblue; 
         margin-top: 50px;
+        border-radius: 5px;
         .loginbtn{
         text-align:center;
         position: absolute;
