@@ -29,7 +29,7 @@ function request<T>(config: AxiosRequestConfig) {
         if (token && typeof token !== "string") {
           config.headers.Authorization = `${(token as Token).value}`;
         } else
-          config.headers.Authorization = `9267b0cc-f2a7-4bbf-a846-9412a846ebba`;
+          config.headers.Authorization = `36892726-0ef7-4b35-bf31-876ad207c88a`;
         return config;
       },
       (err) => {

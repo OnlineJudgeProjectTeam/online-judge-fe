@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onUpdated, ref, watch } from "vue";
+import { onUpdated, ref, watch, computed } from "vue";
 import Pointer from "@components/detail/Pointer.vue";
 import usePointer from "@/hooks/usePointer";
 
@@ -8,6 +8,11 @@ const code = ref<string[]>([
   "const a = 2",
   "for(let i = 1; i <= n; i++)",
 ]);
+const codeRef = ref();
+const offsetLeft = computed(() => {
+  if (!codeRef.value) return;
+  return codeRef.value.offsetLeft;
+});
 
 const { pointerHandler, pointerPosition, pushPointer } = usePointer(code.value);
 
@@ -77,16 +82,23 @@ watch(inputText, () => {
     code.value[pointerPosition.y].slice(0, pointerPosition.x) + strArr[0];
   console.log(strArr);
   if (strArr.length > 1) enterHandler(strArr, endStr);
-  else pushPointer(inputText.value.length, 0);
+  else {
+    code.value[pointerPosition.y] += endStr;
+    pushPointer(inputText.value.length, 0);
+  }
   inputText.value = "";
 });
 </script>
 
 <template>
   <div class="code-editor">
-    <Pointer :pointer-position="pointerPosition" :code="code"></Pointer>
+    <Pointer
+      :pointer-position="pointerPosition"
+      :code="code"
+      :offsetLeft="offsetLeft"
+    ></Pointer>
     <div class="line-container"></div>
-    <div class="code-container">
+    <div class="code-container" ref="codeRef">
       <div class="code-line" v-for="(item, index) in code">
         <div class="line-number">
           {{ index }}
@@ -95,7 +107,7 @@ watch(inputText, () => {
           class="code"
           v-highlight
           @click="
-            pointerHandler(index, code[index], $event);
+            pointerHandler(index, code[index], offsetLeft, $event);
             inputHandler();
           "
         >

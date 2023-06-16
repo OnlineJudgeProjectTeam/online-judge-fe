@@ -22,9 +22,14 @@ const usePointer = (code: string[]) => {
     }, 0);
   };
 
-  const pointerHandler = (index: number, str: string, e: any) => {
+  const pointerHandler = (
+    index: number,
+    str: string,
+    offsetLeft: number,
+    e: any
+  ) => {
     e.stopPropagation();
-    const clickX = e.screenX - 32;
+    const clickX = e.screenX - offsetLeft;
     pointerPosition.x = getCharacterIndex(str, clickX);
     pointerPosition.y = index;
     resetPointer();
@@ -43,11 +48,11 @@ const usePointer = (code: string[]) => {
 
   const pushPointer = (x: number, y: number) => {
     pointerPosition.y += y;
-    if (pointerPosition.y >= code.length) pointerPosition.y = code.length - 1;
+    if (pointerPosition.y > code.length) pointerPosition.y = code.length;
     if (pointerPosition.y < 0) pointerPosition.y = 0;
     pointerPosition.x += x;
-    if (pointerPosition.x >= code[pointerPosition.y].length)
-      pointerPosition.x = code[pointerPosition.y].length - 1;
+    if (pointerPosition.x > code[pointerPosition.y].length)
+      pointerPosition.x = code[pointerPosition.y].length;
     if (pointerPosition.x < 0) pointerPosition.x = 0;
     resetPointer();
   };

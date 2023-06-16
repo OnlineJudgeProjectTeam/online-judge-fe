@@ -4,12 +4,12 @@ import { userStore } from "@/stores/login";
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 
-
-
 const userinfo = reactive({
   username: "",
   password: "",
 });
+
+const login = useLogin();
 let err = ref<string>("");
 
 const rExp: RegExp = /[a-zA-Z0-9]{4,32}$/;
@@ -24,13 +24,13 @@ async function handleLogin() {
   } else if (!userinfo.password.match(rExp)) {
     err.value = "密码不符合规则";
   } else {
-    err.value = "";
-    const res = useLogin(userinfo);
-    if(!res.error){
-      err.value = res.error      
-      store.$state = res.data.value;
-      router.push("/")
-    }
+    login(userinfo).then((res: any) => {
+      if (!res.error) {
+        err.value = res.error;
+        store.$state = res.data.value;
+        router.push("/");
+      }
+    });
   }
 }
 
@@ -53,20 +53,28 @@ async function register() {
       </div>
       <div class="right">
         <div class="text">
-                <input type = "text" v-model="userinfo.username" placeholder="请输入您的用户名">
-            </div>
-            <div class="pwd">
-                <input type="password" v-model="userinfo.password" placeholder="请输入密码">
-            </div>
-            <div class="msg">
-                <span >{{ err }}</span>
-            </div>
-            <div class="btn" @click="handleLogin">
-                <p class="loginbtn">登录</p>
-            </div>
-            <div class="verify" @click="verify">验证登录</div>
-            <div class="register" @click="register">注册账号</div>
+          <input
+            type="text"
+            v-model="userinfo.username"
+            placeholder="请输入您的用户名"
+          />
         </div>
+        <div class="pwd">
+          <input
+            type="password"
+            v-model="userinfo.password"
+            placeholder="请输入密码"
+          />
+        </div>
+        <div class="msg">
+          <span>{{ err }}</span>
+        </div>
+        <div class="btn" @click="handleLogin">
+          <p class="loginbtn">登录</p>
+        </div>
+        <div class="verify" @click="verify">验证登录</div>
+        <div class="register" @click="register">注册账号</div>
+      </div>
     </div>
   </div>
 </template>
@@ -78,14 +86,14 @@ async function register() {
   height: 100vh;
   background-image: url();
   background-size: 100% 100%;
-  background-color:  #fce38a;
+  background-color: #fce38a;
   .container {
     height: 80%;
     width: 80%;
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
   }
 }
 .container {
@@ -95,20 +103,20 @@ async function register() {
   align-items: center;
   .left {
     width: 750px;
-    h1{
-        margin-top: 10px;
-        color: black;
-        white-space: nowrap;
+    h1 {
+      margin-top: 10px;
+      color: black;
+      white-space: nowrap;
     }
-    h3{
-        margin-top: 10px;
-        font-size: 1.2rem;
-        text-align:center;
-        color: black;
-        white-space: nowrap;
-    } 
-  }  
-  
+    h3 {
+      margin-top: 10px;
+      font-size: 1.2rem;
+      text-align: center;
+      color: black;
+      white-space: nowrap;
+    }
+  }
+
   .right {
     width: 400px;
     height: 400px;
@@ -155,46 +163,45 @@ async function register() {
     font-size: 0.9rem;
     color: red;
   }
-  .btn{
-        position: relative;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80%;
-        height: 40px;
-        background-color: skyblue; 
-        margin-top: 50px;
-        cursor: pointer;
-        .loginbtn{
-        text-align:center;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translateX(-50%) translateY(-50%);
-        &:hover{
-           color: red;
-        }  
-        } 
+  .btn {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 40px;
+    background-color: skyblue;
+    margin-top: 50px;
+    cursor: pointer;
+    .loginbtn {
+      text-align: center;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      &:hover {
+        color: red;
+      }
+    }
   }
-  .verify{
+  .verify {
     display: flex;
     justify-content: flex-end;
     margin-right: 20px;
     margin-top: 20px;
-    &:hover{
+    &:hover {
       color: blue;
       cursor: pointer;
     }
   }
-  .register{
+  .register {
     display: flex;
     justify-content: flex-end;
     margin-right: 20px;
     margin-top: 15px;
-    &:hover{
+    &:hover {
       color: blue;
       cursor: pointer;
     }
   }
-
 }
 </style>

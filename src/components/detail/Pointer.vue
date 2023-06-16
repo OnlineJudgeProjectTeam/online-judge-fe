@@ -7,6 +7,7 @@ const props = defineProps<{
     x: number;
     y: number;
   };
+  offsetLeft: number;
   code: string[];
 }>();
 
@@ -23,10 +24,11 @@ const getPointerX = (str: string) => {
 };
 
 watch(props.pointerPosition, (pointerPosition) => {
+  console.log(props.offsetLeft);
   pointer.value.style.top = `${pointerPosition.y * 18.5 + 1}px`;
   pointer.value.style.left = `${
     getPointerX(props.code[pointerPosition.y].substring(0, pointerPosition.x)) +
-    32
+    props.offsetLeft
   }px`;
 });
 
