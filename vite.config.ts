@@ -17,4 +17,14 @@ export default defineConfig({
       "@components": path.resolve(__dirname, "./src/components"),
     },
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://10.13.6.157:8070",
+        changeOrigin: true, //支持跨域
+        rewrite: (path) => path.replace(/^\/api/, ""), //重写路径,替换/api
+        secure: false,
+      },
+    },
+  },
 });

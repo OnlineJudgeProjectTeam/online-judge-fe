@@ -1,9 +1,9 @@
 import { Token } from "@/type/user";
-import { getToken } from "@/utils/token";
-import axios, { AxiosRequestConfig } from "axios";
+import { clearToken, getToken } from "@/utils/token";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { Ref, ref } from "vue";
 
-const baseURL = "";
+const baseURL = "/api";
 
 const requestSet = new Set<string>();
 
@@ -12,6 +12,7 @@ function request<T>(config: AxiosRequestConfig) {
     JSON.stringify(config.data) + config.url! + JSON.stringify(config.params);
 
   const data = ref(undefined) as Ref<T | undefined>;
+  const error = ref(undefined) as Ref<string | undefined>;
   const fetching = ref(true);
   let whenFinish = Promise.resolve();
 
@@ -27,7 +28,8 @@ function request<T>(config: AxiosRequestConfig) {
         const token = getToken();
         if (token && typeof token !== "string") {
           config.headers.Authorization = `${(token as Token).value}`;
-        }
+        } else
+          config.headers.Authorization = `9267b0cc-f2a7-4bbf-a846-9412a846ebba`;
         return config;
       },
       (err) => {
@@ -40,11 +42,25 @@ function request<T>(config: AxiosRequestConfig) {
       instance(config)
         .then((res) => {
           console.log(res);
-          const { data: _data } = res;
+          const { data: _data, msg } = res.data;
+          if (msg) throw new Error(msg);
           data.value = _data;
         })
         .catch((err) => {
-          console.log(err);
+          let errStr = "";
+          if ((err as AxiosError).response) {
+            if (err.response.status === 401) {
+              clearToken();
+              errStr = "no login";
+            } else errStr = err.message;
+          } else if ((err as Error) instanceof Error) {
+            errStr = err.message;
+          } else if (typeof err === "string") {
+            errStr = err;
+          } else {
+            errStr = "unknown error";
+          }
+          error.value = errStr;
         })
         .finally(() => {
           fetching.value = false;
@@ -60,6 +76,7 @@ function request<T>(config: AxiosRequestConfig) {
     fetching,
     data,
     whenFinish,
+    error,
   };
 }
 

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onUpdated, ref, watch } from "vue";
-import Pointer from "@components/Pointer.vue";
+import Pointer from "@components/detail/Pointer.vue";
 import usePointer from "@/hooks/usePointer";
 
 const code = ref<string[]>([
@@ -119,11 +119,14 @@ watch(inputText, () => {
 </template>
 
 <style lang="scss" scoped>
+.code-editor {
+  width: 50vw;
+}
+
 .line-container {
   position: absolute;
   width: 28px;
   min-height: 100vh;
-  left: 0;
   border-right: 1px solid rgba($color: #000000, $alpha: 0.3);
   background-color: #e3e3e3;
 }
