@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import useLogin from "@/hooks/login/useLogin";
-import { userStore } from "@/stores/login";
+import useLogin from "../../hooks/login/useLogin";
+import { userStore } from "../../stores/login";
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 
@@ -10,6 +10,7 @@ const userinfo = reactive({
 });
 
 const login = useLogin();
+
 let err = ref<string>("");
 
 const rExp: RegExp = /[a-zA-Z0-9]{4,32}$/;
@@ -19,6 +20,7 @@ const router = useRouter();
 const store = userStore();
 
 async function handleLogin() {
+  err.value = ""
   if (userinfo.username === "") {
     err.value = "用户名不能为空";
   } else if (!userinfo.password.match(rExp)) {
@@ -26,9 +28,11 @@ async function handleLogin() {
   } else {
     login(userinfo).then((res: any) => {
       if (!res.error) {
-        err.value = res.error;
         store.$state = res.data.value;
         router.push("/");
+      }
+      else{
+        err.value = res.error;
       }
     });
   }
