@@ -20,19 +20,19 @@ const router = useRouter();
 const store = userStore();
 
 async function handleLogin() {
-  err.value = ""
   if (userinfo.username === "") {
     err.value = "用户名不能为空";
   } else if (!userinfo.password.match(rExp)) {
     err.value = "密码不符合规则";
   } else {
     login(userinfo).then((res: any) => {
-      if (!res.error) {
+      err.value = ""
+      if (!res.error.value) {
         store.$state = res.data.value;
         router.push("/");
       }
       else{
-        err.value = res.error;
+        err.value = res.error.value;
       }
     });
   }
