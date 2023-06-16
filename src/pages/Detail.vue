@@ -4,11 +4,10 @@ import Md from "@/components/detail/Md.vue";
 import useGetProblem from "@/hooks/detail/useGetProblem";
 
 const { data, fetching, error } = useGetProblem(1, 0);
-console.log(error);
 </script>
 
 <template>
-  <div class="detail" v-if="!error">
+  <div class="detail" v-if="!error && !fetching">
     <Md :problem="data" :fetching="fetching"></Md>
     <CodeEditor></CodeEditor>
   </div>

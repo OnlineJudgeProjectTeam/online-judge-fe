@@ -47,6 +47,7 @@ function request<T>(config: AxiosRequestConfig) {
           data.value = _data;
         })
         .catch((err) => {
+          console.error(err);
           let errStr = "";
           if ((err as AxiosError).response) {
             if (err.response.status === 401) {
