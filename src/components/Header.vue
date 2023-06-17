@@ -6,6 +6,8 @@ import { useRouter } from 'vue-router';
 
 const store = userStore()
 const router = useRouter()
+
+
 const name = ref<string>(store.$state.name)
 const avatar = ref<string>(store.$state.avatar!)
 
