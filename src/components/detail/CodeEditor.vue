@@ -143,7 +143,7 @@ watch(inputText, () => {
   height: calc(100vh - 32px);
   margin: 16px;
   padding: 8px 16px;
-  overflow: auto;
+  overflow-y: auto;
   background-color: white;
 }
 
@@ -169,6 +169,9 @@ watch(inputText, () => {
   .code {
     min-width: 100px;
     min-height: 18px;
+    height: fit-content;
+    display: flex;
+    flex-wrap: wrap;
     cursor: text;
     & > pre > code {
       outline: none;
