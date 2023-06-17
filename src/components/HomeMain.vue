@@ -1,6 +1,22 @@
 <script lang="ts" setup>
-  import { ref } from 'vue';
-
+import { onMounted, ref } from 'vue';
+import useGetProblemList from '@/hooks/homeMain/useGetProblemList';
+  const probleminfo = ref<ProblemInfo>();
+  const getProblemList = useGetProblemList();
+  const pageinfo = ref<PageInfo>();
+    
+  onMounted(() => {
+    probleminfo.value!.pageNum = 1
+    probleminfo.value!.pageSize = 1
+    probleminfo.value!.navSize = 2
+    getProblemList(probleminfo.value!).then((res: any) => {
+      if (!res.error.value) {
+        pageinfo.value = res.data.value;
+      }
+      else{
+      }
+    });
+  })
   
   const isShowc = ref<boolean>(false)
   async function displayc() {
@@ -230,12 +246,18 @@ input{
     0px 6px 12px rgba(0, 0, 0, 0.02);
   border-radius: 5px;
   z-index: 999;
+  &:hover{
+    cursor: pointer;
+  }
 }
 .choice{
     display: block;
     width: 15vh;
     padding-top: 10px;
     padding-left: 10px;
+    &:hover{
+    cursor: pointer;
+  }
 }
 .hide{
   display: none;

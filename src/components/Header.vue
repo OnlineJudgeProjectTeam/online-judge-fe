@@ -2,11 +2,16 @@
 
 import { ref } from 'vue';
 import { userStore } from "@/stores/login";
+import { useRouter } from 'vue-router';
 
 const store = userStore()
-const person = ref<string>(store.$state.name)
+const router = useRouter()
 
-const greet = ref<string>("Hello, "+ person.value +"!")
+
+const name = ref<string>(store.$state.name)
+const avatar = ref<string>(store.$state.avatar!)
+
+const greet = ref<string>("Hello, "+ name.value +"!")
 
 const isShowb = ref<boolean>(true)
 const isShows = ref<boolean>(false)
@@ -25,6 +30,10 @@ async function displayr() {
   isShowr.value = true
   isShows.value = false
   isShowb.value = false
+}
+
+async function PersonalCenter() {
+  router.push("/myspace")
 }
 </script>
 
@@ -47,7 +56,7 @@ async function displayr() {
     </div>
     <div class="user">
       <a>{{ greet }}</a>
-      <img src="../assets/images/logo.svg" alt="">
+      <el-avatar class="avatar" :size="50" :src="avatar" @click = "PersonalCenter"/>
     </div>
   </div>
 </template>
@@ -123,22 +132,23 @@ async function displayr() {
 }
 .user{
   margin: auto 0;
-  margin-right: 175px;
+  margin-right: 180px;
   a{
     vertical-align: middle;
   }
-  img{
+  .avatar{
     width: 5vh;
     height: 5vh;
     vertical-align: middle;
-    padding-left: 10px;
+    margin-left: 10px;
+    cursor: pointer;
   }
 }
 .hide{
   display: none;
 }
 .show{
-      margin-top: 13px;
-      border-color: black;
+  margin-top: 13px;
+  border-color: black;
 }
 </style>

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import useLogin from "@/hooks/login/useLogin";
-import { userStore } from "@/stores/login";
+import useLogin from "../../hooks/login/useLogin";
+import { userStore } from "../../stores/login";
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 
@@ -10,6 +10,7 @@ const userinfo = reactive({
 });
 
 const login = useLogin();
+
 let err = ref<string>("");
 
 const rExp: RegExp = /[a-zA-Z0-9]{4,32}$/;
@@ -25,10 +26,13 @@ async function handleLogin() {
     err.value = "密码不符合规则";
   } else {
     login(userinfo).then((res: any) => {
-      if (!res.error) {
-        err.value = res.error;
+      err.value = ""
+      if (!res.error.value) {
         store.$state = res.data.value;
         router.push("/");
+      }
+      else{
+        err.value = res.error.value;
       }
     });
   }
@@ -121,7 +125,7 @@ async function register() {
     width: 400px;
     height: 400px;
     border-radius: 25px;
-    border: 1px solid black;
+    border: 1px solid rgb(227, 229, 235);
     background-color: white;
   }
 }
@@ -134,7 +138,7 @@ async function register() {
       height: 40px;
       margin-top: 80px;
       margin-left: 20px;
-      border: 1px solid rgb(65, 63, 63);
+      border: 1px solid rgb(227, 229, 235);
       background-color: rgba(255, 255, 255, 0.5);
       font-size: inherit;
       padding-left: 20px;
@@ -147,7 +151,7 @@ async function register() {
       height: 40px;
       margin-top: 40px;
       margin-left: 20px;
-      border: 1px solid rgb(65, 63, 63);
+      border: 1px solid rgb(227, 229, 235);
       background-color: rgba(255, 255, 255, 0.5);
       font-size: inherit;
       padding-left: 20px;
@@ -171,6 +175,7 @@ async function register() {
     height: 40px;
     background-color: skyblue;
     margin-top: 50px;
+    border-radius: 5px;
     cursor: pointer;
     .loginbtn {
       text-align: center;
