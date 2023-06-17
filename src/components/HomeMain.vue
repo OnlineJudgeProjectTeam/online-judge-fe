@@ -13,7 +13,7 @@ let probleminfo: ProblemInfo = {
 
 const { data, fetching, error } = useGetProblemList(probleminfo);
 const { dataEvery, fetchingEvery, errorEvery } = useGetEverydayProblem();
-const { dataAc, fetchingAc, errorAc} = useGetTotalAcRate();
+const { dataAc, fetchingAc, errorAc } = useGetTotalAcRate();
 const changeFavorite = useChangeFavorite();
 
 let pageinfo = ref({}) as Ref<PageInfo>;
@@ -22,14 +22,18 @@ watch(data, () => {
   pageinfo = data;
 });
 
-console.log(dataAc.value)
-
-function judge(){
-  if(!error && !fetching && !errorEvery && !fetchingEvery && !errorAc && !fetchingAc){
-    return false;
-  }
-  else{
+function judge() {
+  if (
+    !error.value &&
+    !fetching.value &&
+    !errorEvery.value &&
+    !fetchingEvery.value &&
+    !errorAc.value &&
+    !fetchingAc.value
+  ) {
     return true;
+  } else {
+    return false;
   }
 }
 
@@ -42,25 +46,24 @@ async function displayd() {
   isShowd.value = !isShowd.value;
 }
 
-let url1 = "/src/assets/images/star-yellow.png"
-let url2 = "/src/assets/images/star.png"
+let url1 = "/src/assets/images/star-yellow.png";
+let url2 = "/src/assets/images/star.png";
 
 const url = ref<string>();
-function collect(id : number,problem:ProblemRes) {
-  changeFavorite(id).then((res:any) => {
-    if(res.data.value === "操作成功"){
-      if(problem.isFavorite === 1){
+function collect(id: number, problem: ProblemRes) {
+  changeFavorite(id).then((res: any) => {
+    if (res.data.value === "操作成功") {
+      if (problem.isFavorite === 1) {
         problem.isFavorite = 0;
         problem.favorites--;
-        url.value = url2
-      }
-      else{
+        url.value = url2;
+      } else {
         problem.isFavorite = 1;
         problem.favorites++;
-        url.value = url1
+        url.value = url1;
       }
     }
-  })
+  });
 }
 </script>
 
@@ -110,23 +113,24 @@ function collect(id : number,problem:ProblemRes) {
       </div>
       <div class="contents">
         <div class="everyday">
-        <div class="status">{{ dataEvery.status }}</div>
-        <div class="question">{{ dataEvery.name }}</div>
-        <div class="answer">{{dataEvery.solutions}}</div>
-        <div class="assort">{{ dataEvery.tags }}</div>
-        <div class="difficulty">{{ dataEvery.difficulty }}</div>
-        <div class="collected" @click="collect(dataEvery.id,dataEvery)">
-          <img :src="url = dataEvery.isFavorite ? url1 : url2" alt="" />
-            <a>{{ dataEvery.favorites }}</a></div>
-      </div>
+          <div class="status">{{ dataEvery.status }}</div>
+          <div class="question">{{ dataEvery.name }}</div>
+          <div class="answer">{{ dataEvery.solutions }}</div>
+          <div class="assort">{{ dataEvery.tags }}</div>
+          <div class="difficulty">{{ dataEvery.difficulty }}</div>
+          <div class="collected" @click="collect(dataEvery.id, dataEvery)">
+            <img :src="(url = dataEvery.isFavorite ? url1 : url2)" alt="" />
+            <a>{{ dataEvery.favorites }}</a>
+          </div>
+        </div>
         <div class="content" v-for="problem in pageinfo.list">
           <div class="status">{{ problem.status }}</div>
           <div class="question">{{ problem.name }}</div>
           <div class="answer">{{ problem.solutions }}</div>
           <div class="assort">{{ problem.tags }}</div>
           <div class="difficulty">{{ problem.difficulty }}</div>
-          <div class="collected" @click="collect(problem.id,problem)">
-            <img :src="url = problem.isFavorite ? url1 : url2" alt="" />
+          <div class="collected" @click="collect(problem.id, problem)">
+            <img :src="(url = problem.isFavorite ? url1 : url2)" alt="" />
             <a>{{ problem.favorites }}</a>
           </div>
         </div>
@@ -327,7 +331,7 @@ input {
   padding-bottom: 1vh;
   height: 4vh;
 }
-.everyday{
+.everyday {
   display: flex;
   padding-top: 1vh;
   padding-bottom: 1vh;
