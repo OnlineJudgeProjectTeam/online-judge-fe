@@ -1,25 +1,15 @@
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
-import useGetProblemList from "@/hooks/homeMain/useGetProblemList";
-const probleminfo = ref<ProblemInfo>({
+import { ref } from "vue";
+import useGetProblemList from "../hooks/homeMain/useGetProblemList";
+let probleminfo : ProblemInfo = {
   pageNum: 1,
   pageSize: 1,
   navSize: 2,
-});
-const getProblemList = useGetProblemList();
-const pageinfo = ref<PageInfo>();
+};
 
-onMounted(() => {
-  probleminfo.value.pageNum = 1;
-  probleminfo.value.pageSize = 1;
-  probleminfo.value.navSize = 2;
-  getProblemList(probleminfo.value!).then((res: any) => {
-    if (!res.error.value) {
-      pageinfo.value = res.data.value;
-    } else {
-    }
-  });
-});
+const {data,fetching,error} = useGetProblemList(probleminfo);
+
+let pageinfo:PageInfo = data.value;
 
 const isShowc = ref<boolean>(false);
 async function displayc() {
@@ -40,10 +30,12 @@ async function collect() {
     url.value = "/src/assets/images/star.png";
   }
 }
+
+
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" v-if="!error && !fetching">
     <div class="choose">
       <div class="submit">
         <div class="search">
@@ -87,56 +79,16 @@ async function collect() {
         <div class="collected">收藏</div>
       </div>
       <div class="contents">
-        <div class="content">
-          <div class="status">状态</div>
-          <div class="question">题目</div>
-          <div class="answer">题解</div>
-          <div class="assort">分类</div>
-          <div class="difficulty">难度</div>
+        <div class="content" v-for="problem in pageinfo.list">
+          <div class="status">{{ problem.status }}</div>
+          <div class="question">{{ problem.name }}</div>
+          <div class="answer">{{ problem.solutions }}</div>
+          <div class="assort">{{ problem.tags }}</div>
+          <div class="difficulty">{{ problem.difficulty }}</div>
           <div class="collected" @click="collect">
             <img :src="url" alt="" />
-            <a>123</a>
+            <a>{{ problem.favorite }}</a>
           </div>
-        </div>
-        <div class="content">
-          <div class="status">状态</div>
-          <div class="question">题目</div>
-          <div class="answer">题解</div>
-          <div class="assort">分类</div>
-          <div class="difficulty">难度</div>
-          <div class="collected">收藏</div>
-        </div>
-        <div class="content">
-          <div class="status">状态</div>
-          <div class="question">题目</div>
-          <div class="answer">题解</div>
-          <div class="assort">分类</div>
-          <div class="difficulty">难度</div>
-          <div class="collected">收藏</div>
-        </div>
-        <div class="content">
-          <div class="status">状态</div>
-          <div class="question">题目</div>
-          <div class="answer">题解</div>
-          <div class="assort">分类</div>
-          <div class="difficulty">难度</div>
-          <div class="collected">收藏</div>
-        </div>
-        <div class="content">
-          <div class="status">状态</div>
-          <div class="question">题目</div>
-          <div class="answer">题解</div>
-          <div class="assort">分类</div>
-          <div class="difficulty">难度</div>
-          <div class="collected">收藏</div>
-        </div>
-        <div class="content">
-          <div class="status">状态</div>
-          <div class="question">题目</div>
-          <div class="answer">题解</div>
-          <div class="assort">分类</div>
-          <div class="difficulty">难度</div>
-          <div class="collected">收藏</div>
         </div>
       </div>
     </div>

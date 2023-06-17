@@ -2,7 +2,7 @@ interface ProblemRes{
   id: number,
   name: string,
   difficulty: string,
-  tags: string[],
+  tags: string,
   timeLimit:number,
   memoryLimit:number,
   favorite: number,

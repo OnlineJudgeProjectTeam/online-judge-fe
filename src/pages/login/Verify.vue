@@ -4,6 +4,7 @@
 import useLoginSend from "@/hooks/login/useLoginSend";
 import useLoginByCode from "@/hooks/login/userLoginByCode";
 import { userStore } from "@/stores/login";
+import { setToken } from "@/utils/token";
 
     const loginSend = useLoginSend()
     const loginByCode = useLoginByCode()
@@ -57,6 +58,7 @@ import { userStore } from "@/stores/login";
                 err.value = ""
                 if (!res.error.value) {
                   store.$state = res.data.value;
+                  setToken({ value: res.data.value.token });
                   router.push("/");
                 }
                 else{
