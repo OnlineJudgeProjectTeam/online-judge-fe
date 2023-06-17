@@ -8,4 +8,5 @@ export interface ProblemRes {
   description: string;
   template: string;
   isFavorite: number;
+  favorites: number;
 }

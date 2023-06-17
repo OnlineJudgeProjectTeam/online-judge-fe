@@ -3,6 +3,7 @@ import useLogin from "../../hooks/login/useLogin";
 import { userStore } from "../../stores/login";
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
+import { setToken } from "@/utils/token";
 
 const userinfo = reactive({
   username: "",
@@ -26,12 +27,12 @@ async function handleLogin() {
     err.value = "密码不符合规则";
   } else {
     login(userinfo).then((res: any) => {
-      err.value = ""
+      err.value = "";
       if (!res.error.value) {
         store.$state = res.data.value;
+        setToken({ value: res.data.value.token });
         router.push("/");
-      }
-      else{
+      } else {
         err.value = res.error.value;
       }
     });

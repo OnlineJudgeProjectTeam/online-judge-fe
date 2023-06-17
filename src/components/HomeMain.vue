@@ -1,43 +1,45 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
-import useGetProblemList from '@/hooks/homeMain/useGetProblemList';
-  const probleminfo = ref<ProblemInfo>();
-  const getProblemList = useGetProblemList();
-  const pageinfo = ref<PageInfo>();
-    
-  onMounted(() => {
-    probleminfo.value!.pageNum = 1
-    probleminfo.value!.pageSize = 1
-    probleminfo.value!.navSize = 2
-    getProblemList(probleminfo.value!).then((res: any) => {
-      if (!res.error.value) {
-        pageinfo.value = res.data.value;
-      }
-      else{
-      }
-    });
-  })
-  
-  const isShowc = ref<boolean>(false)
-  async function displayc() {
-    isShowc.value = !isShowc.value
-  }
-  const isShowd = ref<boolean>(false)
-  async function displayd() {
-    isShowd.value = !isShowd.value
-  }
+import { onMounted, ref } from "vue";
+import useGetProblemList from "@/hooks/homeMain/useGetProblemList";
+const probleminfo = ref<ProblemInfo>({
+  pageNum: 1,
+  pageSize: 1,
+  navSize: 2,
+});
+const getProblemList = useGetProblemList();
+const pageinfo = ref<PageInfo>();
 
-  const url = ref<string>()
-  const isCollected = ref<boolean>()
-  async function collect() {
-    isCollected.value = !isCollected.value
-    if(isCollected.value === true){
-      url.value = "/src/assets/images/star-yellow.png"
+onMounted(() => {
+  probleminfo.value.pageNum = 1;
+  probleminfo.value.pageSize = 1;
+  probleminfo.value.navSize = 2;
+  getProblemList(probleminfo.value!).then((res: any) => {
+    if (!res.error.value) {
+      pageinfo.value = res.data.value;
+    } else {
     }
-    else{
-      url.value = "/src/assets/images/star.png"
-    }
+  });
+});
+
+const isShowc = ref<boolean>(false);
+async function displayc() {
+  isShowc.value = !isShowc.value;
+}
+const isShowd = ref<boolean>(false);
+async function displayd() {
+  isShowd.value = !isShowd.value;
+}
+
+const url = ref<string>();
+const isCollected = ref<boolean>();
+async function collect() {
+  isCollected.value = !isCollected.value;
+  if (isCollected.value === true) {
+    url.value = "/src/assets/images/star-yellow.png";
+  } else {
+    url.value = "/src/assets/images/star.png";
   }
+}
 </script>
 
 <template>
@@ -45,37 +47,35 @@ import useGetProblemList from '@/hooks/homeMain/useGetProblemList';
     <div class="choose">
       <div class="submit">
         <div class="search">
-          <input type="text" placeholder="请输入题目名称">
+          <input type="text" placeholder="请输入题目名称" />
           <div class="btn">
-            <img src="../assets/images/search.png" alt="搜索">
+            <img src="../assets/images/search.png" alt="搜索" />
           </div>
         </div>
-          <div class="classify" @click="displayc">
-            <div class="label">分类</div>
-            <div class="text">
-              <a :class="isShowc === true ? 'choice' : 'hide'" >123</a>
-              <a :class="isShowc === true ? 'choice' : 'hide'" >234</a>
-              <a :class="isShowc === true ? 'choice' : 'hide'" >345</a>
-            </div>
-            <div class="btn" >
-              <img src="../assets/images/down.png" alt="">
-            </div>
+        <div class="classify" @click="displayc">
+          <div class="label">分类</div>
+          <div class="text">
+            <a :class="isShowc === true ? 'choice' : 'hide'">123</a>
+            <a :class="isShowc === true ? 'choice' : 'hide'">234</a>
+            <a :class="isShowc === true ? 'choice' : 'hide'">345</a>
           </div>
-          <div class="degree" @click="displayd">
-            <div class="label">难度</div>
-            <div class="text">
-              <a :class="isShowd === true ? 'choice' : 'hide'" >1</a>
-              <a :class="isShowd === true ? 'choice' : 'hide'" >2</a>
-              <a :class="isShowd === true ? 'choice' : 'hide'" >3</a>
-            </div>
-            <div class="btn" >
-              <img src="../assets/images/down.png" alt="">
-            </div>
+          <div class="btn">
+            <img src="../assets/images/down.png" alt="" />
           </div>
+        </div>
+        <div class="degree" @click="displayd">
+          <div class="label">难度</div>
+          <div class="text">
+            <a :class="isShowd === true ? 'choice' : 'hide'">1</a>
+            <a :class="isShowd === true ? 'choice' : 'hide'">2</a>
+            <a :class="isShowd === true ? 'choice' : 'hide'">3</a>
+          </div>
+          <div class="btn">
+            <img src="../assets/images/down.png" alt="" />
+          </div>
+        </div>
       </div>
-      <div class="random">
-      随机一题
-      </div>
+      <div class="random">随机一题</div>
     </div>
     <div class="questions">
       <div class="title">
@@ -88,15 +88,15 @@ import useGetProblemList from '@/hooks/homeMain/useGetProblemList';
       </div>
       <div class="contents">
         <div class="content">
-            <div class="status">状态</div>
-            <div class="question">题目</div>
-            <div class="answer">题解</div>
-            <div class="assort">分类</div>
-            <div class="difficulty">难度</div>
-            <div class="collected" @click="collect">
-              <img :src="url" alt="">
-              <a>123</a>
-            </div>
+          <div class="status">状态</div>
+          <div class="question">题目</div>
+          <div class="answer">题解</div>
+          <div class="assort">分类</div>
+          <div class="difficulty">难度</div>
+          <div class="collected" @click="collect">
+            <img :src="url" alt="" />
+            <a>123</a>
+          </div>
         </div>
         <div class="content">
           <div class="status">状态</div>
@@ -167,38 +167,38 @@ import useGetProblemList from '@/hooks/homeMain/useGetProblemList';
 </template>
 
 <style lang="scss" scoped>
-.container{
+.container {
   margin: 0 auto;
   width: 75%;
   height: 92vh;
 }
-.choose{
+.choose {
   display: flex;
   height: 5vh;
   margin-top: 20px;
   margin-bottom: 10px;
 }
-.submit{
+.submit {
   display: flex;
 }
-.search{
+.search {
   display: flex;
   margin-bottom: 10px;
   margin-left: 10px;
   border-radius: 5px;
-  background-color: rgb(242,243,244);
+  background-color: rgb(242, 243, 244);
   height: 4vh;
 }
-input{
+input {
   outline: none;
   border: none;
-  background-color: rgb(242,243,244);
+  background-color: rgb(242, 243, 244);
   padding-left: 5px;
   height: 4vh;
   border-radius: 5px;
 }
 
-.classify{
+.classify {
   position: relative;
   display: flex;
   margin-left: 60px;
@@ -207,18 +207,18 @@ input{
   width: 12vh;
   height: 3vh;
   padding: 3px 0;
-  background-color: rgb(242,243,244);
-  &:hover{
-    background-color: rgb(247, 247,247);
+  background-color: rgb(242, 243, 244);
+  &:hover {
+    background-color: rgb(247, 247, 247);
   }
-  .btn{
+  .btn {
     margin-left: 10px;
   }
-  .label{
+  .label {
     padding-left: 10px;
   }
 }
-.degree{
+.degree {
   position: relative;
   display: flex;
   margin-left: 30px;
@@ -226,118 +226,116 @@ input{
   height: 3vh;
   width: 12vh;
   padding: 3px 0;
-  background-color: rgb(242,243,244);
-  &:hover{
-    background-color: rgb(247, 247,247);
+  background-color: rgb(242, 243, 244);
+  &:hover {
+    background-color: rgb(247, 247, 247);
   }
-  .btn{
+  .btn {
     margin-left: 10px;
   }
-  .label{
+  .label {
     padding-left: 10px;
   }
 }
-.text{
+.text {
   position: absolute;
-  top:100%;
+  top: 100%;
   background-color: white;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04), 
-    0px 4px 8px rgba(0, 0, 0, 0.02), 
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.02),
     0px 6px 12px rgba(0, 0, 0, 0.02);
   border-radius: 5px;
   z-index: 999;
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 }
-.choice{
-    display: block;
-    width: 15vh;
-    padding-top: 10px;
-    padding-left: 10px;
-    &:hover{
+.choice {
+  display: block;
+  width: 15vh;
+  padding-top: 10px;
+  padding-left: 10px;
+  &:hover {
     cursor: pointer;
   }
 }
-.hide{
+.hide {
   display: none;
 }
 
-.random{
+.random {
   color: greenyellow;
   cursor: pointer;
   margin-left: auto;
   margin-right: 10px;
 }
-.btn{
+.btn {
   margin-top: 3px;
   margin-right: 3px;
-  img{
-  height: 18px;
-  width: 18px;
-}
+  img {
+    height: 18px;
+    width: 18px;
+  }
 }
 
-.questions{
+.questions {
   width: 80%;
-  
 }
-.title{
+.title {
   display: flex;
   padding-bottom: 8px;
   height: 3vh;
-  border-bottom: 1px solid rgb(240,240,240);
+  border-bottom: 1px solid rgb(240, 240, 240);
 }
-.status{
+.status {
   margin-left: 15px;
   width: 10%;
 }
-.question{
+.question {
   width: 30%;
   cursor: pointer;
-  &:hover{
+  &:hover {
     color: blue;
   }
 }
-.answer{
+.answer {
   width: 10%;
   cursor: pointer;
-  &:hover{
+  &:hover {
     color: blue;
   }
 }
-.assort{
+.assort {
   width: 30%;
 }
-.difficulty{
+.difficulty {
   width: 10%;
 }
-.collected{
+.collected {
   width: 10%;
-  img{
+  img {
     height: 18px;
     width: 18px;
     vertical-align: middle;
     cursor: pointer;
   }
-  a{
+  a {
     padding-left: 2px;
     vertical-align: middle;
   }
 }
-.content:nth-child(odd){
-    background-color: #fff;
+.content:nth-child(odd) {
+  background-color: #fff;
 }
-.content:nth-child(even){
-    background-color: rgb(247, 247,247);
+.content:nth-child(even) {
+  background-color: rgb(247, 247, 247);
 }
-.content{
+.content {
   display: flex;
   padding-top: 1vh;
   padding-bottom: 1vh;
   height: 4vh;
 }
-.record{
+.record {
   width: 13%;
   position: fixed;
   top: 110px;
@@ -345,42 +343,40 @@ input{
   margin-top: 7px;
   border-radius: 3px;
   background-color: white;
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04), 
-  0px 4px 8px rgba(0, 0, 0, 0.02), 
-  0px 6px 12px rgba(0, 0, 0, 0.02);
-
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.02),
+    0px 6px 12px rgba(0, 0, 0, 0.02);
 }
-.description{
+.description {
   display: flex;
   padding-top: 1vh;
   padding-bottom: 1vh;
 }
-.countAll{
+.countAll {
   display: flex;
   padding-bottom: 1vh;
 }
-.count{
+.count {
   display: flex;
   padding-bottom: 1vh;
 }
-.rate{
+.rate {
   display: flex;
   padding-bottom: 1vh;
 }
-.easy{
+.easy {
   width: 30%;
   padding-left: 10%;
-  color: rgb(0,175,155);
+  color: rgb(0, 175, 155);
 }
-.mid{
+.mid {
   width: 30%;
-  color: rgb(255,184,0);
+  color: rgb(255, 184, 0);
 }
-.difficult{
+.difficult {
   width: 30%;
-  color: rgb(255,45,85);
+  color: rgb(255, 45, 85);
 }
-.statistics{
+.statistics {
   width: 15vh;
   height: 15vh;
   border: 1px solid black;

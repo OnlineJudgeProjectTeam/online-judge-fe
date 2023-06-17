@@ -1,22 +1,14 @@
 <script lang="ts" setup>
-import { ProblemRes } from "@/type/detail";
 import { md } from "@/utils/setupMd";
 import { computed } from "vue";
 
 const props = defineProps<{
-  problem: ProblemRes;
-  fetching: boolean;
+  content: string;
 }>();
 
 const mdContent = computed(() => {
-  if (props.fetching) return "";
-  console.log(props.fetching);
-  console.log(props.problem);
-  return md.render(props.problem.description);
+  return md.render(props.content);
 });
-
-console.log(props.fetching);
-console.log(props.problem);
 </script>
 
 <template>
@@ -27,13 +19,17 @@ console.log(props.problem);
 
 <style lang="scss">
 .md {
-  width: 50vw;
-  padding: 0 16px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .md-content {
+  p {
+    font-size: 14px;
+  }
+
   pre {
-    background-color: #dddddd;
+    background-color: #eeeeee;
   }
 
   li {

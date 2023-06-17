@@ -2,7 +2,6 @@ import request from "@/network/request";
 import { PersonRes } from "@/type/user";
 
 const useLogin = () => {
-
   const login = async (userinfo: any) => {
     const { data, whenFinish, error } = request<PersonRes>({
       url: "/user/login",

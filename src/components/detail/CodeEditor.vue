@@ -3,15 +3,19 @@ import { onUpdated, ref, watch, computed } from "vue";
 import Pointer from "@components/detail/Pointer.vue";
 import usePointer from "@/hooks/usePointer";
 
-const code = ref<string[]>([
-  "const a = 1  //测试，",
-  "const a = 2",
-  "for(let i = 1; i <= n; i++)",
-]);
+const props = defineProps<{
+  template: string;
+}>();
+
+const code = ref<string[]>(props.template.split("\n"));
 const codeRef = ref();
 const offsetLeft = computed(() => {
   if (!codeRef.value) return;
   return codeRef.value.offsetLeft;
+});
+const offsetTop = computed(() => {
+  if (!codeRef.value) return;
+  return codeRef.value.offsetTop;
 });
 
 const { pointerHandler, pointerPosition, pushPointer } = usePointer(code.value);
@@ -96,12 +100,13 @@ watch(inputText, () => {
       :pointer-position="pointerPosition"
       :code="code"
       :offsetLeft="offsetLeft"
+      :offsetTop="offsetTop"
     ></Pointer>
     <div class="line-container"></div>
     <div class="code-container" ref="codeRef">
       <div class="code-line" v-for="(item, index) in code">
         <div class="line-number">
-          {{ index }}
+          <p>{{ index }}</p>
         </div>
         <div
           class="code"
@@ -132,31 +137,41 @@ watch(inputText, () => {
 
 <style lang="scss" scoped>
 .code-editor {
+  box-sizing: border-box;
+  border-radius: 8px;
   width: 50vw;
+  height: calc(100vh - 32px);
+  margin: 16px;
+  padding: 8px 16px;
+  overflow-y: auto;
+  background-color: white;
 }
 
 .line-container {
   position: absolute;
   width: 28px;
-  min-height: 100vh;
-  border-right: 1px solid rgba($color: #000000, $alpha: 0.3);
-  background-color: #e3e3e3;
 }
 
 .code-container {
   position: relative;
-  min-height: 100vh;
   margin-left: 32px;
 
   .line-number {
     position: absolute;
-    left: -16px;
-    font-size: 14px;
+    height: 18.5px;
+    left: -30px;
+    font-size: 12px;
+    color: #237893;
+    display: flex;
+    align-items: center;
   }
 
   .code {
     min-width: 100px;
     min-height: 18px;
+    height: fit-content;
+    display: flex;
+    flex-wrap: wrap;
     cursor: text;
     & > pre > code {
       outline: none;
