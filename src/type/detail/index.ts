@@ -6,7 +6,7 @@ export interface ProblemRes {
   timeLimit: number;
   memoryLimit: number;
   description: string;
-  template: string;
+  template: string[];
   isFavorite: number;
   favorites: number;
 }

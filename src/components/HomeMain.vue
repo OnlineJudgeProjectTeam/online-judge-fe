@@ -1,15 +1,19 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, watch, Ref } from "vue";
 import useGetProblemList from "../hooks/homeMain/useGetProblemList";
-let probleminfo : ProblemInfo = {
+let probleminfo: ProblemInfo = {
   pageNum: 1,
   pageSize: 1,
   navSize: 2,
 };
 
-const {data,fetching,error} = useGetProblemList(probleminfo);
+const { data, fetching, error } = useGetProblemList(probleminfo);
 
-let pageinfo:PageInfo = data.value;
+let pageinfo = ref({}) as Ref<PageInfo>;
+
+watch(data, () => {
+  pageinfo = data;
+});
 
 const isShowc = ref<boolean>(false);
 async function displayc() {
@@ -22,7 +26,7 @@ async function displayd() {
 
 const url = ref<string>();
 const isCollected = ref<boolean>();
-async function collect() {
+function collect() {
   isCollected.value = !isCollected.value;
   if (isCollected.value === true) {
     url.value = "/src/assets/images/star-yellow.png";
@@ -30,8 +34,6 @@ async function collect() {
     url.value = "/src/assets/images/star.png";
   }
 }
-
-
 </script>
 
 <template>

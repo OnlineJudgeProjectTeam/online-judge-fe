@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import CodeEditor from "@/components/detail/CodeEditor.vue";
-import Problem from "@/components/detail/Problem.vue";
+import ProblemMain from "@/components/detail/ProblemMain.vue";
+import ProblemTab from "@/components/detail/ProblemTab.vue";
 import useGetProblem from "@/hooks/detail/useGetProblem";
 
 const { data, fetching, error } = useGetProblem(1, 0);
@@ -8,7 +9,10 @@ const { data, fetching, error } = useGetProblem(1, 0);
 
 <template>
   <div class="detail" v-if="!error && !fetching">
-    <Problem :problem="data" :fetching="fetching"></Problem>
+    <div class="left">
+      <ProblemTab></ProblemTab>
+      <ProblemMain :problem="data" :fetching="fetching"></ProblemMain>
+    </div>
     <CodeEditor :template="data.template"></CodeEditor>
   </div>
 </template>
@@ -19,5 +23,13 @@ const { data, fetching, error } = useGetProblem(1, 0);
   width: 100vw;
   display: flex;
   background-color: #ededed;
+
+  .left {
+    height: calc(100vh - 32px);
+    margin: 16px;
+    margin-right: 0;
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>

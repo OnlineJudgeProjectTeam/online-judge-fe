@@ -2,12 +2,13 @@
 import { onUpdated, ref, watch, computed } from "vue";
 import Pointer from "@components/detail/Pointer.vue";
 import usePointer from "@/hooks/usePointer";
+import downImg from "@/assets/images/down.png";
 
 const props = defineProps<{
-  template: string;
+  template: string[];
 }>();
 
-const code = ref<string[]>(props.template.split("\n"));
+const code = ref<string[]>(props.template[0].split("\n"));
 const codeRef = ref();
 const offsetLeft = computed(() => {
   if (!codeRef.value) return;
@@ -92,6 +93,14 @@ watch(inputText, () => {
   }
   inputText.value = "";
 });
+
+const languageList = ["Java", "C"];
+const language = ref(0);
+const isShowDrop = ref(false);
+
+const changeLanguage = (index: number) => {
+  language.value = index;
+};
 </script>
 
 <template>
@@ -102,6 +111,22 @@ watch(inputText, () => {
       :offsetLeft="offsetLeft"
       :offsetTop="offsetTop"
     ></Pointer>
+    <div class="code-top">
+      <div class="code-language" @click="isShowDrop = !isShowDrop">
+        <p>{{ languageList[language] }}</p>
+        <img :src="downImg" />
+      </div>
+      <div class="code-drop" :class="{ hidden: !isShowDrop }">
+        <div
+          class="drop-item"
+          :class="{ active: language === index }"
+          v-for="(item, index) in languageList"
+          @click="changeLanguage(index)"
+        >
+          <p>{{ item }}</p>
+        </div>
+      </div>
+    </div>
     <div class="line-container"></div>
     <div class="code-container" ref="codeRef">
       <div class="code-line" v-for="(item, index) in code">
@@ -147,6 +172,71 @@ watch(inputText, () => {
   background-color: white;
 }
 
+.code-top {
+  box-sizing: border-box;
+  height: 32px;
+  padding: 8px 16px;
+  background-color: white;
+
+  .code-language {
+    width: fit-content;
+    cursor: pointer;
+    filter: opacity(50%);
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      filter: opacity(100%);
+    }
+
+    & > p {
+      font-size: 14px;
+    }
+
+    & > img {
+      height: 16px;
+      width: 16px;
+      margin-left: 8px;
+    }
+  }
+
+  .code-drop {
+    position: relative;
+    top: 4px;
+    left: -24px;
+    width: 72px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 0 #0000,
+      0px 1px 3px #0000000a, 0px 4px 12px #00000014;
+    filter: drop-shadow(rgba(0, 0, 0, 0.04) 0px 1px 3px)
+      drop-shadow(rgba(0, 0, 0, 0.12) 0px 6px 16px);
+    z-index: 100;
+
+    &.hidden {
+      display: none;
+    }
+
+    .drop-item {
+      font-size: 14px;
+      padding: 4px 24px 4px 4px;
+      font-size: 14px;
+      border-radius: 8px;
+      color: #e2e8f0;
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba($color: #000000, $alpha: 0.05);
+      }
+
+      &.active {
+        color: black;
+      }
+    }
+  }
+}
+
 .line-container {
   position: absolute;
   width: 28px;
@@ -154,6 +244,7 @@ watch(inputText, () => {
 
 .code-container {
   position: relative;
+  top: 8px;
   margin-left: 32px;
 
   .line-number {
@@ -162,6 +253,7 @@ watch(inputText, () => {
     left: -30px;
     font-size: 12px;
     color: #237893;
+    user-select: none;
     display: flex;
     align-items: center;
   }
