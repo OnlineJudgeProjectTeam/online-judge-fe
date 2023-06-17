@@ -5,7 +5,7 @@ interface ProblemRes{
   tags: string,
   timeLimit:number,
   memoryLimit:number,
-  favorite: number,
+  favorites: number,
   isFavorite:number,
   solutions:number,
   status:number
@@ -39,4 +39,14 @@ interface ProblemInfo{
   name?: string,
   tags?: string,
   difficulty?: string 
+}
+
+interface AcDataRes{
+  acData:AcData[]
+}
+
+interface AcData{
+  acRate:number,
+  acNum:number,
+  submitNum:number
 }

@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import { ref, watch, Ref } from "vue";
 import useGetProblemList from "../hooks/homeMain/useGetProblemList";
+import useChangeFavorite from "@/hooks/homeMain/useChangeFavorite";
+import useGetEverydayProblem from "@/hooks/homeMain/useGetEverydayProblem";
+import useGetTotalAcRate from "@/hooks/homeMain/useGetTotalAcRate";
+
 let probleminfo: ProblemInfo = {
   pageNum: 1,
   pageSize: 1,
@@ -8,12 +12,26 @@ let probleminfo: ProblemInfo = {
 };
 
 const { data, fetching, error } = useGetProblemList(probleminfo);
+const { dataEvery, fetchingEvery, errorEvery } = useGetEverydayProblem();
+const { dataAc, fetchingAc, errorAc} = useGetTotalAcRate();
+const changeFavorite = useChangeFavorite();
 
 let pageinfo = ref({}) as Ref<PageInfo>;
 
 watch(data, () => {
   pageinfo = data;
 });
+
+console.log(dataAc.value)
+
+function judge(){
+  if(!error && !fetching && !errorEvery && !fetchingEvery && !errorAc && !fetchingAc){
+    return false;
+  }
+  else{
+    return true;
+  }
+}
 
 const isShowc = ref<boolean>(false);
 async function displayc() {
@@ -24,20 +42,30 @@ async function displayd() {
   isShowd.value = !isShowd.value;
 }
 
+let url1 = "/src/assets/images/star-yellow.png"
+let url2 = "/src/assets/images/star.png"
+
 const url = ref<string>();
-const isCollected = ref<boolean>();
-function collect() {
-  isCollected.value = !isCollected.value;
-  if (isCollected.value === true) {
-    url.value = "/src/assets/images/star-yellow.png";
-  } else {
-    url.value = "/src/assets/images/star.png";
-  }
+function collect(id : number,problem:ProblemRes) {
+  changeFavorite(id).then((res:any) => {
+    if(res.data.value === "操作成功"){
+      if(problem.isFavorite === 1){
+        problem.isFavorite = 0;
+        problem.favorites--;
+        url.value = url2
+      }
+      else{
+        problem.isFavorite = 1;
+        problem.favorites++;
+        url.value = url1
+      }
+    }
+  })
 }
 </script>
 
 <template>
-  <div class="container" v-if="!error && !fetching">
+  <div class="container" v-if="judge()">
     <div class="choose">
       <div class="submit">
         <div class="search">
@@ -60,9 +88,9 @@ function collect() {
         <div class="degree" @click="displayd">
           <div class="label">难度</div>
           <div class="text">
-            <a :class="isShowd === true ? 'choice' : 'hide'">1</a>
-            <a :class="isShowd === true ? 'choice' : 'hide'">2</a>
-            <a :class="isShowd === true ? 'choice' : 'hide'">3</a>
+            <a :class="isShowd === true ? 'choice' : 'hide'">简单</a>
+            <a :class="isShowd === true ? 'choice' : 'hide'">中等</a>
+            <a :class="isShowd === true ? 'choice' : 'hide'">困难</a>
           </div>
           <div class="btn">
             <img src="../assets/images/down.png" alt="" />
@@ -81,15 +109,25 @@ function collect() {
         <div class="collected">收藏</div>
       </div>
       <div class="contents">
+        <div class="everyday">
+        <div class="status">{{ dataEvery.status }}</div>
+        <div class="question">{{ dataEvery.name }}</div>
+        <div class="answer">{{dataEvery.solutions}}</div>
+        <div class="assort">{{ dataEvery.tags }}</div>
+        <div class="difficulty">{{ dataEvery.difficulty }}</div>
+        <div class="collected" @click="collect(dataEvery.id,dataEvery)">
+          <img :src="url = dataEvery.isFavorite ? url1 : url2" alt="" />
+            <a>{{ dataEvery.favorites }}</a></div>
+      </div>
         <div class="content" v-for="problem in pageinfo.list">
           <div class="status">{{ problem.status }}</div>
           <div class="question">{{ problem.name }}</div>
           <div class="answer">{{ problem.solutions }}</div>
           <div class="assort">{{ problem.tags }}</div>
           <div class="difficulty">{{ problem.difficulty }}</div>
-          <div class="collected" @click="collect">
-            <img :src="url" alt="" />
-            <a>{{ problem.favorite }}</a>
+          <div class="collected" @click="collect(problem.id,problem)">
+            <img :src="url = problem.isFavorite ? url1 : url2" alt="" />
+            <a>{{ problem.favorites }}</a>
           </div>
         </div>
       </div>
@@ -100,20 +138,20 @@ function collect() {
         <div class="mid">中等</div>
         <div class="difficult">困难</div>
       </div>
-      <div class="countAll">
-        <div class="easy">111</div>
-        <div class="mid">2</div>
-        <div class="difficult">3</div>
-      </div>
       <div class="count">
-        <div class="easy">111</div>
-        <div class="mid">2</div>
-        <div class="difficult">3</div>
+        <div class="easy">{{ dataAc.acData[1].acNum }}</div>
+        <div class="mid">{{ dataAc.acData[2].acNum }}</div>
+        <div class="difficult">{{ dataAc.acData[3].acNum }}</div>
+      </div>
+      <div class="countAll">
+        <div class="easy">{{ dataAc.acData[1].submitNum }}</div>
+        <div class="mid">{{ dataAc.acData[2].submitNum }}</div>
+        <div class="difficult">{{ dataAc.acData[3].submitNum }}</div>
       </div>
       <div class="rate">
-        <div class="easy">1</div>
-        <div class="mid">2</div>
-        <div class="difficult">3</div>
+        <div class="easy">{{ dataAc.acData[1].acRate }}</div>
+        <div class="mid">{{ dataAc.acData[2].acRate }}</div>
+        <div class="difficult">{{ dataAc.acData[3].acRate }}</div>
       </div>
       <div class="statistics"></div>
     </div>
@@ -284,6 +322,12 @@ input {
   background-color: rgb(247, 247, 247);
 }
 .content {
+  display: flex;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  height: 4vh;
+}
+.everyday{
   display: flex;
   padding-top: 1vh;
   padding-bottom: 1vh;
