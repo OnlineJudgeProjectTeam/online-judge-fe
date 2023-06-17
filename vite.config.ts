@@ -15,12 +15,13 @@ export default defineConfig({
       "@pages": path.resolve(__dirname, "./src/pages"),
       "@assets": path.resolve(__dirname, "./src/assets"),
       "@components": path.resolve(__dirname, "./src/components"),
+      "@hooks": path.resolve(__dirname, "./src/hooks"),
     },
   },
   server: {
     proxy: {
       "/api": {
-        target: "http://10.13.6.157:8070",
+        target: "http://10.13.7.76:8070",
         changeOrigin: true, //支持跨域
         rewrite: (path) => path.replace(/^\/api/, ""), //重写路径,替换/api
         secure: false,
