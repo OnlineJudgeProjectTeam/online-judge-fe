@@ -7,7 +7,7 @@ const useGetEverydayProblem = () => {
 
   const getEverydayProblem = async () => {
     const { data, whenFinish, fetching,error } = request<ProblemRes>({
-      url: `/submission/get-total-ac-rate`,
+      url: `/everyday-problem/get-everyday-problem`,
       method: "get",
     });
     await whenFinish;

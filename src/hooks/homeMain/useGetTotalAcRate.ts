@@ -7,7 +7,7 @@ const useGetTotalAcRate = () => {
 
   const getTotalAcRate = async () => {
     const { data, whenFinish, fetching,error } = request<AcDataRes>({
-      url: `/everyday-problem/get-everyday-problem`,
+      url: `/submission/get-total-ac-rate`,
       method: "get",
     });
     await whenFinish;
