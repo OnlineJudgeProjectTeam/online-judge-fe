@@ -4,23 +4,78 @@ import useGetProblemList from "../hooks/homeMain/useGetProblemList";
 import useChangeFavorite from "@/hooks/homeMain/useChangeFavorite";
 import useGetEverydayProblem from "@/hooks/homeMain/useGetEverydayProblem";
 import useGetTotalAcRate from "@/hooks/homeMain/useGetTotalAcRate";
+import Tags from "./detail/Tags.vue";
 
 let probleminfo: ProblemInfo = {
   pageNum: 1,
-  pageSize: 1,
-  navSize: 2,
+  pageSize: 7,
+  navSize: 3,
 };
+
+const name = ref<string>("");
+const tags = ref<string>("");
+const currentPage = ref<number>(1);
+
+const pageinfo = ref({}) as Ref<PageInfo>;
 
 const { data, fetching, error } = useGetProblemList(probleminfo);
 const { dataEvery, fetchingEvery, errorEvery } = useGetEverydayProblem();
 const { dataAc, fetchingAc, errorAc } = useGetTotalAcRate();
 const changeFavorite = useChangeFavorite();
 
-let pageinfo = ref({}) as Ref<PageInfo>;
+async function search() {
+   probleminfo.pageNum = currentPage.value;
+  const { data, whenFinish } = useGetProblemList(probleminfo);
+  whenFinish.value.then(() => {
+    pageinfo.value = data.value;
+  })
+}
 
-watch(data, () => {
-  pageinfo = data;
-});
+async function send(){
+  probleminfo.name = "name";
+  const { data, whenFinish } = useGetProblemList(probleminfo);
+  whenFinish.value.then(() => {
+    pageinfo.value = data.value;
+  })
+}
+
+async function choose(tag:string,checked:boolean){
+  if(checked === false){
+    tags.value.replace(tag,"")
+    console.log(tags.value)
+  }
+  tags.value = tags.value + tag;
+  probleminfo.tags = tags.value;
+  const { data, whenFinish } = useGetProblemList(probleminfo);
+  whenFinish.value.then(() => {
+    pageinfo.value = data.value;
+  })
+}
+
+async function changeEasy(){
+  probleminfo.difficulty = "简单"
+  const { data, whenFinish } = useGetProblemList(probleminfo);
+  whenFinish.value.then(() => {
+    pageinfo.value = data.value;
+  })
+}
+
+async function changeMid(){
+  probleminfo.difficulty = "中等"
+  const { data,whenFinish } = useGetProblemList(probleminfo);
+  whenFinish.value.then(() => {
+    pageinfo.value = data.value;
+  })
+}
+
+async function changeDifficult(){
+  probleminfo.difficulty = "困难"
+  const { data,whenFinish} = useGetProblemList(probleminfo);
+  whenFinish.value.then(() => {
+    pageinfo.value = data.value;
+  })
+}
+
 
 function judge() {
   if (
@@ -37,10 +92,7 @@ function judge() {
   }
 }
 
-const isShowc = ref<boolean>(false);
-async function displayc() {
-  isShowc.value = !isShowc.value;
-}
+
 const isShowd = ref<boolean>(false);
 async function displayd() {
   isShowd.value = !isShowd.value;
@@ -50,7 +102,7 @@ let url1 = "/src/assets/images/star-yellow.png";
 let url2 = "/src/assets/images/star.png";
 
 const url = ref<string>();
-function collect(id: number, problem: ProblemRes) {
+async function collect(id: number, problem: ProblemRes) {
   changeFavorite(id).then((res: any) => {
     if (res.data.value === "操作成功") {
       if (problem.isFavorite === 1) {
@@ -65,35 +117,34 @@ function collect(id: number, problem: ProblemRes) {
     }
   });
 }
+
+watch(data, () => {
+  pageinfo.value = data.value;
+});
+
+
+
 </script>
 
 <template>
   <div class="container" v-if="judge()">
+    <div class="tags">
+      <Tags @choose-tags="choose" />
+    </div>
     <div class="choose">
       <div class="submit">
         <div class="search">
-          <input type="text" placeholder="请输入题目名称" />
-          <div class="btn">
+          <input type="text" placeholder="请输入题目名称"  v-model="name"/>
+          <div class="btn" @click="send()">
             <img src="../assets/images/search.png" alt="搜索" />
           </div>
         </div>
-        <div class="classify" @click="displayc">
-          <div class="label">分类</div>
-          <div class="text">
-            <a :class="isShowc === true ? 'choice' : 'hide'">123</a>
-            <a :class="isShowc === true ? 'choice' : 'hide'">234</a>
-            <a :class="isShowc === true ? 'choice' : 'hide'">345</a>
-          </div>
-          <div class="btn">
-            <img src="../assets/images/down.png" alt="" />
-          </div>
-        </div>
-        <div class="degree" @click="displayd">
+        <div class="degree" @click="displayd" >
           <div class="label">难度</div>
           <div class="text">
-            <a :class="isShowd === true ? 'choice' : 'hide'">简单</a>
-            <a :class="isShowd === true ? 'choice' : 'hide'">中等</a>
-            <a :class="isShowd === true ? 'choice' : 'hide'">困难</a>
+            <a :class="isShowd === true ? 'choice' : 'hide'" @click = changeEasy()>简单</a>
+            <a :class="isShowd === true ? 'choice' : 'hide'" @click = changeMid()>中等</a>
+            <a :class="isShowd === true ? 'choice' : 'hide'" @click = changeDifficult()>困难</a>
           </div>
           <div class="btn">
             <img src="../assets/images/down.png" alt="" />
@@ -137,7 +188,20 @@ function collect(id: number, problem: ProblemRes) {
       </div>
     </div>
     <div class="record">
-      <div class="description">
+      <el-progress :percentage="dataAc.acData[1].acRate" color="rgb(0, 175, 155)" >
+        <span>{{ dataAc.acData[1].acRate }}% 简单</span>
+      </el-progress>
+      <el-progress :percentage="dataAc.acData[2].acRate" color="rgb(255, 184, 0)" >
+        <span>{{ dataAc.acData[2].acRate }}% 中等</span>
+      </el-progress>
+      <el-progress :percentage="dataAc.acData[3].acRate" color="rgb(255, 45, 85)" >
+        <span>{{ dataAc.acData[3].acRate }}% 困难</span>
+      </el-progress>
+      <el-progress type="circle" :percentage="dataAc.acData[0].acRate" width="100" style="margin-left: 45px;">
+        <span>总通过率<br/><br/>{{ dataAc.acData[0].acRate }}% </span>
+      </el-progress>
+
+      <!-- <div class="description">
         <div class="easy">简单</div>
         <div class="mid">中等</div>
         <div class="difficult">困难</div>
@@ -157,8 +221,18 @@ function collect(id: number, problem: ProblemRes) {
         <div class="mid">{{ dataAc.acData[2].acRate }}</div>
         <div class="difficult">{{ dataAc.acData[3].acRate }}</div>
       </div>
-      <div class="statistics"></div>
+      <div class="statistics"></div> -->
     </div>
+    <el-pagination
+    small
+    background
+    layout="prev, pager, next"
+    :total="pageinfo.total"
+    :pager-count= "probleminfo.navSize"
+    :page-size= "probleminfo.pageSize"
+    v-model:current-page="currentPage"
+    @current-change="search"
+  />
   </div>
 </template>
 
@@ -168,9 +242,13 @@ function collect(id: number, problem: ProblemRes) {
   width: 75%;
   height: 92vh;
 }
+.tags{
+  margin-top: 10px;
+}
 .choose {
   display: flex;
   height: 5vh;
+  width: 80%;
   margin-top: 20px;
   margin-bottom: 10px;
 }
@@ -184,6 +262,11 @@ function collect(id: number, problem: ProblemRes) {
   border-radius: 5px;
   background-color: rgb(242, 243, 244);
   height: 4vh;
+  .btn{
+    &:hover{
+      cursor: pointer;
+    }
+  }
 }
 input {
   outline: none;
@@ -194,26 +277,6 @@ input {
   border-radius: 5px;
 }
 
-.classify {
-  position: relative;
-  display: flex;
-  margin-left: 60px;
-  margin-right: 30px;
-  border-radius: 5px;
-  width: 12vh;
-  height: 3vh;
-  padding: 3px 0;
-  background-color: rgb(242, 243, 244);
-  &:hover {
-    background-color: rgb(247, 247, 247);
-  }
-  .btn {
-    margin-left: 10px;
-  }
-  .label {
-    padding-left: 10px;
-  }
-}
 .degree {
   position: relative;
   display: flex;
@@ -338,51 +401,61 @@ input {
   height: 4vh;
 }
 .record {
-  width: 13%;
-  position: fixed;
-  top: 110px;
-  right: 180px;
+  width: 15%;
+  position: absolute;
+  top: 60px;
+  right: 150px;
   margin-top: 7px;
   border-radius: 3px;
-  background-color: white;
+  // background-color: white;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.02),
     0px 6px 12px rgba(0, 0, 0, 0.02);
 }
-.description {
-  display: flex;
-  padding-top: 1vh;
-  padding-bottom: 1vh;
+
+.el-progress{
+  margin: 10px 10px;
 }
-.countAll {
-  display: flex;
-  padding-bottom: 1vh;
-}
-.count {
-  display: flex;
-  padding-bottom: 1vh;
-}
-.rate {
-  display: flex;
-  padding-bottom: 1vh;
-}
-.easy {
-  width: 30%;
-  padding-left: 10%;
-  color: rgb(0, 175, 155);
-}
-.mid {
-  width: 30%;
-  color: rgb(255, 184, 0);
-}
-.difficult {
-  width: 30%;
-  color: rgb(255, 45, 85);
-}
-.statistics {
-  width: 15vh;
-  height: 15vh;
-  border: 1px solid black;
-  border-radius: 999px;
-  margin: 15px auto;
+// .description {
+//   display: flex;
+//   padding-top: 1vh;
+//   padding-bottom: 1vh;
+// }
+// .countAll {
+//   display: flex;
+//   padding-bottom: 1vh;
+// }
+// .count {
+//   display: flex;
+//   padding-bottom: 1vh;
+// }
+// .rate {
+//   display: flex;
+//   padding-bottom: 1vh;
+// }
+// .easy {
+//   width: 30%;
+//   padding-left: 10%;
+//   color: rgb(0, 175, 155);
+// }
+// .mid {
+//   width: 30%;
+//   color: rgb(255, 184, 0);
+// }
+// .difficult {
+//   width: 30%;
+//   color: rgb(255, 45, 85);
+// }
+// .statistics {
+//   width: 15vh;
+//   height: 15vh;
+//   border: 1px solid black;
+//   border-radius: 999px;
+//   margin: 15px auto;
+// }
+
+.el-pagination{
+  position: absolute;
+  right: 30%;
+  margin-top: 25px;
 }
 </style>

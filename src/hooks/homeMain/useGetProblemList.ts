@@ -4,6 +4,8 @@ import request from "../../network/request";
 const useGetProblemList = (probleminfo: ProblemInfo) => {
   const error = ref(undefined) as Ref<string | undefined>;
   const fetching = ref(true);
+  const data = ref({}) as Ref<PageInfo>;
+  const whenFinish = ref(Promise.resolve());
 
   const getProblemList = async () => {
     const { data, whenFinish, fetching,error } = request<PageInfo>({
@@ -12,10 +14,10 @@ const useGetProblemList = (probleminfo: ProblemInfo) => {
       data: probleminfo,
     });
     await whenFinish;
-    return { data, fetching,error };
+    return { data, fetching,error,whenFinish };
   };
 
-  const data = ref({}) as Ref<PageInfo>;
+  
 
   const query = async () => {
     const res = await getProblemList();
@@ -25,11 +27,12 @@ const useGetProblemList = (probleminfo: ProblemInfo) => {
       data.value = res.data.value!;
     }
     fetching.value = false;
+    whenFinish.value = res.whenFinish;
   };
 
   query();
 
-  return { data, fetching, error };
+  return { data, fetching, error,whenFinish};
 
 };
 
