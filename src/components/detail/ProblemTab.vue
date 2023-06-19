@@ -37,6 +37,7 @@ const store = useTabStore();
     margin-right: 16px;
     padding-bottom: 10px;
     font-size: 14px;
+    cursor: pointer;
 
     &.active {
       border-bottom: 3px solid rgba($color: #000000, $alpha: 0.6);

@@ -3,8 +3,11 @@ import CodeEditor from "@/components/detail/CodeEditor.vue";
 import ProblemMain from "@/components/detail/ProblemMain.vue";
 import ProblemTab from "@/components/detail/ProblemTab.vue";
 import useGetProblem from "@/hooks/detail/useGetProblem";
+import { useRoute } from "vue-router";
 
-const { data, fetching, error } = useGetProblem(1, 0);
+const { query } = useRoute();
+
+const { data, fetching, error } = useGetProblem(query.problemId as any, 0);
 </script>
 
 <template>
@@ -25,6 +28,7 @@ const { data, fetching, error } = useGetProblem(1, 0);
   background-color: #ededed;
 
   .left {
+    position: relative;
     height: calc(100vh - 32px);
     margin: 16px;
     margin-right: 0;

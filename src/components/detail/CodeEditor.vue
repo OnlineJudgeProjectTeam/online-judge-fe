@@ -3,6 +3,8 @@ import { onUpdated, ref, watch, computed } from "vue";
 import Pointer from "@components/detail/Pointer.vue";
 import usePointer from "@/hooks/usePointer";
 import downImg from "@/assets/images/down.png";
+import { useRoute } from "vue-router";
+import useSubmit from "@/hooks/detail/useSubmit";
 
 const props = defineProps<{
   template: string[];
@@ -19,7 +21,8 @@ const offsetTop = computed(() => {
   return codeRef.value.offsetTop;
 });
 
-const { pointerHandler, pointerPosition, pushPointer } = usePointer(code.value);
+const { pointerHandler, pointerPosition, pushPointer, resetPosition } =
+  usePointer(code.value);
 
 const input = ref();
 const inputText = ref();
@@ -100,19 +103,42 @@ const isShowDrop = ref(false);
 
 const changeLanguage = (index: number) => {
   language.value = index;
+  isShowDrop.value = false;
+};
+
+watch(language, () => {
+  // code.value = props.template[language.value].split("\n");
+  props.template[language.value].split("\n").map((item, index) => {
+    code.value[index] = item;
+  });
+  code.value.splice(props.template[language.value].split("\n").length);
+  resetPosition();
+});
+
+// 提交代码
+const { query } = useRoute();
+const submit = useSubmit();
+
+const submitHandler = () => {
+  let str: string = "";
+  code.value.map((item) => {
+    str += item + "\n";
+  });
+  submit(str, language.value, query.problemId as any).then((res) => {
+    const { data, error } = res;
+    console.log(data, error);
+  });
 };
 </script>
 
 <template>
   <div class="code-editor">
-    <Pointer
-      :pointer-position="pointerPosition"
-      :code="code"
-      :offsetLeft="offsetLeft"
-      :offsetTop="offsetTop"
-    ></Pointer>
     <div class="code-top">
-      <div class="code-language" @click="isShowDrop = !isShowDrop">
+      <div
+        class="code-language"
+        :class="{ active: isShowDrop }"
+        @click="isShowDrop = !isShowDrop"
+      >
         <p>{{ languageList[language] }}</p>
         <img :src="downImg" />
       </div>
@@ -127,12 +153,23 @@ const changeLanguage = (index: number) => {
         </div>
       </div>
     </div>
-    <div class="line-container"></div>
     <div class="code-container" ref="codeRef">
-      <div class="code-line" v-for="(item, index) in code">
-        <div class="line-number">
-          <p>{{ index }}</p>
+      <Pointer
+        :pointer-position="pointerPosition"
+        :code="code"
+        :offsetLeft="offsetLeft"
+        :offsetTop="offsetTop"
+      ></Pointer>
+      <div class="line-container">
+        <div
+          v-for="(item, index) in code"
+          class="line-number"
+          :class="{ item: item }"
+        >
+          <p>{{ index + 1 }}</p>
         </div>
+      </div>
+      <div class="code-line" v-for="(item, index) in code">
         <div
           class="code"
           v-highlight
@@ -156,6 +193,11 @@ const changeLanguage = (index: number) => {
         @keyup.left="leftHandler"
         @keyup.right="rightHandler"
       ></textarea>
+    </div>
+    <div class="code-bottom">
+      <div class="btn-submit" @click="submitHandler">
+        <p>提交</p>
+      </div>
     </div>
   </div>
 </template>
@@ -181,9 +223,14 @@ const changeLanguage = (index: number) => {
   .code-language {
     width: fit-content;
     cursor: pointer;
-    filter: opacity(50%);
+    filter: opacity(60%);
     display: flex;
     align-items: center;
+    z-index: 10;
+
+    &.active {
+      filter: opacity(100%);
+    }
 
     &:hover {
       filter: opacity(100%);
@@ -223,7 +270,7 @@ const changeLanguage = (index: number) => {
       padding: 4px 24px 4px 4px;
       font-size: 14px;
       border-radius: 8px;
-      color: #e2e8f0;
+      color: #c7ced6;
       cursor: pointer;
 
       &:hover {
@@ -240,23 +287,28 @@ const changeLanguage = (index: number) => {
 .line-container {
   position: absolute;
   width: 28px;
-}
-
-.code-container {
-  position: relative;
-  top: 8px;
-  margin-left: 32px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 
   .line-number {
-    position: absolute;
+    position: relative;
     height: 18.5px;
-    left: -30px;
     font-size: 12px;
     color: #237893;
     user-select: none;
     display: flex;
     align-items: center;
   }
+}
+
+.code-container {
+  position: relative;
+  top: -16px;
+  height: calc(100vh - 136px);
+  overflow-y: auto;
+  padding-left: 32px;
 
   .code {
     min-width: 100px;
@@ -285,6 +337,32 @@ const changeLanguage = (index: number) => {
     height: 16px;
     width: 1000px;
     outline: none;
+  }
+}
+
+.code-bottom {
+  background-color: white;
+  height: 32px;
+  margin-top: 8px;
+  padding: 8px 16px;
+
+  .btn-submit {
+    position: relative;
+    left: 90%;
+    height: 32px;
+    width: 72px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: white;
+    background-color: #2db55d;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background-color: #268547;
+    }
   }
 }
 </style>

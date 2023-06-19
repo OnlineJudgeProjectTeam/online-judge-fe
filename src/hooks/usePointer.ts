@@ -1,6 +1,10 @@
-import { ref, reactive } from "vue";
+import { ref, reactive, watchEffect } from "vue";
 
 const usePointer = (code: string[]) => {
+  watchEffect(() => {
+    console.log(code);
+  });
+
   const isShowPointer = ref(true);
   let pointerInterval = setInterval(() => {
     isShowPointer.value = !isShowPointer.value;
@@ -29,7 +33,7 @@ const usePointer = (code: string[]) => {
     e: any
   ) => {
     e.stopPropagation();
-    const clickX = e.screenX - offsetLeft;
+    const clickX = e.screenX - offsetLeft - 32;
     pointerPosition.x = getCharacterIndex(str, clickX);
     pointerPosition.y = index;
     resetPointer();
@@ -47,6 +51,8 @@ const usePointer = (code: string[]) => {
   };
 
   const pushPointer = (x: number, y: number) => {
+    console.log(code);
+    console.log(pointerPosition.y);
     pointerPosition.y += y;
     if (pointerPosition.y > code.length) pointerPosition.y = code.length;
     if (pointerPosition.y < 0) pointerPosition.y = 0;
@@ -57,7 +63,18 @@ const usePointer = (code: string[]) => {
     resetPointer();
   };
 
-  return { isShowPointer, pointerHandler, pointerPosition, pushPointer };
+  const resetPosition = () => {
+    pointerPosition.x = 0;
+    pointerPosition.y = 0;
+  };
+
+  return {
+    isShowPointer,
+    pointerHandler,
+    pointerPosition,
+    pushPointer,
+    resetPosition,
+  };
 };
 
 export default usePointer;

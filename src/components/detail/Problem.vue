@@ -62,7 +62,7 @@ const difficultyClass = computed(() => {
   box-sizing: border-box;
   position: relative;
   width: 50vw;
-  height: 100%;
+  height: calc(100vh - 80px);
   padding: 8px 16px;
   margin: 16px;
   margin-top: 0;

@@ -10,3 +10,9 @@ export interface ProblemRes {
   isFavorite: number;
   favorites: number;
 }
+
+export interface SubmitRes {
+  message: string;
+  timeCost: string;
+  memoryCost: string;
+}

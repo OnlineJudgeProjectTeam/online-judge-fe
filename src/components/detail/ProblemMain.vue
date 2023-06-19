@@ -22,6 +22,7 @@ const store = useTabStore();
 
 <style lang="scss" scoped>
 .main {
+  position: relative;
   flex: 1;
 }
 </style>

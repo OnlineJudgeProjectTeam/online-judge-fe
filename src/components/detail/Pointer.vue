@@ -25,14 +25,11 @@ const getPointerX = (str: string) => {
 };
 
 watch(props.pointerPosition, (pointerPosition) => {
-  console.log(props.offsetLeft);
-  pointer.value.style.top = `${
-    pointerPosition.y * 18.5 + 1 + props.offsetTop
-  }px`;
-  pointer.value.style.left = `${
-    getPointerX(props.code[pointerPosition.y].substring(0, pointerPosition.x)) +
-    props.offsetLeft
-  }px`;
+  pointer.value.style.top = `${pointerPosition.y * 18.1 + 17.5}px`;
+  console.log();
+  pointer.value.style.left = `${getPointerX(
+    props.code[pointerPosition.y].substring(0, pointerPosition.x)
+  )}px`;
 });
 
 const { isShowPointer } = usePointer(props.code);
@@ -44,7 +41,7 @@ const { isShowPointer } = usePointer(props.code);
 
 <style lang="scss" scoped>
 .pointer {
-  position: absolute;
+  position: relative;
   left: -1000px;
   height: 16px;
   width: 0px;

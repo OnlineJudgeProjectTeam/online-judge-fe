@@ -6,7 +6,7 @@ import useGetEverydayProblem from "@/hooks/homeMain/useGetEverydayProblem";
 import useGetTotalAcRate from "@/hooks/homeMain/useGetTotalAcRate";
 import Tags from "./detail/Tags.vue";
 
-let probleminfo: ProblemInfo = {
+let problemInfo: ProblemInfo = {
   pageNum: 1,
   pageSize: 7,
   navSize: 3,
@@ -18,64 +18,61 @@ const currentPage = ref<number>(1);
 
 const pageinfo = ref({}) as Ref<PageInfo>;
 
-const { data, fetching, error } = useGetProblemList(probleminfo);
+const { data, fetching, error, query } = useGetProblemList();
+
+query(problemInfo);
+
 const { dataEvery, fetchingEvery, errorEvery } = useGetEverydayProblem();
 const { dataAc, fetchingAc, errorAc } = useGetTotalAcRate();
 const changeFavorite = useChangeFavorite();
 
 async function search() {
-   probleminfo.pageNum = currentPage.value;
-  const { data, whenFinish } = useGetProblemList(probleminfo);
-  whenFinish.value.then(() => {
+  problemInfo.pageNum = currentPage.value;
+  query(problemInfo).then(() => {
     pageinfo.value = data.value;
-  })
+  });
 }
 
-async function send(){
-  probleminfo.name = "name";
-  const { data, whenFinish } = useGetProblemList(probleminfo);
-  whenFinish.value.then(() => {
-    pageinfo.value = data.value;
-  })
+async function send() {
+  // problemInfo.name = "name";
+  // const { data, whenFinish } = useGetProblemList(problemInfo);
+  // whenFinish.value.then(() => {
+  //   pageinfo.value = data.value;
+  // });
 }
 
-async function choose(tag:string,checked:boolean){
-  if(checked === false){
-    tags.value.replace(tag,"")
-    console.log(tags.value)
+async function choose(tag: string, checked: boolean) {
+  if (checked === false) {
+    tags.value.replace(tag, "");
+    console.log(tags.value);
   }
   tags.value = tags.value + tag;
-  probleminfo.tags = tags.value;
-  const { data, whenFinish } = useGetProblemList(probleminfo);
-  whenFinish.value.then(() => {
+  problemInfo.tags = tags.value;
+  query(problemInfo).then(() => {
     pageinfo.value = data.value;
-  })
+  });
 }
 
-async function changeEasy(){
-  probleminfo.difficulty = "简单"
-  const { data, whenFinish } = useGetProblemList(probleminfo);
-  whenFinish.value.then(() => {
-    pageinfo.value = data.value;
-  })
+async function changeEasy() {
+  // problemInfo.difficulty = "简单";
+  // whenFinish.value.then(() => {
+  //   pageinfo.value = data.value;
+  // });
 }
 
-async function changeMid(){
-  probleminfo.difficulty = "中等"
-  const { data,whenFinish } = useGetProblemList(probleminfo);
-  whenFinish.value.then(() => {
-    pageinfo.value = data.value;
-  })
+async function changeMid() {
+  // problemInfo.difficulty = "中等";
+  // whenFinish.value.then(() => {
+  //   pageinfo.value = data.value;
+  // });
 }
 
-async function changeDifficult(){
-  probleminfo.difficulty = "困难"
-  const { data,whenFinish} = useGetProblemList(probleminfo);
-  whenFinish.value.then(() => {
-    pageinfo.value = data.value;
-  })
+async function changeDifficult() {
+  // problemInfo.difficulty = "困难";
+  // whenFinish.value.then(() => {
+  //   pageinfo.value = data.value;
+  // });
 }
-
 
 function judge() {
   if (
@@ -91,7 +88,6 @@ function judge() {
     return false;
   }
 }
-
 
 const isShowd = ref<boolean>(false);
 async function displayd() {
@@ -121,9 +117,6 @@ async function collect(id: number, problem: ProblemRes) {
 watch(data, () => {
   pageinfo.value = data.value;
 });
-
-
-
 </script>
 
 <template>
@@ -134,17 +127,29 @@ watch(data, () => {
     <div class="choose">
       <div class="submit">
         <div class="search">
-          <input type="text" placeholder="请输入题目名称"  v-model="name"/>
+          <input type="text" placeholder="请输入题目名称" v-model="name" />
           <div class="btn" @click="send()">
             <img src="../assets/images/search.png" alt="搜索" />
           </div>
         </div>
-        <div class="degree" @click="displayd" >
+        <div class="degree" @click="displayd">
           <div class="label">难度</div>
           <div class="text">
-            <a :class="isShowd === true ? 'choice' : 'hide'" @click = changeEasy()>简单</a>
-            <a :class="isShowd === true ? 'choice' : 'hide'" @click = changeMid()>中等</a>
-            <a :class="isShowd === true ? 'choice' : 'hide'" @click = changeDifficult()>困难</a>
+            <a
+              :class="isShowd === true ? 'choice' : 'hide'"
+              @click="changeEasy()"
+              >简单</a
+            >
+            <a
+              :class="isShowd === true ? 'choice' : 'hide'"
+              @click="changeMid()"
+              >中等</a
+            >
+            <a
+              :class="isShowd === true ? 'choice' : 'hide'"
+              @click="changeDifficult()"
+              >困难</a
+            >
           </div>
           <div class="btn">
             <img src="../assets/images/down.png" alt="" />
@@ -188,17 +193,31 @@ watch(data, () => {
       </div>
     </div>
     <div class="record">
-      <el-progress :percentage="dataAc.acData[1].acRate" color="rgb(0, 175, 155)" >
+      <el-progress
+        :percentage="dataAc.acData[1].acRate"
+        color="rgb(0, 175, 155)"
+      >
         <span>{{ dataAc.acData[1].acRate }}% 简单</span>
       </el-progress>
-      <el-progress :percentage="dataAc.acData[2].acRate" color="rgb(255, 184, 0)" >
+      <el-progress
+        :percentage="dataAc.acData[2].acRate"
+        color="rgb(255, 184, 0)"
+      >
         <span>{{ dataAc.acData[2].acRate }}% 中等</span>
       </el-progress>
-      <el-progress :percentage="dataAc.acData[3].acRate" color="rgb(255, 45, 85)" >
+      <el-progress
+        :percentage="dataAc.acData[3].acRate"
+        color="rgb(255, 45, 85)"
+      >
         <span>{{ dataAc.acData[3].acRate }}% 困难</span>
       </el-progress>
-      <el-progress type="circle" :percentage="dataAc.acData[0].acRate" width="100" style="margin-left: 45px;">
-        <span>总通过率<br/><br/>{{ dataAc.acData[0].acRate }}% </span>
+      <el-progress
+        type="circle"
+        :percentage="dataAc.acData[0].acRate"
+        width="100"
+        style="margin-left: 45px"
+      >
+        <span>总通过率<br /><br />{{ dataAc.acData[0].acRate }}% </span>
       </el-progress>
 
       <!-- <div class="description">
@@ -224,15 +243,15 @@ watch(data, () => {
       <div class="statistics"></div> -->
     </div>
     <el-pagination
-    small
-    background
-    layout="prev, pager, next"
-    :total="pageinfo.total"
-    :pager-count= "probleminfo.navSize"
-    :page-size= "probleminfo.pageSize"
-    v-model:current-page="currentPage"
-    @current-change="search"
-  />
+      small
+      background
+      layout="prev, pager, next"
+      :total="pageinfo.total"
+      :pager-count="problemInfo.navSize"
+      :page-size="problemInfo.pageSize"
+      v-model:current-page="currentPage"
+      @current-change="search"
+    />
   </div>
 </template>
 
@@ -242,7 +261,7 @@ watch(data, () => {
   width: 75%;
   height: 92vh;
 }
-.tags{
+.tags {
   margin-top: 10px;
 }
 .choose {
@@ -262,8 +281,8 @@ watch(data, () => {
   border-radius: 5px;
   background-color: rgb(242, 243, 244);
   height: 4vh;
-  .btn{
-    &:hover{
+  .btn {
+    &:hover {
       cursor: pointer;
     }
   }
@@ -412,7 +431,7 @@ input {
     0px 6px 12px rgba(0, 0, 0, 0.02);
 }
 
-.el-progress{
+.el-progress {
   margin: 10px 10px;
 }
 // .description {
@@ -453,7 +472,7 @@ input {
 //   margin: 15px auto;
 // }
 
-.el-pagination{
+.el-pagination {
   position: absolute;
   right: 30%;
   margin-top: 25px;
