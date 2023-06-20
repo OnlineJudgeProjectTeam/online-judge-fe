@@ -1,41 +1,59 @@
 <template>
+  test shoeinfo
     <div>
-      <br>
-      <br>
-      
-        <div  style="width:14%;height: 130px;border-radius: 100px;display:inline-block;">
-          <img
-            style="width:100%;height: 100%;border-radius: 100px"
-            src="../assets/images/avatar.jpg"
-            class="image"
-          ></div>
-    
+      <el-avatar :size="150" :src="form.avatar" />
       <br>
       <br>
       <el-descriptions :column="1" border>
     
-        <el-descriptions-item label="账号" v-model="name" ><p class="message">{{name}}</p></el-descriptions-item>
-        <!-- <el-descriptions-item label="邮箱号" v-model="person.email" class="message"><p class="message">{{person.email}}</p></el-descriptions-item>
-        <el-descriptions-item label="个人描述" v-model="person.description" class="message" ><p class="message">{{person.description}}</p></el-descriptions-item>
-        <el-descriptions-item label="学校" v-model="person.school" class="message"><p class="message">{{person.school}}</p></el-descriptions-item>
-     -->
+        <el-descriptions-item label="昵称" v-model="form.name" ><p class="message">{{form.name}}</p></el-descriptions-item>
+        <el-descriptions-item label="性别" v-model="sex"><p class="message">{{sex}}</p></el-descriptions-item>
+        <el-descriptions-item label="学校" v-model="form.school" ><p class="message">{{form.school}}</p></el-descriptions-item>
+        <el-descriptions-item label="公司" v-model="form.company" ><p class="message">{{form.company}}</p></el-descriptions-item>
+        <el-descriptions-item label="个人描述" v-model="form.description"><p class="message">{{form.description}}</p></el-descriptions-item>
+
       </el-descriptions>
     </div>
     </template>
     
-    <script setup lang="ts">
-    import { ref } from 'vue';
-    import { userStore } from "@/stores/login";
-    const store = userStore()
-    const name = ref<string>(store.$state.name + '  name')
-    </script>
+<script setup lang="ts">
+// import { ref } from 'vue';
+import { userStore } from "@/stores/login";
+import { reactive } from 'vue'
+
+const store = userStore(); 
+const form = reactive({
+  name: store.$state.name,
+  sex: store.$state.sex,
+  school: store.$state.school,
+  company: store.$state.company,
+  description: store.$state.description,
+  avatar: store.$state.avatar,
+})
+
+var sex:string;
+if(form.sex){
+  sex = '男';
+}
+else{
+  sex = '女';
+}
+
+</script>
     
-    <style scoped>
-    .message{
-      width: 20em;
-      overflow: hidden;
-      text-overflow:ellipsis;
-      white-space: nowrap;
-    }
-    </style>
+<style scoped>
+.message{
+  width: 20em;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
+.long{
+  width: 60em;
+  height: 5cm;
+  overflow: scroll;
+  text-overflow:visible;
+  white-space: nowrap;
+}
+</style>
     

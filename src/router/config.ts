@@ -8,7 +8,6 @@ import {
   asyncSelectedSolutions,
   asyncShowInfo,
   asyncInfoEditor,
-  asyncImageUp,
   asyncAccountCtrl,
   asyncMySpace,
   asyncMyCollect,
@@ -66,11 +65,6 @@ export const routes: RouteRecordRaw[] = [
         path: '/accountctrl',
         name: 'accountctrl',
         component: asyncAccountCtrl,
-      },
-      {
-        path: '/imageup',
-        name: 'imageup',
-        component: asyncImageUp,
       },
       {
         path: '/mycollect',

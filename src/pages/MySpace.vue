@@ -1,8 +1,13 @@
 <template>
-  <el-container class="layout-container-demo" style="height: 900px">
-    <el-aside width="200px">
-      <el-scrollbar>
-        <el-menu :default-openeds="['1', '1']">
+  <Header/>
+  <!-- <br> -->
+  <div class="layout-container-demo">
+    <!-- <el-container>
+      <el-header></el-header> -->
+      <el-container>
+        <el-aside width="200px">
+          <!-- <el-scrollbar> -->
+        <el-menu :default-openeds="['1', '2']">
 
           <el-sub-menu index="1">
             <template #title>
@@ -18,19 +23,13 @@
 
               <router-link class="alink" to="/infoeditor">
                 <el-menu-item index="1-2">
-                  <el-icon><EditPen /></el-icon>信息修改
-                </el-menu-item>
-              </router-link>
-
-              <router-link class="alink" to="/imageup">
-                <el-menu-item index="1-3">
-                  <el-icon><Picture /></el-icon>头像修改
+                  <el-icon><User /></el-icon>信息修改
                 </el-menu-item>
               </router-link>
 
               <router-link class="alink" to="/accountctrl">
-                <el-menu-item index="1-4">
-                  <el-icon><Picture /></el-icon>账号管理
+                <el-menu-item index="1-3">
+                  <el-icon><Lock /></el-icon>密码修改
                 </el-menu-item>
               </router-link>
 
@@ -52,7 +51,7 @@
 
               <router-link class="alink" to="/myupload">
                 <el-menu-item index="2-2">
-                  <el-icon><DataLine /></el-icon>我的题解
+                  <el-icon><Notebook /></el-icon>我的题解
                 </el-menu-item>
               </router-link>
 
@@ -66,73 +65,93 @@
           </router-link>
 
         </el-menu>
-      </el-scrollbar>
-    </el-aside>
-
-    <el-container>
-      <!-- <el-header style="text-align: right; font-size: 12px">
-        <div class="toolbar">
-          <el-dropdown>
-            <el-icon style="margin-right: 8px; margin-top: 1px"
-              ><setting
-            /></el-icon>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item>View</el-dropdown-item>
-                <el-dropdown-item>Add</el-dropdown-item>
-                <el-dropdown-item>Delete</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-          <span>Tom</span>
-        </div>
-      </el-header> -->
-
-      <el-main>
-        <!-- <el-scrollbar>
-          <el-table :data="tableData">
-            <el-table-column prop="date" label="Date" width="140" />
-            <el-table-column prop="name" label="Name" width="120" />
-            <el-table-column prop="address" label="Address" />
-          </el-table>
-        </el-scrollbar> -->
-        <div style="width: 80%;margin: 0 auto">
+      <!-- </el-scrollbar> -->
+        </el-aside>
+        <el-main>
+          <div style="width: 80%;margin: 0 auto">
             <router-view></router-view>
         </div>
-      </el-main>
-    </el-container>
-  </el-container>
+        </el-main>
+      </el-container>
+    <!-- </el-container> -->
+  </div>
 </template>
 
 <script lang="ts" setup>
-// import { Menu as IconMenu, Message, Setting, CollectionTag } from '@element-plus/icons-vue'
-// import { Menu as IconMenu, Message, Setting } from '@element-plus/icons-vue'
-import { Setting, CollectionTag, User, EditPen, Star, Picture, DataLine} from '@element-plus/icons-vue'
+import  Header  from "@/components/Header.vue";
+import { Setting, CollectionTag, User, Star, DataLine, Notebook, Lock} from '@element-plus/icons-vue'
 
 </script>
 
 <style scoped>
-.layout-container-demo .el-aside {
-  /* color: var(--el-text-color-primary); */
-  color: #D4D7DE;
-  /* background: var(--el-color-primary-light-8); */
-  background: #D4D7DE;
+.layout-container-demo .el-sub-menu tbody tr:hover>td{
+  background-color: #ffffff !important;
+  color: #ffffff !important;
 }
+.layout-container-demo{
+  margin-top: 1.8mm;
+}
+/* .layout-container-demo .el-aside tbody tr:hover>td {
+  background-color:transparent!important;
+}  */
+
+/* .layout-container-demo .el-aside-column .button:hover {
+    background-color: #4CAF50; 
+    color: white;
+} */
+
+.layout-container-demo > .el-aside--enable-row-hover .el-table__body tr:hover > td {
+  background-color: white !important;
+}
+
 .layout-container-demo .el-menu {
   border-right: none;
 }
 .layout-container-demo .el-main {
   padding: 0;
 }
-.layout-container-demo .toolbar {
+/* .layout-container-demo .toolbar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   height: 100%;
-  right: 20px;
-}
+  right: 10px;
+} */
 
 .alink{
 text-decoration: none;
 }
+/* 
+    /deep/ .el-submenu__title:focus {
+      color: @font-color;
+      background: none;
+    }
+    /deep/ .el-submenu__title:hover {
+      color: @font-color;
+      background: none;
+    }
+    .el-menu-item:focus, .el-menu-item:hover {
+      color: @font-color;
+      background-color: @font-bg-color;
+    } */
+
 </style>
+
+<!-- <style lang="less">
+//设置鼠标悬停时el-submenu的样式
+.layout-container-demo:hover{
+        background-color: #550d0d !important;
+        color: #114b6e !important;
+        i {
+            color: #1787FB;
+        } 
+    }
+</style> -->
+
+<!-- css: {
+  preprocessorOptions: {
+      less: {
+        math: "always",
+      },
+  },
+}, -->
