@@ -19,6 +19,9 @@ export const asyncRegister = defineAsyncComponent({
 export const asyncDetail = defineAsyncComponent({
   loader: () => import("@pages/Detail.vue"),
 });
+export const asyncSelectedSolutions = defineAsyncComponent({
+  loader: () => import("@pages/SelectedSolutions.vue"),
+})
 
 export const asyncMySpace = defineAsyncComponent({
   loader: () => import("@pages/MySpace.vue"),

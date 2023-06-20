@@ -4,6 +4,7 @@ import request from "../../network/request";
 const useGetEverydayProblem = () => {
   const errorEvery = ref(undefined) as Ref<string | undefined>;
   const fetchingEvery = ref(true);
+  const whenFinishEvery = ref(Promise.resolve());
 
   const getEverydayProblem = async () => {
     const { data, whenFinish, fetching,error } = request<ProblemRes>({
@@ -11,12 +12,12 @@ const useGetEverydayProblem = () => {
       method: "get",
     });
     await whenFinish;
-    return { data, fetching,error };
+    return { data, fetching,error,whenFinish };
   };
 
   const dataEvery = ref({}) as Ref<ProblemRes>;
 
-  const query = async () => {
+  const queryEvery = async () => {
     const res = await getEverydayProblem();
     if (res.error.value) {
       errorEvery.value = res.error.value;
@@ -24,11 +25,12 @@ const useGetEverydayProblem = () => {
       dataEvery.value = res.data.value!;
     }
     fetchingEvery.value = false;
+    whenFinishEvery.value = res.whenFinish;
+    return whenFinishEvery.value;
   };
 
-  query();
 
-  return { dataEvery, fetchingEvery, errorEvery };
+  return { dataEvery, fetchingEvery, errorEvery,queryEvery};
 
 };
 

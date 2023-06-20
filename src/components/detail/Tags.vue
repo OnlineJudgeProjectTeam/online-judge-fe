@@ -44,7 +44,6 @@ const checkActive = (num: number) => {
       return;
     }
   });
-  console.log(activeTag.value);
   return flag;
 };
 </script>
@@ -55,7 +54,7 @@ const checkActive = (num: number) => {
       :checked="checkActive(index)"
       @change="onChange(index)"
       v-for="(tag, index) in tags"
-      @click="$emit('chooseTags', tag, checkActive(index))"
+      @click="$emit('chooseTags', tag,checkActive(index))"
       >{{ tag }}</el-check-tag
     >
   </div>

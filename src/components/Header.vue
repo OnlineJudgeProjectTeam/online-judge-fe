@@ -20,11 +20,13 @@ async function displayb() {
   isShowb.value = true
   isShowr.value = false
   isShows.value = false
+  router.push("/")
 }
 async function displays() {
   isShows.value = true
   isShowb.value = false
   isShowr.value = false
+  router.push("/SelectedSolutions")
 }
 async function displayr() {
   isShowr.value = true

@@ -15,7 +15,7 @@
     })
 
     let s = ref<string>("发送验证码")
-    let isDisabled = ref<boolean>(true)
+    let isDisabled = ref<boolean>(false)
     let count = ref<number>(60)
     const register = useRegister();
 
@@ -38,7 +38,7 @@
         }
         else{
             err.value = ""
-            isDisabled.value = false;
+            isDisabled.value = true;
             s.value = count.value + "s后重发"
             let id = setInterval(() => {
                 if (count.value === 0) {

@@ -5,6 +5,7 @@ import {
   asyncRegister,
   asyncVerify,
   asyncDetail,
+  asyncSelectedSolutions,
   asyncShowInfo,
   asyncInfoEditor,
   asyncImageUp,
@@ -40,6 +41,11 @@ export const routes: RouteRecordRaw[] = [
     path: "/detail",
     name: "detail",
     component: asyncDetail,
+  },
+  {
+    path:"/SelectedSolutions",
+    name:"SelectedSolutions",
+    component: asyncSelectedSolutions,
   },
   {
     path: '/myspace',
