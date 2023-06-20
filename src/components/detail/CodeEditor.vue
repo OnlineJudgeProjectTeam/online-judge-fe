@@ -119,14 +119,25 @@ watch(language, () => {
 const { query } = useRoute();
 const submit = useSubmit();
 
+const emit = defineEmits(["set-status"]);
+
 const submitHandler = () => {
   let str: string = "";
   code.value.map((item) => {
     str += item + "\n";
   });
   submit(str, language.value, query.problemId as any).then((res) => {
-    const { data, error } = res;
-    console.log(data, error);
+    const { data } = res;
+    emit("set-status", true, {
+      code: str,
+      msg: data.value!.message,
+      language: languageList[language.value],
+      isShow: true,
+      timeCost: data.value!.timeCost,
+      timeBeat: data.value!.timeBeat,
+      memoryCost: data.value!.memoryCost,
+      memoryBeat: data.value!.memoryBeat,
+    });
   });
 };
 </script>
@@ -206,7 +217,7 @@ const submitHandler = () => {
 .code-editor {
   box-sizing: border-box;
   border-radius: 8px;
-  width: 50vw;
+  width: 44vw;
   height: calc(100vh - 32px);
   margin: 16px;
   padding: 8px 16px;

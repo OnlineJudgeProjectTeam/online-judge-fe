@@ -20,6 +20,13 @@ const store = useTabStore();
     >
       题解
     </div>
+    <div
+      class="problem-item"
+      :class="{ active: store.$state.tab === 2 }"
+      @click="store.setActive(2)"
+    >
+      提交记录
+    </div>
   </div>
 </template>
 

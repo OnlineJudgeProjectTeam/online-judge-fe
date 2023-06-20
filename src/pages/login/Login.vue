@@ -29,7 +29,7 @@ async function handleLogin() {
     login(userinfo).then((res: any) => {
       err.value = "";
       if (!res.error.value) {
-        store.$state = res.data.value;
+        store.setUser(res.data.value);
         setToken({ value: res.data.value.token });
         router.push("/");
       } else {
