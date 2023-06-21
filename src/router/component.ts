@@ -30,11 +30,11 @@ export const asyncRanking = defineAsyncComponent({
 
 export const asyncSolution = defineAsyncComponent({
   loader: () => import("@pages/Solution.vue"),
-});
+})
 
 export const asyncCreateSolution = defineAsyncComponent({
   loader: () => import("@pages/CreateSolution.vue"),
-});
+})
 
 export const asyncMySpace = defineAsyncComponent({
   loader: () => import("@pages/MySpace.vue"),
@@ -46,6 +46,10 @@ export const asyncShowInfo = defineAsyncComponent({
 
 export const asyncInfoEditor = defineAsyncComponent({
   loader: () => import("@components/InfoEditor.vue"),
+});
+
+export const asyncImageUp = defineAsyncComponent({
+  loader: () => import("@components/ImageUp.vue"),
 });
 
 export const asyncAccountCtrl = defineAsyncComponent({

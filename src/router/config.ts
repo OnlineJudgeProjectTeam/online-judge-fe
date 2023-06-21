@@ -13,12 +13,10 @@ import {
   asyncMyCollect,
   asyncMyHistory,
   asyncMyUpload,
-<<<<<<< HEAD
   asyncRanking,
-=======
   asyncSolution,
   asyncCreateSolution,
->>>>>>> 014fa4df4d117cd4d988ec28ca54d3fc84d0a116
+asyncImageUp,
 } from "./component";
 
 export const routes: RouteRecordRaw[] = [
@@ -53,15 +51,11 @@ export const routes: RouteRecordRaw[] = [
     component: asyncSelectedSolutions,
   },
   {
-<<<<<<< HEAD
     path:"/ranking",
     name:"ranking",
     component: asyncRanking,
   },
   {
-    path: '/myspace',
-    name: 'myspace',
-=======
     path: "/solution",
     name: "solution",
     component: asyncSolution,
@@ -74,7 +68,6 @@ export const routes: RouteRecordRaw[] = [
   {
     path: "/myspace",
     name: "myspace",
->>>>>>> 014fa4df4d117cd4d988ec28ca54d3fc84d0a116
     component: asyncMySpace,
     children: [
       {
