@@ -22,6 +22,12 @@ const currentPage = ref<number>(1);
 const pageinfo = ref({}) as Ref<PageInfo>;
 const router = useRouter();
 
+const diff = ref<string>("难度");
+let state:string = "";
+const state1:string = "/src/assets/images/correct.svg";
+const state2:string = "/src/assets/images/wrong.svg"; 
+const state3:string = "/src/assets/images/off.jpg"; 
+
 const { data, fetching, error, query } = useGetProblemList();
 const { dataEvery, fetchingEvery, errorEvery,queryEvery } = useGetEverydayProblem();
 const { dataAc, fetchingAc, errorAc } = useGetTotalAcRate();
@@ -61,6 +67,7 @@ async function choose(tag: string,checked:boolean) {
 
 async function changeEasy() {
   problemInfo.difficulty = "简单";
+  diff.value = "简单";
   query(problemInfo).then(() => {
     pageinfo.value = data.value;
   });
@@ -68,6 +75,7 @@ async function changeEasy() {
 
 async function changeMid() {
   problemInfo.difficulty = "中等";
+  diff.value = "中等";
   query(problemInfo).then(() => {
     pageinfo.value = data.value;
   });
@@ -75,6 +83,7 @@ async function changeMid() {
 
 async function changeDifficult() {
   problemInfo.difficulty = "困难";
+  diff.value = "困难";
   query(problemInfo).then(() => {
     pageinfo.value = data.value;
   });
@@ -157,7 +166,7 @@ watch(data, () => {
           </div>
         </div>
         <div class="degree" @click="displayd">
-          <div class="label">难度</div>
+          <div class="label">{{ diff }}</div>
           <div class="text">
             <a
               :class="isShowd === true ? 'choice' : 'hide'"
@@ -193,7 +202,9 @@ watch(data, () => {
       </div>
       <div class="contents">
         <div class="everyday">
-          <div class="status">{{ dataEvery.status }}</div>
+          <div class="status">
+            <img src="../assets/images/every.svg" alt="">  
+          </div>
           <div class="question" @click="gotoDetail(dataEvery.id)">{{ dataEvery.name }}</div>
           <div class="answer">{{ dataEvery.solutions }}</div>
           <div class="assort">{{ dataEvery.tags }}</div>
@@ -204,7 +215,9 @@ watch(data, () => {
           </div>
         </div>
         <div class="content" v-for="problem in pageinfo.list">
-          <div class="status">{{ problem.status }}</div>
+          <div class="status">
+            <img :src="(state = problem.status === 2 ? state1 : (problem.status === 1 ? state2 : state3))" alt="">
+          </div>
           <div class="question" @click="gotoDetail(problem.id)" >{{ problem.name }}</div>
           <div class="answer">{{ problem.solutions }}</div>
           <div class="assort">{{ problem.tags }}</div>
@@ -388,23 +401,31 @@ input {
   height: 3vh;
   border-bottom: 1px solid rgb(240, 240, 240);
 }
+.contents{
+  color: rgb(38,38,38);
+}
+
+
 .status {
   margin-left: 15px;
   width: 10%;
+  img{
+    width: 18px;
+    height: 18px;
+    margin-top: 5px;
+  }
 }
+  
+
 .question {
   width: 30%;
   cursor: pointer;
   &:hover {
-    color: blue;
+    color: rgb(0,122,255);
   }
 }
 .answer {
   width: 10%;
-  cursor: pointer;
-  &:hover {
-    color: blue;
-  }
 }
 .assort {
   width: 30%;

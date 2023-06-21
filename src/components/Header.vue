@@ -1,38 +1,30 @@
 <script lang="ts" setup>
-import { ref } from "vue";
+
 import { userStore } from "@/stores/login";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 
 const store = userStore();
 const router = useRouter();
-
 const { userData } = storeToRefs(store);
 
-const name = ref<string>(userData.value!.name);
-const avatar = ref<string>(userData.value!.avatar!);
+// const name = ref<string>(userData.value!.name);
+// const avatar = ref<string>(userData.value!.avatar!);
 
-const greet = ref<string>("Hello, " + name.value + "!");
+// const greet = ref<string>("Hello, " + name.value + "!");
 
-const isShowb = ref<boolean>(true);
-const isShows = ref<boolean>(false);
-const isShowr = ref<boolean>(false);
-async function displayb() {
-  isShowb.value = true;
-  isShowr.value = false;
-  isShows.value = false;
-  router.push("/")
-}
-async function displays() {
-  isShows.value = true;
-  isShowb.value = false;
-  isShowr.value = false;
-}
-async function displayr() {
-  isShowr.value = true;
-  isShows.value = false;
-  isShowb.value = false;
-  router.push("/SelectedSolutions")
+
+
+async function display(num:number) {
+  if(num === 0){
+    router.push(`/`);
+  }
+  else if(num === 1){
+    router.push(`/SelectedSolutions`);
+  }
+  else{
+    router.push(`/ranking`);
+  }
 }
 
 async function PersonalCenter() {
@@ -47,25 +39,22 @@ async function PersonalCenter() {
       <a>OnlineJudge</a>
     </div>
     <div class="choice">
-      <div class="bank" @click="displayb">
+      <div class="bank" :class="{show:$route.name === 'home'}" @click="display(0)" >
         题库
-        <hr :class="isShowb === true ? 'show' : 'hide'" />
       </div>
-      <div class="solving" @click="displays">
+      <div class="solving" :class="{show:$route.name === 'SelectedSolutions'}" @click="display(1)">
         精选题解
-        <hr :class="isShows === true ? 'show' : 'hide'" />
       </div>
-      <div class="rank" @click="displayr">
+      <div class="rank" :class="{show:$route.name === 'ranking'}" @click="display(2)"> 
         排行榜
-        <hr :class="isShowr === true ? 'show' : 'hide'" />
       </div>
     </div>
     <div class="user">
-      <a>{{ greet }}</a>
+      <a>Hello, {{ userData?.name }} !</a>
       <el-avatar
         class="avatar"
         :size="50"
-        :src="avatar"
+        :src="userData?.avatar"
         @click="PersonalCenter"
       />
     </div>
@@ -75,7 +64,6 @@ async function PersonalCenter() {
 <style lang="scss" scoped>
 .header {
   width: 100%;
-  height: 8vh;
   box-shadow: 0 5px 10px -5px rgb(241, 238, 238);
   display: flex;
   background-color: white;
@@ -103,42 +91,43 @@ async function PersonalCenter() {
 .bank {
   width: 5vh;
   margin-right: 40px;
-  margin-right: 40px;
   text-align: center;
   padding: 18px;
+  // box-sizing: border-box;
   &:hover {
     font-weight: 550;
     cursor: pointer;
   }
-  h {
-    margin-top: 13px;
-    border-color: black;
+  &.show {
+    border-bottom: 3px solid rgba($color: #000000, $alpha: 0.6);
   }
 }
 .solving {
   width: 10vh;
   margin-right: 40px;
-  margin-right: 40px;
   text-align: center;
   padding: 18px;
+  // box-sizing: border-box;
   &:hover {
     font-weight: 550;
     cursor: pointer;
+  }
+  &.show {
+    border-bottom: 3px solid rgba($color: #000000, $alpha: 0.6);
   }
 }
 .rank {
   width: 8vh;
   margin-right: 40px;
-  margin-right: 40px;
   text-align: center;
   padding: 18px;
+  // box-sizing: border-box;
   &:hover {
     font-weight: 550;
     cursor: pointer;
   }
-  .hr {
-    margin-top: 13px;
-    border-color: black;
+  &.show {
+    border-bottom: 3px solid rgba($color: #000000, $alpha: 0.6);
   }
 }
 .user {
@@ -154,12 +143,5 @@ async function PersonalCenter() {
     margin-left: 10px;
     cursor: pointer;
   }
-}
-.hide {
-  display: none;
-}
-.show {
-  margin-top: 13px;
-  border-color: black;
 }
 </style>
