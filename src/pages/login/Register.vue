@@ -107,7 +107,7 @@
             </div>
             <div class="code">
                 <input type="password" v-model="userinfo.code" placeholder="请输入验证码">
-                <el-button class="click" @click="send" >{{ s }}</el-button>
+                <el-button class="click" @click="send" :disabled = isDisabled>{{ s }}</el-button>
             </div>
             <div class="pwd">
                 <input type="password" v-model="userinfo.pwd" placeholder="请输入您的密码">

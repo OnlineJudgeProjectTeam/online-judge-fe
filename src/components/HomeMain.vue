@@ -11,7 +11,7 @@ import useGetRandomProblem from "@/hooks/homeMain/useGetRandomProblem";
 
 let problemInfo: ProblemInfo = {
   pageNum: 1,
-  pageSize: 7,
+  pageSize: 10,
   navSize: 3,
 };
 
@@ -171,18 +171,15 @@ watch(data, () => {
             <a
               :class="isShowd === true ? 'choice' : 'hide'"
               @click="changeEasy()"
-              >简单</a
-            >
+              >简单</a>
             <a
               :class="isShowd === true ? 'choice' : 'hide'"
               @click="changeMid()"
-              >中等</a
-            >
+              >中等</a>
             <a
               :class="isShowd === true ? 'choice' : 'hide'"
               @click="changeDifficult()"
-              >困难</a
-            >
+              >困难</a>
           </div>
           <div class="btn">
             <img src="../assets/images/down.png" alt="" />
@@ -341,10 +338,12 @@ input {
   height: 3vh;
   width: 12vh;
   padding: 3px 0;
-  background-color: rgb(242, 243, 244);
-  &:hover {
+  &:hover{
+    cursor: pointer;
     background-color: rgb(247, 247, 247);
+    transition: all .3s;
   }
+  background-color: rgb(242, 243, 244);
   .btn {
     margin-left: 10px;
   }
@@ -358,10 +357,13 @@ input {
   background-color: white;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.02),
     0px 6px 12px rgba(0, 0, 0, 0.02);
-  border-radius: 5px;
+  border-radius: 10px;
   z-index: 999;
   &:hover {
     cursor: pointer;
+  }
+  a:nth-child(3){
+    padding-bottom: 5px;
   }
 }
 .choice {
@@ -520,6 +522,7 @@ input {
 .el-pagination {
   position: absolute;
   right: 30%;
-  margin-top: 25px;
+  margin-top: 20px;
+  padding-bottom: 10px;
 }
 </style>
