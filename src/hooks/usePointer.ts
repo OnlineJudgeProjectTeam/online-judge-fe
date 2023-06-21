@@ -33,7 +33,8 @@ const usePointer = (code: string[]) => {
     e: any
   ) => {
     e.stopPropagation();
-    const clickX = e.screenX - offsetLeft - 32;
+    const clickX = e.offsetX;
+    console.log(clickX, e.screenX, e.offsetX);
     pointerPosition.x = getCharacterIndex(str, clickX);
     pointerPosition.y = index;
     resetPointer();

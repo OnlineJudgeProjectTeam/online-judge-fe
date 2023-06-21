@@ -13,6 +13,8 @@ import {
   asyncMyCollect,
   asyncMyHistory,
   asyncMyUpload,
+  asyncSolution,
+  asyncCreateSolution,
 } from "./component";
 
 export const routes: RouteRecordRaw[] = [
@@ -42,45 +44,55 @@ export const routes: RouteRecordRaw[] = [
     component: asyncDetail,
   },
   {
-    path: '/myspace',
-    name: 'myspace',
+    path: "/solution",
+    name: "solution",
+    component: asyncSolution,
+  },
+  {
+    path: "/create-solution",
+    name: "createSolution",
+    component: asyncCreateSolution,
+  },
+  {
+    path: "/myspace",
+    name: "myspace",
     component: asyncMySpace,
-    children:[
+    children: [
       {
-        path: '/showinfo',
-        name: 'showinfo',
+        path: "/showinfo",
+        name: "showinfo",
         component: asyncShowInfo,
       },
       {
-        path: '/infoeditor',
-        name: 'infoeditor',
+        path: "/infoeditor",
+        name: "infoeditor",
         component: asyncInfoEditor,
       },
       {
-        path: '/accountctrl',
-        name: 'accountctrl',
+        path: "/accountctrl",
+        name: "accountctrl",
         component: asyncAccountCtrl,
       },
       {
-        path: '/imageup',
-        name: 'imageup',
+        path: "/imageup",
+        name: "imageup",
         component: asyncImageUp,
       },
       {
-        path: '/mycollect',
-        name: 'mycollect',
+        path: "/mycollect",
+        name: "mycollect",
         component: asyncMyCollect,
       },
       {
-        path: '/myhistory',
-        name: 'myhistory',
+        path: "/myhistory",
+        name: "myhistory",
         component: asyncMyHistory,
       },
       {
-        path: '/myupload',
-        name: 'myupload',
-        component: asyncMyUpload
+        path: "/myupload",
+        name: "myupload",
+        component: asyncMyUpload,
       },
     ],
-  }
+  },
 ];

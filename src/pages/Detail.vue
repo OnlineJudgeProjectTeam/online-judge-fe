@@ -7,10 +7,12 @@ import { reactive } from "vue";
 import { useRoute } from "vue-router";
 import SubmitStatus from "@/components/detail/SubmitStatus.vue";
 import { Status } from "@/type/detail/index";
+import useStatusStore from "@/stores/status";
+import Header from "@/components/Header.vue";
 
 const { query } = useRoute();
 
-const { data, fetching, error } = useGetProblem(query.problemId as any, 0);
+const { data, fetching, error } = useGetProblem(query.problemId as any);
 
 const status = reactive({
   code: "",
@@ -23,32 +25,29 @@ const status = reactive({
   isShow: false,
 });
 
+const store = useStatusStore();
+
 const setStatus = (isShow: boolean, _status?: Status) => {
-  if (_status) {
-    status.code = _status.code;
-    status.msg = _status.msg;
-    status.language = _status.language;
-    status.isShow = _status.isShow;
-    status.timeCost = _status.timeCost;
-    status.memoryCost = _status.memoryCost;
-    status.timeBeat = _status.timeBeat;
-    status.memoryBeat = _status.memoryBeat;
-  } else status.isShow = isShow;
+  if (_status) store.$state = _status;
+  else store.$state.isShow = isShow;
 };
 </script>
 
 <template>
-  <div class="detail" v-if="!error && !fetching">
-    <div class="left">
-      <ProblemTab></ProblemTab>
-      <ProblemMain :problem="data" :fetching="fetching"></ProblemMain>
-    </div>
-    <div class="right">
-      <SubmitStatus :status="status"></SubmitStatus>
-      <CodeEditor
-        :template="data.template"
-        @set-status="setStatus"
-      ></CodeEditor>
+  <div class="detail">
+    <Header></Header>
+    <div class="container" v-if="!error && !fetching">
+      <div class="left">
+        <ProblemTab></ProblemTab>
+        <ProblemMain :problem="data" :fetching="fetching"></ProblemMain>
+      </div>
+      <div class="right">
+        <SubmitStatus :status="status"></SubmitStatus>
+        <CodeEditor
+          :template="data.template"
+          @set-status="setStatus"
+        ></CodeEditor>
+      </div>
     </div>
   </div>
 </template>
@@ -57,8 +56,12 @@ const setStatus = (isShow: boolean, _status?: Status) => {
 .detail {
   height: 100vh;
   width: 100vw;
-  display: flex;
+  overflow: hidden;
   background-color: #ededed;
+
+  .container {
+    display: flex;
+  }
 
   .left {
     position: relative;

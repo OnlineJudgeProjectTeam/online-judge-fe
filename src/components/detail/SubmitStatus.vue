@@ -1,15 +1,54 @@
 <script lang="ts" setup>
+import useStatusStore from "@/stores/status";
 import { Status } from "@/type/detail/index";
+import { ref, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
 
-defineProps<{
-  status: Status;
-}>();
+const router = useRouter();
+const { query } = useRoute();
+const store = useStatusStore();
+const status = ref<Status>();
+
+watch(store.$state, () => {
+  status.value = store.$state;
+  console.log(status.value);
+});
+
+const closeHandler = () => {
+  store.$state.isShow = false;
+};
 </script>
 
 <template>
-  <div class="submit-status" v-show="status.isShow">
-    <div class="language-tag">
-      <p>{{ status.language }}</p>
+  <div class="submit-status" v-if="status" v-show="status.isShow">
+    <div class="close" @click="closeHandler">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="1em"
+        height="1em"
+        fill="currentColor"
+        class="text-gray-6 dark:text-dark-gray-6 group-hover:text-gray-7 dark:group-hover:text-dark-gray-7 h-4 w-4"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M13.414 12L19 17.586A1 1 0 0117.586 19L12 13.414 6.414 19A1 1 0 015 17.586L10.586 12 5 6.414A1 1 0 116.414 5L12 10.586 17.586 5A1 1 0 1119 6.414L13.414 12z"
+          clip-rule="evenodd"
+        ></path>
+      </svg>
+    </div>
+    <div class="top">
+      <div class="language-tag">
+        <p>{{ status.language }}</p>
+      </div>
+      <div class="spacer"></div>
+      <div
+        class="btn"
+        v-if="status.timeCost !== '-1'"
+        @click="router.push(`/create-solution?id=${query.problemId}`)"
+      >
+        <p>写题解</p>
+      </div>
     </div>
     <div
       class="msg"
@@ -28,7 +67,7 @@ defineProps<{
         <div class="tag">
           <p>{{ `${Math.floor(status.timeBeat)}` }}</p>
           <p class="small-text">
-            {{ `.${status.timeBeat.toFixed(2).toString().split(".")[1]}%` }}
+            {{ `.${status.timeBeat?.toFixed(2).toString().split(".")[1]}%` }}
           </p>
         </div>
       </div>
@@ -40,7 +79,7 @@ defineProps<{
         <div class="tag">
           <p>{{ `${Math.floor(status.memoryBeat)}` }}</p>
           <p class="small-text">
-            {{ `.${status.memoryBeat.toFixed(2).toString().split(".")[1]}%` }}
+            {{ `.${status.memoryBeat?.toFixed(2).toString().split(".")[1]}%` }}
           </p>
         </div>
       </div>
@@ -65,20 +104,51 @@ defineProps<{
   background-color: white;
   z-index: 1000;
 
-  .language-tag {
-    position: relative;
-    margin-top: 16px;
-    margin-left: 8px;
-    padding: 0 12px;
+  .close {
+    position: absolute;
+    left: 16px;
+    top: 12px;
     height: 24px;
-    width: fit-content;
-    font-size: 14px;
-    border-radius: 16px;
-    color: rgb(0, 122, 255);
-    background-color: rgba(66, 153, 225, 0.2);
+    width: 24px;
+    cursor: pointer;
+  }
+
+  .top {
+    margin-top: 36px;
+    padding: 0 12px;
     display: flex;
     align-items: center;
-    justify-content: center;
+
+    .language-tag {
+      position: relative;
+      padding: 0 12px;
+      height: 24px;
+      width: fit-content;
+      font-size: 14px;
+      border-radius: 16px;
+      color: rgb(0, 122, 255);
+      background-color: rgba(66, 153, 225, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spacer {
+      flex: 1;
+    }
+
+    .btn {
+      padding: 5px 12px;
+      border-radius: 10px;
+      background-color: rgba(45, 181, 93, 0.7);
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba(30, 146, 71, 0.7);
+      }
+    }
   }
 
   .msg {

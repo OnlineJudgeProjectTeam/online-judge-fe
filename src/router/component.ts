@@ -20,6 +20,14 @@ export const asyncDetail = defineAsyncComponent({
   loader: () => import("@pages/Detail.vue"),
 });
 
+export const asyncSolution = defineAsyncComponent({
+  loader: () => import("@pages/Solution.vue"),
+});
+
+export const asyncCreateSolution = defineAsyncComponent({
+  loader: () => import("@pages/CreateSolution.vue"),
+});
+
 export const asyncMySpace = defineAsyncComponent({
   loader: () => import("@pages/MySpace.vue"),
 });

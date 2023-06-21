@@ -1,6 +1,6 @@
 import { PersonRes } from "@/type/user";
 import { defineStore } from "pinia";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 
 const userKey = "__OJ__user";
 
