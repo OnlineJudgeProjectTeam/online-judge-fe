@@ -26,7 +26,7 @@ const diff = ref<string>("难度");
 let state:string = "";
 const state1:string = "/src/assets/images/correct.svg";
 const state2:string = "/src/assets/images/wrong.svg"; 
-const state3:string = "/src/assets/images/off.jpg"; 
+const state3:string = "/src/assets/images/start.svg"; 
 
 const { data, fetching, error, query } = useGetProblemList();
 const { dataEvery, fetchingEvery, errorEvery,queryEvery } = useGetEverydayProblem();
@@ -166,19 +166,22 @@ watch(data, () => {
           </div>
         </div>
         <div class="degree" @click="displayd">
-          <div class="label">{{ diff }}</div>
+          <div class="label" :class="{box1: diff === '简单',box2: diff === '中等',box3: diff === '困难'}">{{ diff }}</div>
           <div class="text">
             <a
               :class="isShowd === true ? 'choice' : 'hide'"
               @click="changeEasy()"
+              :style="{color:'rgb(0, 175, 155)'}"
               >简单</a>
             <a
               :class="isShowd === true ? 'choice' : 'hide'"
               @click="changeMid()"
+              :style="{color:'rgb(255, 184, 0)'}"
               >中等</a>
             <a
               :class="isShowd === true ? 'choice' : 'hide'"
               @click="changeDifficult()"
+              :style="{color:'rgb(255, 45, 85)'}"
               >困难</a>
           </div>
           <div class="btn">
@@ -186,7 +189,11 @@ watch(data, () => {
           </div>
         </div>
       </div>
-      <div class="random" @click="randomDetail">随机一题</div>
+      
+      <div class="random" @click="randomDetail">
+        <img src="../assets/images/random.svg" alt="">
+        <a>随机一题</a>
+      </div>
     </div>
     <div class="questions">
       <div class="title">
@@ -205,7 +212,7 @@ watch(data, () => {
           <div class="question" @click="gotoDetail(dataEvery.id)">{{ dataEvery.name }}</div>
           <div class="answer">{{ dataEvery.solutions }}</div>
           <div class="assort">{{ dataEvery.tags }}</div>
-          <div class="difficulty">{{ dataEvery.difficulty }}</div>
+          <div class="difficulty" :class="{box1: dataEvery.difficulty === '简单',box2: dataEvery.difficulty === '中等',box3: dataEvery.difficulty === '困难'}">{{ dataEvery.difficulty }}</div>
           <div class="collected" @click="collect(dataEvery.id, dataEvery)">
             <img :src="(url = dataEvery.isFavorite ? url1 : url2)" alt="" />
             <a>{{ dataEvery.favorites }}</a>
@@ -218,7 +225,7 @@ watch(data, () => {
           <div class="question" @click="gotoDetail(problem.id)" >{{ problem.name }}</div>
           <div class="answer">{{ problem.solutions }}</div>
           <div class="assort">{{ problem.tags }}</div>
-          <div class="difficulty">{{ problem.difficulty }}</div>
+          <div class="difficulty" :class="{box1: problem.difficulty === '简单',box2: problem.difficulty === '中等',box3: problem.difficulty === '困难'}">{{ problem.difficulty }}</div>
           <div class="collected" @click="collect(problem.id, problem)">
             <img :src="(url = problem.isFavorite ? url1 : url2)" alt="" />
             <a>{{ problem.favorites }}</a>
@@ -253,28 +260,6 @@ watch(data, () => {
       >
         <span>总通过率<br /><br />{{ dataAc.acData[0].acRate }}% </span>
       </el-progress>
-
-      <!-- <div class="description">
-        <div class="easy">简单</div>
-        <div class="mid">中等</div>
-        <div class="difficult">困难</div>
-      </div>
-      <div class="count">
-        <div class="easy">{{ dataAc.acData[1].acNum }}</div>
-        <div class="mid">{{ dataAc.acData[2].acNum }}</div>
-        <div class="difficult">{{ dataAc.acData[3].acNum }}</div>
-      </div>
-      <div class="countAll">
-        <div class="easy">{{ dataAc.acData[1].submitNum }}</div>
-        <div class="mid">{{ dataAc.acData[2].submitNum }}</div>
-        <div class="difficult">{{ dataAc.acData[3].submitNum }}</div>
-      </div>
-      <div class="rate">
-        <div class="easy">{{ dataAc.acData[1].acRate }}</div>
-        <div class="mid">{{ dataAc.acData[2].acRate }}</div>
-        <div class="difficult">{{ dataAc.acData[3].acRate }}</div>
-      </div>
-      <div class="statistics"></div> -->
     </div>
     <el-pagination
       small
@@ -380,10 +365,20 @@ input {
 }
 
 .random {
-  color: greenyellow;
+  color: rgb(45, 181, 93);
   cursor: pointer;
   margin-left: auto;
   margin-right: 10px;
+  display: flex;
+  align-items: center;
+  img{
+    width: 18px;
+    height: 18px;
+    background-color: rgb(45, 181, 93);
+    border-radius: 999px;
+    padding: 5px;
+    margin-right: 10px;
+  }
 }
 .btn {
   margin-top: 3px;
@@ -473,7 +468,6 @@ input {
   right: 150px;
   margin-top: 7px;
   border-radius: 3px;
-  // background-color: white;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.02),
     0px 6px 12px rgba(0, 0, 0, 0.02);
 }
@@ -481,48 +475,21 @@ input {
 .el-progress {
   margin: 10px 10px;
 }
-// .description {
-//   display: flex;
-//   padding-top: 1vh;
-//   padding-bottom: 1vh;
-// }
-// .countAll {
-//   display: flex;
-//   padding-bottom: 1vh;
-// }
-// .count {
-//   display: flex;
-//   padding-bottom: 1vh;
-// }
-// .rate {
-//   display: flex;
-//   padding-bottom: 1vh;
-// }
-// .easy {
-//   width: 30%;
-//   padding-left: 10%;
-//   color: rgb(0, 175, 155);
-// }
-// .mid {
-//   width: 30%;
-//   color: rgb(255, 184, 0);
-// }
-// .difficult {
-//   width: 30%;
-//   color: rgb(255, 45, 85);
-// }
-// .statistics {
-//   width: 15vh;
-//   height: 15vh;
-//   border: 1px solid black;
-//   border-radius: 999px;
-//   margin: 15px auto;
-// }
 
 .el-pagination {
   position: absolute;
   right: 30%;
   margin-top: 20px;
   padding-bottom: 10px;
+}
+
+.box1{
+  color: rgb(0,175,155);
+}
+.box2{
+  color:rgb(255,184,0);
+}
+.box3{
+  color: rgb(255, 45, 85);
 }
 </style>
