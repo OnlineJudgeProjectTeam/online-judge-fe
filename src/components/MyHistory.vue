@@ -1,69 +1,72 @@
 <script lang="ts" setup>
-import { ref, watch, Ref } from "vue";
+import { ref, watch, Ref, reactive } from "vue";
 // import useGetProblemList from "../hooks/homeMain/useGetProblemList";
 import useGetRecord from "@/hooks/myspace/getRecord";
-import {RecordGate} from "@/type/user/index";
-import { userStore } from "@/stores/login";
+import {RecordGate, RecordInfo} from "@/type/user/index";
+import { useRouter } from "vue-router";
 
-const store = userStore();
+const value1 = ref('')
+const value2 = ref('')
 
-let problemInfo: ProblemInfo = {
+const shortcuts = [
+  {
+    text: 'Today',
+    value: new Date(),
+  },
+  {
+    text: 'Yesterday',
+    value: () => {
+      const date = new Date()
+      date.setTime(date.getTime() - 3600 * 1000 * 24)
+      return date
+    },
+  },
+  {
+    text: 'A week ago',
+    value: () => {
+      const date = new Date()
+      date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+      return date
+    },
+  },
+]
+
+
+let problemInfo: RecordGate = reactive({
   pageNum: 1,
   pageSize: 7,
   navSize: 3,
-};
+  startTime: value1,
+  endTime: value2,
+});
 
-let gate: RecordGate = {
-  pageNum: 1,
-  pageSize: 7,
-  navSize: 3,
-  userId: store.$state.id,
-}
-
-const name = ref<string>("");
 const currentPage = ref<number>(1);
 
-const pageinfo = ref({}) as Ref<PageInfo>;
+const pageinfo = ref({}) as Ref<RecordInfo>;
 
-// const { data, fetching, error, query } = useGetProblemList();
 const { data, fetching, error, query } = useGetRecord();
 
 query(problemInfo);
 
 async function search() {
-  gate.pageNum = currentPage.value;
-  query(gate).then(() => {
+  problemInfo.pageNum = currentPage.value;
+  query(problemInfo).then(() => {
     pageinfo.value = data.value;
   });
 }
 
-async function send() {
-  // problemInfo.name = "name";
-  // const { data, whenFinish } = useGetProblemList(problemInfo);
-  // whenFinish.value.then(() => {
-  //   pageinfo.value = data.value;
-  // });
+async function update() {
+  alert(value1.value);
+  problemInfo.startTime=value1.value;
+  problemInfo.endTime=value2.value;
+  query(problemInfo).then(() => {
+    pageinfo.value = data.value;
+  });
 }
 
-async function changeEasy() {
-  // problemInfo.difficulty = "简单";
-  // whenFinish.value.then(() => {
-  //   pageinfo.value = data.value;
-  // });
-}
-
-async function changeMid() {
-  // problemInfo.difficulty = "中等";
-  // whenFinish.value.then(() => {
-  //   pageinfo.value = data.value;
-  // });
-}
-
-async function changeDifficult() {
-  // problemInfo.difficulty = "困难";
-  // whenFinish.value.then(() => {
-  //   pageinfo.value = data.value;
-  // });
+const router = useRouter();
+async function enter(id: number) {
+  router.push(`/detail?problemId=${id}`);
 }
 
 function judge() {
@@ -81,77 +84,47 @@ function judge() {
   }
 }
 
-const isShowd = ref<boolean>(false);
-async function displayd() {
-  isShowd.value = !isShowd.value;
-}
-
-
 watch(data, () => {
   pageinfo.value = data.value;
 });
 </script>
 
 <template>
-  <div class="container" v-if="judge()">
-    <div class="choose">
-      <div class="submit">
-        <div class="search">
-          <input type="text" placeholder="请输入题目名称" v-model="name" />
-          <div class="btn" @click="send()">
-            <img src="../assets/images/search.png" alt="搜索" />
-          </div>
-        </div>
-        <div class="degree" @click="displayd">
-          <div class="label">难度</div>
-          <div class="text">
-            <a
-              :class="isShowd === true ? 'choice' : 'hide'"
-              @click="changeEasy()"
-              >简单</a
-            >
-            <a
-              :class="isShowd === true ? 'choice' : 'hide'"
-              @click="changeMid()"
-              >中等</a
-            >
-            <a
-              :class="isShowd === true ? 'choice' : 'hide'"
-              @click="changeDifficult()"
-              >困难</a
-            >
-          </div>
-          <div class="btn">
-            <img src="../assets/images/down.png" alt="" />
-          </div>
-        </div>
-      </div>
+  <div class="container" v-if="judge()">     
+  <div class="demo-datetime-picker">
+    <div class="block">
+      <span class="demonstration">With shortcuts</span>
+      <el-date-picker
+        v-model="value1"
+        type="datetime"
+        placeholder="Select date and time"
+        :shortcuts="shortcuts"
+      />
     </div>
-
-    <div class="questions">
-        <div class="content" v-for="problem in pageinfo.list">
-
-          <div class="question">{{ problem.name }}</div>
-          <div class="assort">{{ problem.tags }}</div>
-          <div class="difficulty">{{ problem.difficulty }}</div>
-            取消收藏
-          </div>
-        </div>
+    <div class="block">
+      <span class="demonstration">With shortcuts</span>
+      <el-date-picker
+        v-model="value2"
+        type="datetime"
+        placeholder="Select date and time"
+        :shortcuts="shortcuts"
+      />
     </div>
-
-    <!-- <div v-for="problem in pageinfo.list">
-  <el-card class="box-card">
-    <template #header>
-      <div class="card-header">
-        <span>{{problem.name}}</span>
-        <el-button class="button" text>取消收藏</el-button>
-      </div>
-    </template>
-    <span>难度：{{problem.difficulty}}</span><br>
-    <span>标签：{{problem.tags}}</span>
-  </el-card>
-    </div> -->
-
+  </div>
+<br>
+  <el-timeline>
+    <el-timeline-item
+      v-for="problem in pageinfo.list"
+      :timestamp="problem.executionTime"
+      class="timeline"
+    >
+      <div @click="enter(problem.problemId)">{{ problem.problemName }}</div>
+      {{ problem.difficulty }}
+      {{ problem.language?'c':'java' }}
+    </el-timeline-item>
+  </el-timeline>
+  </div>
+  <el-button @click="update">查看</el-button>
     <el-pagination
       small
       background
@@ -165,6 +138,28 @@ watch(data, () => {
 </template>
 
 <style lang="scss" scoped>
+
+.demo-datetime-picker {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  flex-wrap: wrap;
+}
+.demo-datetime-picker .block {
+  padding: 30px 0;
+  text-align: center;
+  border-right: solid 1px var(--el-border-color);
+  flex: 1;
+}
+.demo-datetime-picker .block:last-child {
+  border-right: none;
+}
+.demo-datetime-picker .demonstration {
+  display: block;
+  color: var(--el-text-color-secondary);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
 .container {
   margin: 0 auto;
   width: 75%;
@@ -343,8 +338,11 @@ input {
 .el-progress {
   margin: 10px 10px;
 }
-
-
+.timeline{
+  // left: 40%;
+  align-items: center;
+  justify-content: center;
+}
 .el-pagination {
   position: absolute;
   right: 30%;

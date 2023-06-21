@@ -14,25 +14,24 @@
               <el-icon><setting /></el-icon>信息管理
             </template>
             <el-menu-item-group>
-              
-              <router-link class="alink" to="/showinfo">
+
+              <router-link class="alink" to="/infoeditor">
                 <el-menu-item index="1-1">
                   <el-icon><User /></el-icon>基本信息
                 </el-menu-item>
               </router-link>
 
-              <router-link class="alink" to="/infoeditor">
-                <el-menu-item index="1-2">
-                  <el-icon><User /></el-icon>信息修改
-                </el-menu-item>
-              </router-link>
-
               <router-link class="alink" to="/accountctrl">
-                <el-menu-item index="1-3">
+                <el-menu-item index="1-2">
                   <el-icon><Lock /></el-icon>密码修改
                 </el-menu-item>
               </router-link>
 
+              <router-link class="alink" to="/showinfo">
+                <el-menu-item index="1-3">
+                  <el-icon><User /></el-icon>test
+                </el-menu-item>
+              </router-link>
 
             </el-menu-item-group>
           </el-sub-menu>

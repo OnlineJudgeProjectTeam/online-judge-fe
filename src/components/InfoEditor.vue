@@ -1,9 +1,29 @@
 <template>
+  <br>
+  <div class="common-layout">
+    <el-container>
+      <el-aside width="200px">          
+     <label
+      class="button"
+      for="file-input"
+     >
+      <span><el-avatar :size="120" :src="form.avatar" /></span>
+      <!-- <input
+        type="file"
+        class="file-input"
+        id="file-input"
+      /> -->
+      <input type="file" ref="fileInput" class="file-input" id="file-input" @change="handleFileChange" />
+    </label>
+      </el-aside>
+      <el-main>
+        <br><br>
+        <!-- <el-button @click="onUpload">上传头像</el-button> -->
+      </el-main>
+    </el-container>
+  </div>
+  <br>
     <el-form :model="form" label-width="120px">
-
-    <input type="file" ref="fileInput" @change="handleFileChange">
-    <el-button @click="onUpload">上传头像</el-button>
-
     <el-form-item label="用户名" class="small">
       <el-input v-model="form.username" disabled placeholder="form.username" />    
     </el-form-item>
@@ -45,10 +65,13 @@
 <script lang="ts" setup>
 // import { School } from '@element-plus/icons-vue';
 import useUpdate from "../hooks/myspace/useInfoed.ts";
-import { userStore } from "../stores/login";
-import { ref, reactive } from "vue";
+import { ref,reactive } from "vue";
+import { storeToRefs } from "pinia";
 // import { useRouter } from "vue-router";
 import useUpload from "../hooks/myspace/upLoad.ts";
+import { userStore } from "../stores/login";
+const store = userStore();
+const { userData } = storeToRefs(store);
 
 const options = [
   {
@@ -68,30 +91,37 @@ const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const file = target.files?.[0];
   selectedFile.value = file || null;
+  onUpload();
 };
 
 const update = useUpdate();
-const store = userStore();
 
 const form = reactive({
-  email: store.$state.email,
-  username: store.$state.username,
-  name: store.$state.name,
-  sex: store.$state.sex,
-  school: store.$state.school,
-  company: store.$state.company,
-  description: store.$state.description,
-  avatar: store.$state.avatar,
+  id: userData.value!.id,
+  email: userData.value!.email,
+  username: userData.value!.username,
+  name: userData.value!.name,
+  sex: userData.value!.sex,
+  school: userData.value!.school,
+  company: userData.value!.company,
+  description: userData.value!.description,
+  avatar: userData.value!.avatar,
+  token: userData.value!.token,
+  createdtime: userData.value!.createdTime,
+  password: userData.value!.password
 })
+
 
 const onSubmit = () => {
   update(form).then((res: any) => {
     if (!res.error.value) {
-      store.$state.name=form.name;
-      store.$state.sex=form.sex;
-      store.$state.school=form.school;
-      store.$state.company=form.company;
-      store.$state.description=form.description;
+      // userData.value!.name=form.name;
+      // userData.value!.sex=form.sex;
+      // userData.value!.school=form.school;
+      // userData.value!.company=form.company;
+      // userData.value!.description=form.description;
+      store.setUser(form);
+      alert('提交成功！');
     }
     // else{
     // }
@@ -112,7 +142,7 @@ const onUpload = () => {
     upload(formData).then((res: any) => {
     if (!res.error.value) {
       form.avatar=res.data.value;
-      store.$state.avatar=res.data.value;
+      store.setUser(form);
       update(form);
     }
     // else{
@@ -123,6 +153,16 @@ const onUpload = () => {
 </script>
 
 <style scoped>
+/* input[type="file"] {
+  display: none;
+} */
+.file-input{
+  display: none;
+}
+.el-avatar{
+  position: relative;
+  left:25%;
+}
 .small{
 width: 10cm;
 }
