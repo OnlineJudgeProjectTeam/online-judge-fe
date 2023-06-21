@@ -19,6 +19,9 @@ export const asyncRegister = defineAsyncComponent({
 export const asyncDetail = defineAsyncComponent({
   loader: () => import("@pages/Detail.vue"),
 });
+export const asyncSelectedSolutions = defineAsyncComponent({
+  loader: () => import("@pages/SelectedSolutions.vue"),
+})
 
 export const asyncSolution = defineAsyncComponent({
   loader: () => import("@pages/Solution.vue"),
@@ -38,10 +41,6 @@ export const asyncShowInfo = defineAsyncComponent({
 
 export const asyncInfoEditor = defineAsyncComponent({
   loader: () => import("@components/InfoEditor.vue"),
-});
-
-export const asyncImageUp = defineAsyncComponent({
-  loader: () => import("@components/ImageUp.vue"),
 });
 
 export const asyncAccountCtrl = defineAsyncComponent({

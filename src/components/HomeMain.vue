@@ -5,6 +5,9 @@ import useChangeFavorite from "@/hooks/homeMain/useChangeFavorite";
 import useGetEverydayProblem from "@/hooks/homeMain/useGetEverydayProblem";
 import useGetTotalAcRate from "@/hooks/homeMain/useGetTotalAcRate";
 import Tags from "./detail/Tags.vue";
+import { useRouter } from "vue-router";
+import useGetRandomProblem from "@/hooks/homeMain/useGetRandomProblem";
+
 
 let problemInfo: ProblemInfo = {
   pageNum: 1,
@@ -17,14 +20,16 @@ const tags = ref<string>("");
 const currentPage = ref<number>(1);
 
 const pageinfo = ref({}) as Ref<PageInfo>;
+const router = useRouter();
 
 const { data, fetching, error, query } = useGetProblemList();
-
-query(problemInfo);
-
-const { dataEvery, fetchingEvery, errorEvery } = useGetEverydayProblem();
+const { dataEvery, fetchingEvery, errorEvery,queryEvery } = useGetEverydayProblem();
 const { dataAc, fetchingAc, errorAc } = useGetTotalAcRate();
 const changeFavorite = useChangeFavorite();
+const getRandomProblem = useGetRandomProblem();
+
+query(problemInfo);
+queryEvery();
 
 async function search() {
   problemInfo.pageNum = currentPage.value;
@@ -34,44 +39,57 @@ async function search() {
 }
 
 async function send() {
-  // problemInfo.name = "name";
-  // const { data, whenFinish } = useGetProblemList(problemInfo);
-  // whenFinish.value.then(() => {
-  //   pageinfo.value = data.value;
-  // });
+  problemInfo.name = "name";
+  query(problemInfo).then(() => {
+    pageinfo.value = data.value;
+  });
 }
 
-async function choose(tag: string, checked: boolean) {
+async function choose(tag: string,checked:boolean) {
   if (checked === false) {
-    tags.value.replace(tag, "");
-    console.log(tags.value);
+    tags.value = tags.value.replace(tag,'');
   }
-  tags.value = tags.value + tag;
+  else{
+    tags.value = tags.value + tag;
+  }
   problemInfo.tags = tags.value;
+  console.log(tags.value)
   query(problemInfo).then(() => {
     pageinfo.value = data.value;
   });
 }
 
 async function changeEasy() {
-  // problemInfo.difficulty = "简单";
-  // whenFinish.value.then(() => {
-  //   pageinfo.value = data.value;
-  // });
+  problemInfo.difficulty = "简单";
+  query(problemInfo).then(() => {
+    pageinfo.value = data.value;
+  });
 }
 
 async function changeMid() {
-  // problemInfo.difficulty = "中等";
-  // whenFinish.value.then(() => {
-  //   pageinfo.value = data.value;
-  // });
+  problemInfo.difficulty = "中等";
+  query(problemInfo).then(() => {
+    pageinfo.value = data.value;
+  });
 }
 
 async function changeDifficult() {
-  // problemInfo.difficulty = "困难";
-  // whenFinish.value.then(() => {
-  //   pageinfo.value = data.value;
-  // });
+  problemInfo.difficulty = "困难";
+  query(problemInfo).then(() => {
+    pageinfo.value = data.value;
+  });
+}
+
+async function randomDetail() {
+  getRandomProblem().then((res:any) =>{
+    if(!res.error.value){
+      router.push(`/detail?problemId=${res.data.value.id}`);
+    }
+  })
+}
+
+async function gotoDetail(id:number) {
+  router.push(`/detail?problemId=${id}`);
 }
 
 function judge() {
@@ -110,7 +128,13 @@ async function collect(id: number, problem: ProblemRes) {
         problem.favorites++;
         url.value = url1;
       }
+    queryEvery();
+    query(problemInfo).then(() => {
+      pageinfo.value = data.value;
+    });
+
     }
+
   });
 }
 
@@ -156,7 +180,7 @@ watch(data, () => {
           </div>
         </div>
       </div>
-      <div class="random">随机一题</div>
+      <div class="random" @click="randomDetail">随机一题</div>
     </div>
     <div class="questions">
       <div class="title">
@@ -170,7 +194,7 @@ watch(data, () => {
       <div class="contents">
         <div class="everyday">
           <div class="status">{{ dataEvery.status }}</div>
-          <div class="question">{{ dataEvery.name }}</div>
+          <div class="question" @click="gotoDetail(dataEvery.id)">{{ dataEvery.name }}</div>
           <div class="answer">{{ dataEvery.solutions }}</div>
           <div class="assort">{{ dataEvery.tags }}</div>
           <div class="difficulty">{{ dataEvery.difficulty }}</div>
@@ -181,7 +205,7 @@ watch(data, () => {
         </div>
         <div class="content" v-for="problem in pageinfo.list">
           <div class="status">{{ problem.status }}</div>
-          <div class="question">{{ problem.name }}</div>
+          <div class="question" @click="gotoDetail(problem.id)" >{{ problem.name }}</div>
           <div class="answer">{{ problem.solutions }}</div>
           <div class="assort">{{ problem.tags }}</div>
           <div class="difficulty">{{ problem.difficulty }}</div>
