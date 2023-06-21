@@ -8,13 +8,17 @@ import {
   asyncSelectedSolutions,
   asyncShowInfo,
   asyncInfoEditor,
-  asyncImageUp,
   asyncAccountCtrl,
   asyncMySpace,
   asyncMyCollect,
   asyncMyHistory,
   asyncMyUpload,
+<<<<<<< HEAD
   asyncRanking,
+=======
+  asyncSolution,
+  asyncCreateSolution,
+>>>>>>> 014fa4df4d117cd4d988ec28ca54d3fc84d0a116
 } from "./component";
 
 export const routes: RouteRecordRaw[] = [
@@ -44,11 +48,12 @@ export const routes: RouteRecordRaw[] = [
     component: asyncDetail,
   },
   {
-    path:"/SelectedSolutions",
-    name:"SelectedSolutions",
+    path: "/SelectedSolutions",
+    name: "SelectedSolutions",
     component: asyncSelectedSolutions,
   },
   {
+<<<<<<< HEAD
     path:"/ranking",
     name:"ranking",
     component: asyncRanking,
@@ -56,43 +61,57 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/myspace',
     name: 'myspace',
+=======
+    path: "/solution",
+    name: "solution",
+    component: asyncSolution,
+  },
+  {
+    path: "/create-solution",
+    name: "createSolution",
+    component: asyncCreateSolution,
+  },
+  {
+    path: "/myspace",
+    name: "myspace",
+>>>>>>> 014fa4df4d117cd4d988ec28ca54d3fc84d0a116
     component: asyncMySpace,
-    children:[
+    children: [
       {
-        path: '/showinfo',
-        name: 'showinfo',
+        path: "/showinfo",
+        name: "showinfo",
         component: asyncShowInfo,
       },
       {
-        path: '/infoeditor',
-        name: 'infoeditor',
+        path: "/infoeditor",
+        name: "infoeditor",
         component: asyncInfoEditor,
       },
       {
-        path: '/accountctrl',
-        name: 'accountctrl',
+        path: "/accountctrl",
+        name: "accountctrl",
         component: asyncAccountCtrl,
       },
       {
-        path: '/imageup',
-        name: 'imageup',
+        path: "/imageup",
+        name: "imageup",
         component: asyncImageUp,
       },
       {
-        path: '/mycollect',
-        name: 'mycollect',
+        path: "/mycollect",
+        name: "mycollect",
         component: asyncMyCollect,
       },
       {
-        path: '/myhistory',
-        name: 'myhistory',
+        path: "/myhistory",
+        name: "myhistory",
         component: asyncMyHistory,
       },
       {
-        path: '/myupload',
-        name: 'myupload',
-        component: asyncMyUpload
+        path: "/myupload",
+        name: "myupload",
+        component: asyncMyUpload,
       },
     ],
-  }
+  },
 ];

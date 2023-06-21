@@ -1,16 +1,15 @@
 import request from "@/network/request";
-import { ProblemRes } from "@/type/detail";
+import { SolutionItem } from "@/type/detail";
 import { Ref, ref } from "vue";
 
-const useGetProblem = (problemId: number) => {
-  const data = ref({}) as Ref<ProblemRes>;
+const useGetSolutionDetail = (id: any) => {
+  const data = ref({}) as Ref<SolutionItem>;
   const error = ref(undefined) as Ref<string | undefined>;
   const fetching = ref(true);
 
-  const getProblem = async () => {
-    const { data, whenFinish, fetching, error } = request<ProblemRes>({
-      // url: `/problem/get-problem-content?problemId=${problemId}&language=${language}`,
-      url: `/problem/get-problem-content?problemId=${problemId}`,
+  const getSolution = async () => {
+    const { data, whenFinish, fetching, error } = request<SolutionItem>({
+      url: `/solution/get-solution/${id}`,
       method: "get",
     });
     await whenFinish;
@@ -18,7 +17,7 @@ const useGetProblem = (problemId: number) => {
   };
 
   const query = async () => {
-    const res = await getProblem();
+    const res = await getSolution();
     if (res.error.value) {
       error.value = res.error.value;
     } else {
@@ -32,4 +31,4 @@ const useGetProblem = (problemId: number) => {
   return { data, fetching, error };
 };
 
-export default useGetProblem;
+export default useGetSolutionDetail;

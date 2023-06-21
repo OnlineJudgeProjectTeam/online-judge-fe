@@ -1,3 +1,5 @@
+import exp from "constants";
+
 export interface Token {
   value: string;
   expire?: number;
@@ -17,4 +19,17 @@ export interface PersonRes {
   sex?: number; //0 女 1 男
   company?: string;
   token: string;
+}
+
+export interface PwdGate {
+  code : String;
+  password : String;
+  email : String;
+}
+
+export interface RecordGate{
+  pageNum: number,
+  pageSize: number,
+  navSize: number,
+  userId?: number,
 }

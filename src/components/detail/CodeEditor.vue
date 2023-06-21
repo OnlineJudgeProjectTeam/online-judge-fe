@@ -218,7 +218,7 @@ const submitHandler = () => {
   box-sizing: border-box;
   border-radius: 8px;
   width: 44vw;
-  height: calc(100vh - 32px);
+  height: calc(100vh - 104px);
   margin: 16px;
   padding: 8px 16px;
   overflow-y: auto;
@@ -317,7 +317,7 @@ const submitHandler = () => {
 .code-container {
   position: relative;
   top: -16px;
-  height: calc(100vh - 136px);
+  height: calc(100vh - 208px);
   overflow-y: auto;
   padding-left: 32px;
 
