@@ -31,7 +31,7 @@ async function handleLogin() {
       if (!res.error.value) {
         store.setUser(res.data.value);
         setToken({ value: res.data.value.token });
-        router.push("/");
+        router.push(`/?isShow=${0}`);
       } else {
         err.value = res.error.value;
       }

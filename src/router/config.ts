@@ -13,8 +13,10 @@ import {
   asyncMyCollect,
   asyncMyHistory,
   asyncMyUpload,
+  asyncRanking,
   asyncSolution,
   asyncCreateSolution,
+asyncImageUp,
 } from "./component";
 
 export const routes: RouteRecordRaw[] = [
@@ -47,6 +49,11 @@ export const routes: RouteRecordRaw[] = [
     path: "/SelectedSolutions",
     name: "SelectedSolutions",
     component: asyncSelectedSolutions,
+  },
+  {
+    path:"/ranking",
+    name:"ranking",
+    component: asyncRanking,
   },
   {
     path: "/solution",

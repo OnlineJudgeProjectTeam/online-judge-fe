@@ -1,25 +1,24 @@
+import { RankingInfo,RankingPage } from './../../type/ranking/index';
 import { Ref, ref } from "vue";
 import request from "../../network/request";
-import { SolutionsInfo,Page } from "@/type/selectedSolutions";
 
-const useGetSolutionList = () => {
+const useGetRank = () => {
   const error = ref(undefined) as Ref<string | undefined>;
   const fetching = ref(true);
-  const data = ref({}) as Ref<Page>;
+  const data = ref({}) as Ref<RankingPage>;
   const whenFinish = ref(Promise.resolve());
 
-  const getSolutionList = async (solutionsInfo: SolutionsInfo) => {
-    const { data, whenFinish, fetching, error } = request<Page>({
-      url: "/solution/get-solution-list",
-      method: "post",
-      data:solutionsInfo,
+  const getRank = async (rankinginfo: RankingInfo) => {
+    const { data, whenFinish, fetching, error } = request<RankingPage>({
+      url: `/user/rank?pageNum=${rankinginfo?.pageNum}&pageSize=${rankinginfo?.pageSize}&navSize=${rankinginfo?.navSize}&order=${rankinginfo.order}`,
+      method: "get",
     });
     await whenFinish;
     return { data, fetching, error, whenFinish };
   };
 
-  const query = async (solutionsInfo: SolutionsInfo) => {
-    const res = await getSolutionList(solutionsInfo);
+  const query = async (rankinginfo: RankingInfo) => {
+    const res = await getRank(rankinginfo);
     if (res.error.value) {
       error.value = res.error.value;
     } else {
@@ -33,4 +32,4 @@ const useGetSolutionList = () => {
   return { data, fetching, error, whenFinish, query };
 };
 
-export default useGetSolutionList;
+export default useGetRank;

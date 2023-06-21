@@ -59,7 +59,7 @@ import { setToken } from "@/utils/token";
                 if (!res.error.value) {
                   store.$state = res.data.value;
                   setToken({ value: res.data.value.token });
-                  router.push("/");
+                  router.push(`/?isShow=${0}`);
                 }
                 else{
                   err.value = res.error.value;
