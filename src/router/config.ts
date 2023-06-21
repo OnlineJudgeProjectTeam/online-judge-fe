@@ -86,11 +86,6 @@ export const routes: RouteRecordRaw[] = [
         component: asyncAccountCtrl,
       },
       {
-        path: "/imageup",
-        name: "imageup",
-        component: asyncImageUp,
-      },
-      {
         path: "/mycollect",
         name: "mycollect",
         component: asyncMyCollect,

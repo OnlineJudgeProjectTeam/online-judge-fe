@@ -1,15 +1,17 @@
 import { Ref, ref } from "vue";
 import request from "../../network/request";
+import {RecordGate, Record, RecordInfo} from "@/type/user/index";
+
 
 const useGetRecord = () => {
   const error = ref(undefined) as Ref<string | undefined>;
   const fetching = ref(true);
-  const data = ref({}) as Ref<PageInfo>;
+  const data = ref({}) as Ref<RecordInfo>;
   const whenFinish = ref(Promise.resolve());
 
-  const getRecord = async (probleminfo: ProblemInfo) => {
-    const { data, whenFinish, fetching, error } = request<PageInfo>({
-      url: `/problem/get-problem-list?pageNum=${probleminfo?.pageNum}&pageSize=${probleminfo?.pageSize}&navSize=${probleminfo?.navSize}&name=${probleminfo?.name}&tags=${probleminfo?.tags}&difficulty=${probleminfo?.difficulty}`,
+  const getRecord = async (probleminfo: RecordGate) => {
+    const { data, whenFinish, fetching, error } = request<RecordInfo>({
+      url: `/submission/get-submission-list?pageNum=${probleminfo?.pageNum}&pageSize=${probleminfo?.pageSize}&navSize=${probleminfo?.navSize}&startTime=${probleminfo?.startTime}`,
       method: "get",
       data: probleminfo,
     });
@@ -17,7 +19,7 @@ const useGetRecord = () => {
     return { data, fetching, error, whenFinish };
   };
 
-  const query = async (probleminfo: ProblemInfo) => {
+  const query = async (probleminfo: RecordGate) => {
     const res = await getRecord(probleminfo);
     if (res.error.value) {
       error.value = res.error.value;
