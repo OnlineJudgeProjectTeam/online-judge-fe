@@ -13,6 +13,9 @@ const { userData } = storeToRefs(store);
 
 // const greet = ref<string>("Hello, " + name.value + "!");
 
+async function main() {
+  router.push(`/`);
+}
 
 
 async function display(num:number) {
@@ -34,7 +37,7 @@ async function PersonalCenter() {
 
 <template>
   <div class="header">
-    <div class="logo">
+    <div class="logo" @click="main">
       <img src="../assets/images/logo.svg" alt="" />
       <a>OnlineJudge</a>
     </div>
@@ -80,6 +83,9 @@ async function PersonalCenter() {
   a {
     padding-left: 10px;
     vertical-align: middle;
+  }
+  &:hover{
+    cursor: pointer;
   }
 }
 .choice {
