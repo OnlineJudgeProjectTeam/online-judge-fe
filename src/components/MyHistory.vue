@@ -10,11 +10,11 @@ const value2 = ref('')
 
 const shortcuts = [
   {
-    text: 'Today',
+    text: '现在',
     value: new Date(),
   },
   {
-    text: 'Yesterday',
+    text: '昨天',
     value: () => {
       const date = new Date()
       date.setTime(date.getTime() - 3600 * 1000 * 24)
@@ -22,7 +22,7 @@ const shortcuts = [
     },
   },
   {
-    text: 'A week ago',
+    text: '一周前',
     value: () => {
       const date = new Date()
       date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
@@ -56,16 +56,22 @@ async function search() {
 }
 
 async function update() {
-  alert(value1.value);
-  problemInfo.startTime=value1.value;
-  problemInfo.endTime=value2.value;
+  alert(value1.value)
+  if(value1.value){
+    problemInfo.startTime=value1.value;
+  }
+  if(value2.value){
+    problemInfo.endTime=value2.value;
+  }
   query(problemInfo).then(() => {
     pageinfo.value = data.value;
   });
 }
 
+
 const router = useRouter();
-async function enter(id: number) {
+
+async function gotoDetail(id:number) {
   router.push(`/detail?problemId=${id}`);
 }
 
@@ -90,42 +96,52 @@ watch(data, () => {
 </script>
 
 <template>
-  <div class="container" v-if="judge()">     
+  <div class="container">     
   <div class="demo-datetime-picker">
     <div class="block">
-      <span class="demonstration">With shortcuts</span>
+      <span class="demonstration">起始时间</span>
       <el-date-picker
         v-model="value1"
         type="datetime"
-        placeholder="Select date and time"
+        placeholder="选择日期和时间"
         :shortcuts="shortcuts"
       />
     </div>
     <div class="block">
-      <span class="demonstration">With shortcuts</span>
+      <span class="demonstration">结束时间</span>
       <el-date-picker
         v-model="value2"
         type="datetime"
-        placeholder="Select date and time"
+        placeholder="选择日期和时间"
         :shortcuts="shortcuts"
       />
     </div>
   </div>
-<br>
-  <el-timeline>
-    <el-timeline-item
-      v-for="problem in pageinfo.list"
-      :timestamp="problem.executionTime"
-      class="timeline"
-    >
-      <div @click="enter(problem.problemId)">{{ problem.problemName }}</div>
-      {{ problem.difficulty }}
-      {{ problem.language?'c':'java' }}
-    </el-timeline-item>
-  </el-timeline>
+  <el-button class="select" @click="update">按时间筛选</el-button><br><br>
+  <!-- <el-table :data="pageinfo.list" style="width: 100%">
+    <el-table-column prop="problemName" label="题目名称" width="180"/>
+    <el-table-column prop="difficulty" label="难度" width="60" />
+    <el-table-column prop="executionTime" label="提交时间" width="180" />
+    <el-table-column prop="setlang(language)" label="Name" width="180" />
+    <el-table-column prop="problem.language?'c':'java'" label="Address" />
+  </el-table> -->
+  <div class="questions">
+      <div class="title">
+        <div class="question">题目</div>
+        <div class="difficulty">难度</div>
+        <div class="pass">通过</div>
+        <div class="language">语言</div>
+        <div class="time">提交时间</div>
+      </div>
+      <div class="content" v-for="problem in pageinfo.list">
+          <div class="question" @click="gotoDetail(problem.problemId)" >{{ problem.problemName }}</div>
+          <div class="difficulty">{{ problem.difficulty }}</div>
+          <div class="pass">{{ problem.pass?'Y':'N' }}</div>
+          <div class="language">{{ problem.language?'C':'Java' }}</div>
+          <div class="time">{{ problem.executionTime }}</div>
+      </div>
   </div>
-  <el-button @click="update">查看</el-button>
-    <el-pagination
+  <el-pagination
       small
       background
       layout="prev, pager, next"
@@ -135,10 +151,18 @@ watch(data, () => {
       v-model:current-page="currentPage"
       @current-change="search"
     />
+  
+  
+</div>
 </template>
 
 <style lang="scss" scoped>
-
+.select{
+  margin: auto 8cm;
+  // position: relative;
+  // align-items: center;
+  // align-self: center;
+}
 .demo-datetime-picker {
   display: flex;
   width: 100%;
@@ -148,7 +172,6 @@ watch(data, () => {
 .demo-datetime-picker .block {
   padding: 30px 0;
   text-align: center;
-  border-right: solid 1px var(--el-border-color);
   flex: 1;
 }
 .demo-datetime-picker .block:last-child {
@@ -162,8 +185,8 @@ watch(data, () => {
 }
 .container {
   margin: 0 auto;
-  width: 75%;
-  height: 92vh;
+  width: 80%;
+  // height: 92vh;
 }
 .tags {
   margin-top: 10px;
@@ -259,9 +282,9 @@ input {
   }
 }
 
-.questions {
-  width: 80%;
-}
+// .questions {
+//   width: 80%;
+// }
 .title {
   display: flex;
   padding-bottom: 8px;
@@ -273,11 +296,17 @@ input {
   width: 10%;
 }
 .question {
-  width: 30%;
+  width: 35%;
   cursor: pointer;
   &:hover {
     color: blue;
   }
+}
+.pass{
+  width:8%;
+}
+.language{
+  width: 12%;
 }
 .answer {
   width: 10%;
@@ -333,15 +362,6 @@ input {
   // background-color: white;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.02),
     0px 6px 12px rgba(0, 0, 0, 0.02);
-}
-
-.el-progress {
-  margin: 10px 10px;
-}
-.timeline{
-  // left: 40%;
-  align-items: center;
-  justify-content: center;
 }
 .el-pagination {
   position: absolute;

@@ -75,7 +75,7 @@ watch(data, () => {
     <el-card class="box-card">
     <template #header>
       <div class="card-header">
-        <span @click="enter(problem.id)">{{problem.name}}-{{problem.difficulty}}</span>
+        <span class="problem" @click="enter(problem.id)">{{problem.name}}---{{problem.difficulty}}</span>
         <el-button text @click="collect(problem.id,problem)">{{problem.isFavorite?'恢复':'取消收藏'}}</el-button>
       </div>
     </template>
@@ -98,6 +98,21 @@ watch(data, () => {
 </template>
 
 <style lang="scss" scoped>
+  .problem{
+    color: #262626;
+    font-size: 18px;
+    font-weight: 550;
+    margin: auto 0;
+    margin-bottom: 10px;
+    right: 0;
+    &:hover{
+      cursor: pointer;
+      color: rgb(0,122,255);
+    }
+    a{
+      vertical-align: middle;
+    }
+  }
 .card-header {
   display: flex;
   justify-content: space-between;

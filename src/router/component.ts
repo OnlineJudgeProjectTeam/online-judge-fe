@@ -48,10 +48,6 @@ export const asyncInfoEditor = defineAsyncComponent({
   loader: () => import("@components/InfoEditor.vue"),
 });
 
-export const asyncImageUp = defineAsyncComponent({
-  loader: () => import("@components/ImageUp.vue"),
-});
-
 export const asyncAccountCtrl = defineAsyncComponent({
   loader: () => import("@components/AccountCtrl.vue"),
 });

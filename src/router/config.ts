@@ -16,7 +16,6 @@ import {
   asyncRanking,
   asyncSolution,
   asyncCreateSolution,
-asyncImageUp,
 } from "./component";
 
 export const routes: RouteRecordRaw[] = [

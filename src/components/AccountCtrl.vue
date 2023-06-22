@@ -1,5 +1,6 @@
 <template>
   <br><br>
+  <div class="main">
   <el-input
     v-model="form.password"
     type="password"
@@ -7,19 +8,26 @@
     show-password
     clearable
     class="medium"
+  /><br><br>
+  <el-input
+    v-model="firm"
+    type="password"
+    placeholder="确认密码"
+    show-password
+    clearable
+    class="medium"
   />
-  <br> <div class="msg"><span >{{ err }}</span></div><br>
+  <br><br> 
   <el-input
     v-model="form.code"
-    type="password"
     placeholder="输入验证码"
     class="inputcode"
-    show-password
     clearable
   />
   <el-button  @click="apply" :disabled = isDisabled class="getcode">{{ s }}</el-button>
-  <br><br>
+  <br><div class="msg"><span >{{ err }}</span></div><br>
   <el-button type="primary" @click="send">提交</el-button>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -38,6 +46,7 @@ const form = reactive({
 })
 
 let err = ref<string>("")
+let firm = ref<string>("")
 let s = ref<string>("发送验证码")
 let isDisabled = ref<boolean>(false)
 let count = ref<number>(60)
@@ -59,6 +68,7 @@ const apply = () => {
   },1000)
   sendcode(form.email).then((res: any) => {
     if (!res.error.value) {
+      err.value='';
     }
     else{
       err.value=res.error.value
@@ -69,6 +79,14 @@ const apply = () => {
 
 const editcode = useEditCode();
 const send = () => {
+  if(form.password==''||firm.value==''){
+    err.value='请输入密码并确认密码';
+    return;
+  }
+  if(form.password!=firm.value){
+    err.value='两次密码输入不一致';
+    return;
+  }
   editcode(form).then((res: any) => {
     if (!res.error.value) {
     }
@@ -82,6 +100,11 @@ const send = () => {
 </script>
 
 <style scoped>
+.main{
+  margin-left: 25mm;
+  margin-top: 5mm;
+  margin-bottom: 5mm;
+}
 .medium{
   width: 12cm;
 }
@@ -93,7 +116,7 @@ const send = () => {
 }
 .msg{
 position: absolute;
-left: 50%;
+left: 38%;
 transform: translateX(-50%);
 margin-top: 0px;
 font-size: 0.9rem;

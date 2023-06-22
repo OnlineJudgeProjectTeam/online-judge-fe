@@ -1,94 +1,86 @@
 <template>
-  <Header/>
-  <!-- <br> -->
-  <div class="layout-container-demo">
+  <div class="common-layout">
+    <el-container>
+      <el-header><Header/></el-header>
+      <el-main>
+        <div class="main">
+          <div class="layout-container-demo">
+
     <!-- <el-container>
       <el-header></el-header> -->
       <el-container>
-        <el-aside width="200px">
-          <!-- <el-scrollbar> -->
-        <el-menu :default-openeds="['1', '2']">
+        <el-aside width="200px" class="aside">
 
-          <el-sub-menu index="1">
-            <template #title>
-              <el-icon><setting /></el-icon>信息管理
-            </template>
-            <el-menu-item-group>
+    <div class="menu">
+      <router-link class="alink" to="/infoeditor">
+<el-icon><User /></el-icon> 基本信息
+  </router-link>
+  </div>
 
-              <router-link class="alink" to="/infoeditor">
-                <el-menu-item index="1-1">
-                  <el-icon><User /></el-icon>基本信息
-                </el-menu-item>
-              </router-link>
+  <div class="menu">
+      <router-link class="alink" to="/accountctrl">
+<el-icon><Lock /></el-icon> 密码修改
+  </router-link><br>
+  </div>
 
-              <router-link class="alink" to="/accountctrl">
-                <el-menu-item index="1-2">
-                  <el-icon><Lock /></el-icon>密码修改
-                </el-menu-item>
-              </router-link>
+  <div class="menu">
+      <router-link class="alink" to="/myhistory">
+<el-icon><DataLine /></el-icon> 做题记录
+  </router-link><br>
+  </div>
 
-              <router-link class="alink" to="/showinfo">
-                <el-menu-item index="1-3">
-                  <el-icon><User /></el-icon>test
-                </el-menu-item>
-              </router-link>
+  <div class="menu">
+      <router-link class="alink" to="/myupload">
+<el-icon><Notebook /></el-icon> 我的题解
+  </router-link><br>
+  </div>
 
-            </el-menu-item-group>
-          </el-sub-menu>
+  <div class="menu">
+      <router-link class="alink" to="/mycollect">
+<el-icon><Star /></el-icon> 我的收藏
+  </router-link><br>
+  </div>
 
-          <el-sub-menu index="2">
-            <template #title>
-              <el-icon><CollectionTag /></el-icon>我的记录
-            </template>
-            <el-menu-item-group>
+  <!-- <div class="menu">
+      <router-link class="alink" to="/infoeditor">
+<el-icon><User /></el-icon>基本信息
+  </router-link>
+  </div> -->
 
-              <router-link class="alink" to="/myhistory">
-                <el-menu-item index="2-1">
-                  <el-icon><DataLine /></el-icon>做题记录
-                </el-menu-item>
-              </router-link>
-
-              <router-link class="alink" to="/myupload">
-                <el-menu-item index="2-2">
-                  <el-icon><Notebook /></el-icon>我的题解
-                </el-menu-item>
-              </router-link>
-
-            </el-menu-item-group>
-          </el-sub-menu>
-
-          <router-link class="alink" to="/mycollect">
-                <el-menu-item index="3">
-                  <el-icon><Star /></el-icon>收藏夹
-                </el-menu-item>
-          </router-link>
-
-        </el-menu>
-      <!-- </el-scrollbar> -->
         </el-aside>
         <el-main>
-          <div style="width: 80%;margin: 0 auto">
+          <div>
             <router-view></router-view>
         </div>
         </el-main>
       </el-container>
     <!-- </el-container> -->
   </div>
+
+        </div>
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import  Header  from "@/components/Header.vue";
 import { Setting, CollectionTag, User, Star, DataLine, Notebook, Lock} from '@element-plus/icons-vue'
-
 </script>
 
 <style scoped>
-.layout-container-demo .el-sub-menu tbody tr:hover>td{
-  background-color: #ffffff !important;
-  color: #ffffff !important;
+.el-aside{
+  margin-right: 0px;
+}
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
+.main{
+  margin: 0 15vw;
 }
 .layout-container-demo{
-  margin-top: 1.8mm;
+  margin-top: 1.5mm;
 }
 /* .layout-container-demo .el-aside tbody tr:hover>td {
   background-color:transparent!important;
@@ -98,7 +90,6 @@ import { Setting, CollectionTag, User, Star, DataLine, Notebook, Lock} from '@el
     background-color: #4CAF50; 
     color: white;
 } */
-
 .layout-container-demo > .el-aside--enable-row-hover .el-table__body tr:hover > td {
   background-color: white !important;
 }
@@ -109,48 +100,33 @@ import { Setting, CollectionTag, User, Star, DataLine, Notebook, Lock} from '@el
 .layout-container-demo .el-main {
   padding: 0;
 }
-/* .layout-container-demo .toolbar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  right: 10px;
-} */
-
 .alink{
 text-decoration: none;
+color: black;
 }
-/* 
-    /deep/ .el-submenu__title:focus {
-      color: @font-color;
-      background: none;
-    }
-    /deep/ .el-submenu__title:hover {
-      color: @font-color;
-      background: none;
-    }
-    .el-menu-item:focus, .el-menu-item:hover {
-      color: @font-color;
-      background-color: @font-bg-color;
-    } */
+.menu{
+  margin: 20px 0;
+  padding: 10px;
+  text-align: center;
+  &:hover{
+    cursor: pointer;
+    background-color: rgb(237, 238, 240);
+  }
+  &:focus{
+    background-color: rgb(237, 238, 240);
+  }
+}
+/* .button{
+  margin: 20px 0;
+  padding: 10px;
+  text-align: center;
+  &:hover{
+    cursor: pointer;
+    background-color: rgb(237, 238, 240);
+  }
+  &:focus{
+    background-color: rgb(237, 238, 240);
+  }
+} */
 
 </style>
-
-<!-- <style lang="less">
-//设置鼠标悬停时el-submenu的样式
-.layout-container-demo:hover{
-        background-color: #550d0d !important;
-        color: #114b6e !important;
-        i {
-            color: #1787FB;
-        } 
-    }
-</style> -->
-
-<!-- css: {
-  preprocessorOptions: {
-      less: {
-        math: "always",
-      },
-  },
-}, -->
