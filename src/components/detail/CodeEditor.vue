@@ -5,6 +5,7 @@ import usePointer from "@/hooks/usePointer";
 import downImg from "@/assets/images/down.png";
 import { useRoute } from "vue-router";
 import useSubmit from "@/hooks/detail/useSubmit";
+import useTabStore from "@/stores/tab";
 
 const props = defineProps<{
   template: string[];
@@ -40,6 +41,7 @@ const inputHandler = () => {
 };
 
 const backSpaceHandler = () => {
+  console.log(window.getSelection());
   if (pointerPosition.x === 0) {
     if (pointerPosition.y === 0) return;
     let l = code.value[pointerPosition.y - 1].length;
@@ -81,6 +83,23 @@ const rightHandler = () => {
   pushPointer(1, 0);
 };
 
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Tab") {
+    event.preventDefault();
+    inputText.value = "    ";
+  }
+});
+
+const preventDefault = () => {};
+
+const tabHandler = () => {};
+
+const clearHandler = () => {
+  code.value.splice(1);
+  code.value[0] = "";
+  resetPosition();
+};
+
 watch(inputText, () => {
   if (!inputText.value) return;
   console.log(inputText.value);
@@ -116,6 +135,7 @@ watch(language, () => {
 });
 
 // 提交代码
+const store = useTabStore();
 const { query } = useRoute();
 const submit = useSubmit();
 
@@ -138,6 +158,8 @@ const submitHandler = () => {
       memoryCost: data.value!.memoryCost,
       memoryBeat: data.value!.memoryBeat,
     });
+    store.$state.tab = 2;
+    // window.location.reload();
   });
 };
 </script>
@@ -162,6 +184,61 @@ const submitHandler = () => {
         >
           <p>{{ item }}</p>
         </div>
+      </div>
+      <div class="spacer"></div>
+      <div @click="clearHandler">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 48 48"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M20 5.91406H28V13.9141H43V21.9141H5V13.9141H20V5.91406Z"
+            stroke="#838383"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M8 40H40V22H8V40Z"
+            fill="none"
+            stroke="#838383"
+            stroke-width="2"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M16 39.8976V33.9141"
+            stroke="#838383"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M24 39.8977V33.8977"
+            stroke="#838383"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M32 39.8976V33.9141"
+            stroke="#838383"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M12 40H36"
+            stroke="#838383"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
       </div>
     </div>
     <div class="code-container" ref="codeRef">
@@ -203,6 +280,8 @@ const submitHandler = () => {
         @keyup.down="downHandler"
         @keyup.left="leftHandler"
         @keyup.right="rightHandler"
+        @keydown.tap="preventDefault"
+        @keyup.tap="tabHandler"
       ></textarea>
     </div>
     <div class="code-bottom">
@@ -230,6 +309,8 @@ const submitHandler = () => {
   height: 32px;
   padding: 8px 16px;
   background-color: white;
+  display: flex;
+  align-items: center;
 
   .code-language {
     width: fit-content;
@@ -292,6 +373,10 @@ const submitHandler = () => {
         color: black;
       }
     }
+  }
+
+  .spacer {
+    flex: 1;
   }
 }
 

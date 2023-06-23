@@ -26,7 +26,6 @@ const getPointerX = (str: string) => {
 
 watch(props.pointerPosition, (pointerPosition) => {
   pointer.value.style.top = `${pointerPosition.y * 18.1 + 17.5}px`;
-  console.log();
   pointer.value.style.left = `${getPointerX(
     props.code[pointerPosition.y].substring(0, pointerPosition.x)
   )}px`;

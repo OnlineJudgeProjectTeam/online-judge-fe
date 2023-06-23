@@ -11,7 +11,6 @@ const status = ref<Status>();
 
 watch(store.$state, () => {
   status.value = store.$state;
-  console.log(status.value);
 });
 
 const closeHandler = () => {
@@ -65,9 +64,13 @@ const closeHandler = () => {
         <div class="spacer"></div>
         <p class="title">击败</p>
         <div class="tag">
-          <p>{{ `${Math.floor(status.timeBeat)}` }}</p>
+          <p>{{ `${Math.floor(status.timeBeat * 100)}` }}</p>
           <p class="small-text">
-            {{ `.${status.timeBeat?.toFixed(2).toString().split(".")[1]}%` }}
+            {{
+              `.${
+                (status.timeBeat * 100)?.toFixed(2).toString().split(".")[1]
+              }%`
+            }}
           </p>
         </div>
       </div>
@@ -77,9 +80,13 @@ const closeHandler = () => {
         <div class="spacer"></div>
         <p class="title">击败</p>
         <div class="tag">
-          <p>{{ `${Math.floor(status.memoryBeat)}` }}</p>
+          <p>{{ `${Math.floor(status.memoryBeat * 100)}` }}</p>
           <p class="small-text">
-            {{ `.${status.memoryBeat?.toFixed(2).toString().split(".")[1]}%` }}
+            {{
+              `.${
+                (status.memoryBeat * 100)?.toFixed(2).toString().split(".")[1]
+              }%`
+            }}
           </p>
         </div>
       </div>
