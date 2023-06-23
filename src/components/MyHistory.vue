@@ -135,7 +135,7 @@ watch(data, () => {
       </div>
       <div class="content" v-for="problem in pageinfo.list">
           <div class="question" @click="gotoDetail(problem.problemId)" >{{ problem.problemName }}</div>
-          <div class="difficulty">{{ problem.difficulty }}</div>
+          <div class="difficulty" :class="{box1: problem.difficulty === '简单',box2: problem.difficulty === '中等',box3: problem.difficulty === '困难'}">{{ problem.difficulty }}</div>
           <div class="pass">{{ problem.pass?'Y':'N' }}</div>
           <div class="language">{{ problem.language?'C':'Java' }}</div>
           <div class="time">{{ problem.executionTime }}</div>
@@ -367,5 +367,14 @@ input {
   position: absolute;
   right: 30%;
   margin-top: 25px;
+}
+.box1{
+  color: rgb(0,175,155);
+}
+.box2{
+  color:rgb(255,184,0);
+}
+.box3{
+  color: rgb(255, 45, 85);
 }
 </style>

@@ -65,15 +65,15 @@ export const routes: RouteRecordRaw[] = [
     component: asyncCreateSolution,
   },
   {
+    path: "/showinfo",
+    name: "showinfo",
+    component: asyncShowInfo,
+  },
+  {
     path: "/myspace",
     name: "myspace",
     component: asyncMySpace,
     children: [
-      {
-        path: "/showinfo",
-        name: "showinfo",
-        component: asyncShowInfo,
-      },
       {
         path: "/infoeditor",
         name: "infoeditor",

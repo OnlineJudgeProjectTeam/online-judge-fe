@@ -1,71 +1,87 @@
 <template>
+  <!-- <br> -->
+  test
+  <div>{{ form }}</div>
+  <!-- <div class="main">
   <br>
-  <div class="common-layout">
-    <el-container>
-      <el-aside width="200px">          
      <label
       class="button"
       for="file-input"
      >
       <span><el-avatar :size="120" :src="form.avatar" /></span>
     </label>
-      </el-aside>
-      <el-main>
-        <br><br>
-      </el-main>
-    </el-container>
-  </div>
   <br>
-    <el-form :model="form" label-width="120px">
-    <el-form-item label="用户名" class="small">
-      <el-input v-model="form.username" disabled placeholder="form.username" />    
-    </el-form-item>
+ 
+  <div class="content">
+  <div class="tag">用户名</div>
+  <el-input v-model="form.value.username" disabled placeholder="form.username" />
+  <div class="tag">邮箱</div>    
+  <el-input v-model="form.email" disabled placeholder="form.email" /> 
+  <div class="tag">昵称</div>    
+  <el-input v-model="form.name"/> 
 
-    <el-form-item label="邮箱" class="small">
-      <el-input v-model="form.email" disabled placeholder="form.email" />    
-    </el-form-item>
-
-    <el-form-item label="昵称" class="small">
-      <el-input v-model="form.name" />
-    </el-form-item>
-
-    <el-form-item label="性别" class="verysmall">
-      <el-select v-model="form.sex" class="m-2" placeholder="选择">
+    <el-row :span="24" :gutter="10">
+    <el-col :span="6">  
+      <div class="tag">性别</div>   
+    <el-select class="select" v-model="form.sex" placeholder="选择">
     <el-option
       v-for="item in options"
       :key="item.value"
       :label="item.label"
       :value="item.value"
     />
-      </el-select>
-    </el-form-item>
-    
-    <el-form-item label="学校">
-      <el-input v-model="form.school" class="medium" />
-    </el-form-item>
-    <el-form-item label="公司">
-      <el-input v-model="form.company" class="medium"/>
-    </el-form-item>
-    <el-form-item label="个人描述">
-      <el-input v-model="form.description" rows="6" type="textarea" class="medium"/>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">提交</el-button>
-    </el-form-item>
-  </el-form>
+    </el-select>
+    </el-col>
+    <el-col :span="18"><div class="tag">学校</div>    
+  <el-input v-model="form.school"/> </el-col>
+    </el-row>
+
+  <div class="tag">公司</div>    
+  <el-input v-model="form.company"/> 
+  <div class="tag">个人描述</div>    
+  <el-input 
+      v-model="form.description" 
+      rows="8" 
+      type="textarea" 
+      class="medium"
+      maxlength="150"
+      show-word-limit
+      />
+  <el-button class="submit" @click="onSubmit">提交</el-button><br>
+  </div>
+  </div> -->
 </template>
 
 <script lang="ts" setup>
-// import { School } from '@element-plus/icons-vue';
-import useUpdate from "../hooks/myspace/useInfoed.ts";
-import { ref,reactive } from "vue";
-import { storeToRefs } from "pinia";
-// import { useRouter } from "vue-router";
-import useUpload from "../hooks/myspace/upLoad.ts";
-import { userStore } from "../stores/login";
+import { ref, reactive, watch } from "vue";
+import usegetbyId from "../hooks/myspace/getbyId.ts";
+import { useRoute } from "vue-router";
+import { OtherInfo } from "@/type/user";
+const { query } = useRoute();
+const getbyId = usegetbyId()
 
-const store = userStore();
-const { userData } = storeToRefs(store);
+getbyId(query.id as any).then((res: any) => {
+//  const form = reactive<OtherInfo>(res.data.value);
+const form =({
+  id: res.data.value.id,
+})
+});
+
+
+// var form = reactive({
+//   id: data.id,
+//   email: data.value!.email,
+//   username: data.value!.username,
+//   name: data.value?.name,
+//   sex: data.value?.sex,
+//   school: data.value?.school,
+//   company: data.value?.company,
+//   description: data.value?.description,
+//   avatar: data.value!.avatar,
+//   token: data.value!.token,
+//   createdtime: data.value!.createdTime,
+//   password: data.value!.password
+// })
 
 const options = [
   {
@@ -77,85 +93,43 @@ const options = [
     label: '男',
   },
 ]
-
-const selectedFile = ref<File | null>(null);
-const upload = useUpload();
-
-const handleFileChange = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  const file = target.files?.[0];
-  selectedFile.value = file || null;
-  onUpload();
-};
-
-const update = useUpdate();
-
-const form = reactive({
-  id: userData.value!.id,
-  email: userData.value!.email,
-  username: userData.value!.username,
-  name: userData.value!.name,
-  sex: userData.value!.sex,
-  school: userData.value!.school,
-  company: userData.value!.company,
-  description: userData.value!.description,
-  avatar: userData.value!.avatar,
-  token: userData.value!.token,
-  createdtime: userData.value!.createdTime,
-  password: userData.value!.password
-})
-
-
-const onSubmit = () => {
-  update(form).then((res: any) => {
-    if (!res.error.value) {
-      // userData.value!.name=form.name;
-      // userData.value!.sex=form.sex;
-      // userData.value!.school=form.school;
-      // userData.value!.company=form.company;
-      // userData.value!.description=form.description;
-      store.setUser(form);
-      alert('提交成功！');
-    }
-    // else{
-    // }
-  });
-  console.log('submit!');
-}
-
-const onUpload = () => {
-    const image = selectedFile.value;
-    let formData = new FormData();
-    if(image){
-      formData.append('image',image);
-    }
-    else{
-      alert("请先选择文件");
-      return;
-    }
-    upload(formData).then((res: any) => {
-    if (!res.error.value) {
-      form.avatar=res.data.value;
-      store.setUser(form);
-      update(form);
-    }
-    // else{
-    // }
-  });
-  console.log('submit!');
-}
 </script>
 
 <style scoped>
 /* input[type="file"] {
   display: none;
 } */
+.select{
+  margin-left: 1.3mm;
+}
+.content{
+  margin: 0 5vh;
+}
+.tag{
+  color: dimgray;
+  margin: 2mm;
+}
+.el-input{
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.main{
+  margin-left: 25mm;
+  margin-top: 5mm;
+  margin-bottom: 2mm;
+  /* border-style: solid; */
+  border-radius: 5px;
+  /* border-color: darkgray; */
+  /* box-shadow:darkgray 1px 2px 2px 2px ; */
+  box-shadow: 0 0 8px rgba(0, 0, 0, .2);
+
+}
 .file-input{
   display: none;
 }
 .el-avatar{
   position: relative;
-  left:25%;
+  left:38%;
 }
 .small{
 width: 10cm;
@@ -164,7 +138,10 @@ width: 10cm;
 width: 6cm;
 }
 .medium{
-width: 15cm;
+margin-left: 1.3mm;
+}
+.submit{
+  margin: 6mm;
 }
 </style>
 

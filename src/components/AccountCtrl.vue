@@ -101,8 +101,8 @@ const send = () => {
 
 <style scoped>
 .main{
-  margin-left: 25mm;
-  margin-top: 5mm;
+  margin-left: 36mm;
+  margin-top: 12mm;
   margin-bottom: 5mm;
 }
 .medium{
