@@ -1,7 +1,6 @@
 import { Ref, ref } from "vue";
 import request from "../../network/request";
-import {RecordGate, Record, RecordInfo} from "@/type/user/index";
-
+import { RecordGate, Record, RecordInfo } from "@/type/user/index";
 
 const useGetRecord = () => {
   const error = ref(undefined) as Ref<string | undefined>;
@@ -11,7 +10,7 @@ const useGetRecord = () => {
 
   const getRecord = async (probleminfo: RecordGate) => {
     const { data, whenFinish, fetching, error } = request<RecordInfo>({
-      url: `/submission/get-submission-list?pageNum=${probleminfo?.pageNum}&pageSize=${probleminfo?.pageSize}&navSize=${probleminfo?.navSize}&startTime=${probleminfo?.startTime}`,
+      url: `/submission/get-submission-list?pageNum=${probleminfo?.pageNum}&pageSize=${probleminfo?.pageSize}&navSize=${probleminfo?.navSize}&startTime=${probleminfo?.startTime}&endTime=${probleminfo?.endTime}`,
       method: "get",
       data: probleminfo,
     });
