@@ -3,7 +3,7 @@ import { clearToken, getToken } from "@/utils/token";
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { Ref, ref } from "vue";
 
-const baseURL = "http://www.diandianjun.com.cn:8070";
+const baseURL = "/api";
 // /api
 
 const requestSet = new Set<string>();

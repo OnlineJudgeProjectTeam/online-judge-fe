@@ -1,18 +1,14 @@
-import { ref, reactive, watchEffect } from "vue";
+import { ref, reactive } from "vue";
 
 const usePointer = (code: string[]) => {
-  watchEffect(() => {
-    console.log(code);
-  });
-
   const isShowPointer = ref(true);
   let pointerInterval = setInterval(() => {
     isShowPointer.value = !isShowPointer.value;
   }, 500);
 
   const pointerPosition = reactive({
-    x: 0,
-    y: 0,
+    x: -1,
+    y: -1,
   });
 
   const resetPointer = () => {

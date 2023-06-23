@@ -8,7 +8,6 @@ import Tags from "./detail/Tags.vue";
 import { useRouter } from "vue-router";
 import useGetRandomProblem from "@/hooks/homeMain/useGetRandomProblem";
 
-
 let problemInfo: ProblemInfo = {
   pageNum: 1,
   pageSize: 10,
@@ -23,13 +22,14 @@ const pageinfo = ref({}) as Ref<PageInfo>;
 const router = useRouter();
 
 const diff = ref<string>("难度");
-let state:string = "";
-const state1:string = "/src/assets/images/correct.svg";
-const state2:string = "/src/assets/images/wrong.svg"; 
-const state3:string = "/src/assets/images/start.svg"; 
+let state: string = "";
+const state1: string = "/src/assets/images/correct.svg";
+const state2: string = "/src/assets/images/wrong.svg";
+const state3: string = "/src/assets/images/start.svg";
 
 const { data, fetching, error, query } = useGetProblemList();
-const { dataEvery, fetchingEvery, errorEvery,queryEvery } = useGetEverydayProblem();
+const { dataEvery, fetchingEvery, errorEvery, queryEvery } =
+  useGetEverydayProblem();
 const { dataAc, fetchingAc, errorAc } = useGetTotalAcRate();
 const changeFavorite = useChangeFavorite();
 const getRandomProblem = useGetRandomProblem();
@@ -45,21 +45,20 @@ async function search() {
 }
 
 async function send() {
-  problemInfo.name = "name";
+  problemInfo.name = name.value;
   query(problemInfo).then(() => {
     pageinfo.value = data.value;
   });
 }
 
-async function choose(tag: string,checked:boolean) {
+async function choose(tag: string, checked: boolean) {
   if (checked === false) {
-    tags.value = tags.value.replace(tag,'');
-  }
-  else{
+    tags.value = tags.value.replace(tag, "");
+  } else {
     tags.value = tags.value + tag;
   }
   problemInfo.tags = tags.value;
-  console.log(tags.value)
+  console.log(tags.value);
   query(problemInfo).then(() => {
     pageinfo.value = data.value;
   });
@@ -90,14 +89,14 @@ async function changeDifficult() {
 }
 
 async function randomDetail() {
-  getRandomProblem().then((res:any) =>{
-    if(!res.error.value){
+  getRandomProblem().then((res: any) => {
+    if (!res.error.value) {
       router.push(`/detail?problemId=${res.data.value.id}`);
     }
-  })
+  });
 }
 
-async function gotoDetail(id:number) {
+async function gotoDetail(id: number) {
   router.push(`/detail?problemId=${id}`);
 }
 
@@ -137,13 +136,11 @@ async function collect(id: number, problem: ProblemRes) {
         problem.favorites++;
         url.value = url1;
       }
-    queryEvery();
-    query(problemInfo).then(() => {
-      pageinfo.value = data.value;
-    });
-
+      queryEvery();
+      query(problemInfo).then(() => {
+        pageinfo.value = data.value;
+      });
     }
-
   });
 }
 
@@ -166,32 +163,44 @@ watch(data, () => {
           </div>
         </div>
         <div class="degree" @click="displayd">
-          <div class="label" :class="{box1: diff === '简单',box2: diff === '中等',box3: diff === '困难'}">{{ diff }}</div>
+          <div
+            class="label"
+            :class="{
+              box1: diff === '简单',
+              box2: diff === '中等',
+              box3: diff === '困难',
+            }"
+          >
+            {{ diff }}
+          </div>
           <div class="text">
             <a
               :class="isShowd === true ? 'choice' : 'hide'"
               @click="changeEasy()"
-              :style="{color:'rgb(0, 175, 155)'}"
-              >简单</a>
+              :style="{ color: 'rgb(0, 175, 155)' }"
+              >简单</a
+            >
             <a
               :class="isShowd === true ? 'choice' : 'hide'"
               @click="changeMid()"
-              :style="{color:'rgb(255, 184, 0)'}"
-              >中等</a>
+              :style="{ color: 'rgb(255, 184, 0)' }"
+              >中等</a
+            >
             <a
               :class="isShowd === true ? 'choice' : 'hide'"
               @click="changeDifficult()"
-              :style="{color:'rgb(255, 45, 85)'}"
-              >困难</a>
+              :style="{ color: 'rgb(255, 45, 85)' }"
+              >困难</a
+            >
           </div>
           <div class="btn">
             <img src="../assets/images/down.png" alt="" />
           </div>
         </div>
       </div>
-      
+
       <div class="random" @click="randomDetail">
-        <img src="../assets/images/random.svg" alt="">
+        <img src="../assets/images/random.svg" alt="" />
         <a>随机一题</a>
       </div>
     </div>
@@ -207,12 +216,23 @@ watch(data, () => {
       <div class="contents">
         <div class="everyday">
           <div class="status">
-            <img src="../assets/images/every.svg" alt="">  
+            <img src="../assets/images/every.svg" alt="" />
           </div>
-          <div class="question" @click="gotoDetail(dataEvery.id)">{{ dataEvery.name }}</div>
+          <div class="question" @click="gotoDetail(dataEvery.id)">
+            {{ dataEvery.name }}
+          </div>
           <div class="answer">{{ dataEvery.solutions }}</div>
           <div class="assort">{{ dataEvery.tags }}</div>
-          <div class="difficulty" :class="{box1: dataEvery.difficulty === '简单',box2: dataEvery.difficulty === '中等',box3: dataEvery.difficulty === '困难'}">{{ dataEvery.difficulty }}</div>
+          <div
+            class="difficulty"
+            :class="{
+              box1: dataEvery.difficulty === '简单',
+              box2: dataEvery.difficulty === '中等',
+              box3: dataEvery.difficulty === '困难',
+            }"
+          >
+            {{ dataEvery.difficulty }}
+          </div>
           <div class="collected" @click="collect(dataEvery.id, dataEvery)">
             <img :src="(url = dataEvery.isFavorite ? url1 : url2)" alt="" />
             <a>{{ dataEvery.favorites }}</a>
@@ -220,12 +240,33 @@ watch(data, () => {
         </div>
         <div class="content" v-for="problem in pageinfo.list">
           <div class="status">
-            <img :src="(state = problem.status === 2 ? state1 : (problem.status === 1 ? state2 : state3))" alt="">
+            <img
+              :src="
+                (state =
+                  problem.status === 2
+                    ? state1
+                    : problem.status === 1
+                    ? state2
+                    : state3)
+              "
+              alt=""
+            />
           </div>
-          <div class="question" @click="gotoDetail(problem.id)" >{{ problem.name }}</div>
+          <div class="question" @click="gotoDetail(problem.id)">
+            {{ problem.name }}
+          </div>
           <div class="answer">{{ problem.solutions }}</div>
           <div class="assort">{{ problem.tags }}</div>
-          <div class="difficulty" :class="{box1: problem.difficulty === '简单',box2: problem.difficulty === '中等',box3: problem.difficulty === '困难'}">{{ problem.difficulty }}</div>
+          <div
+            class="difficulty"
+            :class="{
+              box1: problem.difficulty === '简单',
+              box2: problem.difficulty === '中等',
+              box3: problem.difficulty === '困难',
+            }"
+          >
+            {{ problem.difficulty }}
+          </div>
           <div class="collected" @click="collect(problem.id, problem)">
             <img :src="(url = problem.isFavorite ? url1 : url2)" alt="" />
             <a>{{ problem.favorites }}</a>
@@ -323,10 +364,10 @@ input {
   height: 3vh;
   width: 12vh;
   padding: 3px 0;
-  &:hover{
+  &:hover {
     cursor: pointer;
     background-color: rgb(247, 247, 247);
-    transition: all .3s;
+    transition: all 0.3s;
   }
   background-color: rgb(242, 243, 244);
   .btn {
@@ -347,7 +388,7 @@ input {
   &:hover {
     cursor: pointer;
   }
-  a:nth-child(3){
+  a:nth-child(3) {
     padding-bottom: 5px;
   }
 }
@@ -371,7 +412,7 @@ input {
   margin-right: 10px;
   display: flex;
   align-items: center;
-  img{
+  img {
     width: 18px;
     height: 18px;
     background-color: rgb(45, 181, 93);
@@ -398,27 +439,25 @@ input {
   height: 3vh;
   border-bottom: 1px solid rgb(240, 240, 240);
 }
-.contents{
-  color: rgb(38,38,38);
+.contents {
+  color: rgb(38, 38, 38);
 }
-
 
 .status {
   margin-left: 15px;
   width: 10%;
-  img{
+  img {
     width: 18px;
     height: 18px;
     margin-top: 5px;
   }
 }
-  
 
 .question {
   width: 30%;
   cursor: pointer;
   &:hover {
-    color: rgb(0,122,255);
+    color: rgb(0, 122, 255);
   }
 }
 .answer {
@@ -483,13 +522,13 @@ input {
   padding-bottom: 10px;
 }
 
-.box1{
-  color: rgb(0,175,155);
+.box1 {
+  color: rgb(0, 175, 155);
 }
-.box2{
-  color:rgb(255,184,0);
+.box2 {
+  color: rgb(255, 184, 0);
 }
-.box3{
+.box3 {
   color: rgb(255, 45, 85);
 }
 </style>

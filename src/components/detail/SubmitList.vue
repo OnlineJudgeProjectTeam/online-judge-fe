@@ -4,6 +4,7 @@ import { SubmitListItem } from "@/type/detail";
 import { ref, watch } from "vue";
 import SubmitItem from "./SubmitItem.vue";
 import Dropdown from "./Dropdown.vue";
+import useTabStore from "@/stores/tab";
 
 const props = defineProps<{
   problemId: any;
@@ -11,6 +12,7 @@ const props = defineProps<{
 
 const submitList = ref<SubmitListItem[]>([]);
 const activeItem = ref<number>();
+const store = useTabStore();
 
 const { data, fetching, error, requery } = useGetSubmitList(props.problemId);
 
@@ -55,6 +57,11 @@ watch(language, () => {
 watch(status, () => {
   requery(language.value, status.value);
   activeItem.value = undefined;
+});
+
+watch(store.$state, () => {
+  requery(language.value, status.value);
+  activeItem.value = 0;
 });
 </script>
 

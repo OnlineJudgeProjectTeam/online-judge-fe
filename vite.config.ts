@@ -18,14 +18,14 @@ export default defineConfig({
       "@hooks": path.resolve(__dirname, "./src/hooks"),
     },
   },
-  // server: {
-  //   proxy: {
-  //     "/api": {
-  //       target: "http://10.19.130.212:8070",
-  //       changeOrigin: true, //支持跨域
-  //       rewrite: (path) => path.replace(/^\/api/, ""), //重写路径,替换/api
-  //       secure: false,
-  //     },
-  //   },
-  // },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://10.19.131.30:8070",
+        changeOrigin: true, //支持跨域
+        rewrite: (path) => path.replace(/^\/api/, ""), //重写路径,替换/api
+        secure: false,
+      },
+    },
+  },
 });

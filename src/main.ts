@@ -6,7 +6,6 @@ import router from "./router";
 import hljs from "highlight.js";
 import "highlight.js/styles/github.css";
 import { createPinia } from "pinia";
-import piniaPersist from 'pinia-plugin-persist';
 
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
@@ -15,9 +14,7 @@ hljs.configure({
   ignoreUnescapedHTML: true,
 });
 
-const pinia = createPinia()
-pinia.use(piniaPersist)
-
+const pinia = createPinia();
 createApp(App)
   .directive("highlight", function (el) {
     const blocks = el.querySelectorAll("pre code");
