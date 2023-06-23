@@ -27,7 +27,7 @@ query2(rankingInfo2);
 const currentPage = ref<number>(1);
   async function choose() {
   rankingInfo2.pageNum = currentPage.value;
-  query1(rankingInfo2);
+  query2(rankingInfo2);
 }
 
 

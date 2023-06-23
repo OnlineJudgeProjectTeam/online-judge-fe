@@ -64,6 +64,14 @@ async function choose(tag: string, checked: boolean) {
   });
 }
 
+async function changeAll() {
+  problemInfo.difficulty = "";
+  diff.value = "难度";
+  query(problemInfo).then(() => {
+    pageinfo.value = data.value;
+  });
+}
+
 async function changeEasy() {
   problemInfo.difficulty = "简单";
   diff.value = "简单";
@@ -174,6 +182,12 @@ watch(data, () => {
             {{ diff }}
           </div>
           <div class="text">
+            <a
+              :class="isShowd === true ? 'choice' : 'hide'"
+              @click="changeAll()"
+              :style="{ color: 'rgb(0, 122, 255)' }"
+              >所有难度</a
+            >
             <a
               :class="isShowd === true ? 'choice' : 'hide'"
               @click="changeEasy()"
@@ -388,7 +402,7 @@ input {
   &:hover {
     cursor: pointer;
   }
-  a:nth-child(3) {
+  a:nth-child(4) {
     padding-bottom: 5px;
   }
 }
