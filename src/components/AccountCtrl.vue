@@ -103,15 +103,9 @@ const send = () => {
 </script>
 
 <style scoped>
-<<<<<<< HEAD
-.main{
+.main {
   margin-left: 36mm;
   margin-top: 12mm;
-=======
-.main {
-  margin-left: 25mm;
-  margin-top: 5mm;
->>>>>>> origin/main
   margin-bottom: 5mm;
 }
 .medium {

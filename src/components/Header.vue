@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 import { userStore } from "@/stores/login";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
@@ -17,21 +16,18 @@ async function main() {
   router.push(`/`);
 }
 
-
-async function display(num:number) {
-  if(num === 0){
+async function display(num: number) {
+  if (num === 0) {
     router.push(`/`);
-  }
-  else if(num === 1){
+  } else if (num === 1) {
     router.push(`/SelectedSolutions`);
-  }
-  else{
+  } else {
     router.push(`/ranking`);
   }
 }
 
 async function PersonalCenter() {
-  router.push("/myspace");
+  router.push("/infoeditor");
 }
 </script>
 
@@ -42,13 +38,25 @@ async function PersonalCenter() {
       <a>OnlineJudge</a>
     </div>
     <div class="choice">
-      <div class="bank" :class="{show:$route.name === 'home'}" @click="display(0)" >
+      <div
+        class="bank"
+        :class="{ show: $route.name === 'home' }"
+        @click="display(0)"
+      >
         题库
       </div>
-      <div class="solving" :class="{show:$route.name === 'SelectedSolutions'}" @click="display(1)">
+      <div
+        class="solving"
+        :class="{ show: $route.name === 'SelectedSolutions' }"
+        @click="display(1)"
+      >
         精选题解
       </div>
-      <div class="rank" :class="{show:$route.name === 'ranking'}" @click="display(2)"> 
+      <div
+        class="rank"
+        :class="{ show: $route.name === 'ranking' }"
+        @click="display(2)"
+      >
         排行榜
       </div>
     </div>
@@ -84,7 +92,7 @@ async function PersonalCenter() {
     padding-left: 10px;
     vertical-align: middle;
   }
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 }
